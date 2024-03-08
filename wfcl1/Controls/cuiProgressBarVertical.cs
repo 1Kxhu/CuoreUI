@@ -1,4 +1,5 @@
 ﻿using CuoreUI;
+using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
@@ -13,11 +14,16 @@ namespace wfcl1
             InitializeComponent();
             DoubleBuffered = true;
             AutoScaleMode = AutoScaleMode.None;
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            base.OnPaint(e);
+
+            e.Graphics.FillRectangle(new SolidBrush(BackColor), ClientRectangle);
+
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            e.Graphics.InterpolationMode = InterpolationMode.HighQualityBilinear;
 
             Bitmap tempBitmap = new Bitmap(ClientSize.Width * 2, ClientSize.Height * 2);
             using (Graphics tempGraphics = Graphics.FromImage(tempBitmap))
@@ -27,12 +33,13 @@ namespace wfcl1
                 tempGraphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 tempGraphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-                GraphicsPath roundBackground = Helper.RoundRect(new Rectangle(0, 0, ClientSize.Width * 2, ClientSize.Height * 2), 17);
-
                 float filledPercent = (float)Value / MaxValue;
                 float foreHeight = ClientRectangle.Height * filledPercent * 2;
                 RectangleF foreHalf = new RectangleF(0, 0, ClientRectangle.Width * 2, ClientRectangle.Height * 2);
-                RectangleF client = new RectangleF(0, foreHeight, ClientRectangle.Width * 2, ClientRectangle.Height * 2 - foreHeight);
+                RectangleF client = new RectangleF(-5, foreHeight, ClientRectangle.Width * 2 + 7, ClientRectangle.Height * 2 + 1);
+                int roundedclientHeight = (int)Math.Round((double)Height, 0);
+
+                GraphicsPath roundBackground = Helper.RoundRect(new Rectangle(0, 0, ClientSize.Width * 2, ClientSize.Height * 2), Rounding);
                 tempGraphics.SetClip(roundBackground);
 
                 using (SolidBrush brush = new SolidBrush(Foreground))
@@ -46,9 +53,10 @@ namespace wfcl1
                 }
             }
 
+
             if (Flipped)
             {
-                tempBitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
+                tempBitmap.RotateFlip(RotateFlipType.Rotate180FlipX);
             }
 
             e.Graphics.DrawImage(tempBitmap, ClientRectangle);

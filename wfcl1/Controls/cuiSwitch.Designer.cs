@@ -1,6 +1,6 @@
 ﻿namespace CuoreUI.Controls
 {
-    partial class cuiListbox
+    partial class cuiSwitch
     {
         /// <summary> 
         /// Wymagana zmienna projektanta.
@@ -29,6 +29,12 @@
         private void InitializeComponent()
         {
             this.SuspendLayout();
+            // 
+            // cuiSwitch
+            // 
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.Name = "cuiSwitch";
+            this.Size = new System.Drawing.Size(50, 24);
             this.ResumeLayout(false);
 
         }

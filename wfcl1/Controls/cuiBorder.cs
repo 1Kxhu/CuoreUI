@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
@@ -10,13 +11,44 @@ namespace CuoreUI
         {
             get;
             set;
-        } = Color.FromArgb(9, 125, 255);
+        } = Color.MediumSlateBlue;
 
         public cuiBorder()
         {
             InitializeComponent();
             DoubleBuffered = true;
             AutoScaleMode = AutoScaleMode.None;
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+        }
+
+
+        private int privateRounding = 8;
+        public int Rounding
+        {
+            get
+            {
+                return privateRounding;
+            }
+            set
+            {
+                if (value > 0)
+                {
+                    if (value > (ClientRectangle.Height / 2))
+                    {
+                        privateRounding = ClientRectangle.Height / 2;
+                        Rounding = privateRounding;
+                    }
+                    else
+                    {
+                        privateRounding = value;
+                    }
+                }
+                else
+                {
+                    throw new Exception("Rounding cannot be less than 1");
+                }
+                Invalidate();
+            }
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -25,7 +57,7 @@ namespace CuoreUI
 
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-            GraphicsPath roundBackground = Helper.RoundRect(ClientRectangle, 17);
+            GraphicsPath roundBackground = Helper.RoundRect(ClientRectangle, Rounding);
             using (SolidBrush brush = new SolidBrush(PanelColor))
             {
                 e.Graphics.FillPath(brush, roundBackground);

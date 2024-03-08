@@ -12,6 +12,7 @@ namespace wfcl1
             InitializeComponent();
             DoubleBuffered = true;
             AutoScaleMode = AutoScaleMode.None;
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
         }
 
         private string privateContent = "Your text here!";
@@ -25,7 +26,7 @@ namespace wfcl1
             {
                 privateContent = Regex.Unescape(value);
             }
-        } 
+        }
 
         protected override void OnPaint(PaintEventArgs e)
         {

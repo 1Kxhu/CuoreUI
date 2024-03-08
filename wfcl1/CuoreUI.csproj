@@ -43,11 +43,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\cuiButton.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\cuiButton.Designer.cs">
+      <DependentUpon>cuiButton.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\cuiListbox.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\cuiListbox.Designer.cs">
       <DependentUpon>cuiListbox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\cuiSwitch.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\cuiSwitch.Designer.cs">
+      <DependentUpon>cuiSwitch.cs</DependentUpon>
     </Compile>
     <Compile Include="Helper.cs" />
     <Compile Include="Controls\cuiBorder.cs">
@@ -75,16 +87,36 @@
       <DependentUpon>cuiProgressBarVertical.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\cuiBorder.resx">
       <DependentUpon>cuiBorder.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\cuiButton.resx">
+      <DependentUpon>cuiButton.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\cuiLabel.resx">
       <DependentUpon>cuiLabel.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\cuiListbox.resx">
+      <DependentUpon>cuiListbox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\cuiSwitch.resx">
+      <DependentUpon>cuiSwitch.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

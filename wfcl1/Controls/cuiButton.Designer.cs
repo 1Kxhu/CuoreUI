@@ -1,6 +1,6 @@
 ﻿namespace CuoreUI.Controls
 {
-    partial class cuiListbox
+    partial class cuiButton
     {
         /// <summary> 
         /// Wymagana zmienna projektanta.
@@ -29,6 +29,12 @@
         private void InitializeComponent()
         {
             this.SuspendLayout();
+            // 
+            // cuiButton
+            // 
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.Name = "cuiButton";
+            this.Size = new System.Drawing.Size(153, 45);
             this.ResumeLayout(false);
 
         }

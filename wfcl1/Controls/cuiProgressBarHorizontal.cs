@@ -14,6 +14,7 @@ namespace wfcl1
             InitializeComponent();
             DoubleBuffered = true;
             AutoScaleMode = AutoScaleMode.None;
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
         }
 
         private int privateValue = 50;
@@ -72,7 +73,7 @@ namespace wfcl1
             }
         }
 
-        private Color privateBackground = Color.FromArgb(21, 21, 21);
+        private Color privateBackground = Color.FromArgb(222, 222, 222);
         public Color Background
         {
             get
@@ -86,7 +87,7 @@ namespace wfcl1
             }
         }
 
-        private Color privateForeground = Color.FromArgb(9, 125, 255);
+        private Color privateForeground = Color.FromArgb(50, 240, 117);
         public Color Foreground
         {
             get
@@ -134,6 +135,9 @@ namespace wfcl1
         {
             base.OnPaint(e);
 
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            e.Graphics.InterpolationMode = InterpolationMode.HighQualityBilinear;
+
             Bitmap tempBitmap = new Bitmap(ClientSize.Width * 2, ClientSize.Height * 2);
             using (Graphics tempGraphics = Graphics.FromImage(tempBitmap))
             {
@@ -147,7 +151,7 @@ namespace wfcl1
 
                 float filledPercent = (float)Value / MaxValue;
                 float foreWidth = ClientRectangle.Width * filledPercent * 2;
-                RectangleF foreHalf = new RectangleF(0, 0, foreWidth, ClientRectangle.Height * 2);
+                RectangleF foreHalf = new RectangleF(0, 0, foreWidth, ClientRectangle.Height * 2 + 1);
                 RectangleF client = new RectangleF(foreWidth, 0, ClientRectangle.Width * 2 - foreWidth, ClientRectangle.Height * 2);
 
                 using (SolidBrush brush = new SolidBrush(Foreground))
@@ -159,8 +163,6 @@ namespace wfcl1
                 {
                     tempGraphics.FillRectangle(brush, client);
                 }
-
-
             }
 
             if (Flipped)
