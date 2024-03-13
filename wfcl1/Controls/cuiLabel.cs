@@ -25,6 +25,7 @@ namespace wfcl1
             set
             {
                 privateContent = Regex.Unescape(value);
+                Invalidate();
             }
         }
 

@@ -67,6 +67,12 @@
     <Compile Include="Controls\cuiListbox.Designer.cs">
       <DependentUpon>cuiListbox.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\cuiSeparator.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\cuiSeparator.Designer.cs">
+      <DependentUpon>cuiSeparator.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\cuiSwitch.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -121,6 +127,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\cuiListbox.resx">
       <DependentUpon>cuiListbox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\cuiSeparator.resx">
+      <DependentUpon>cuiSeparator.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\cuiSwitch.resx">
       <DependentUpon>cuiSwitch.cs</DependentUpon>

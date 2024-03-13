@@ -10,7 +10,20 @@ namespace CuoreUI.Controls
         public cuiButton()
         {
             InitializeComponent();
+        }
 
+        private string privateContent = "Your text here!";
+        public string Content
+        {
+            get
+            {
+                return privateContent;
+            }
+            set
+            {
+                privateContent = value;
+                Invalidate();
+            }
         }
 
         private int privateRounding = 8;
@@ -83,16 +96,16 @@ namespace CuoreUI.Controls
                 Invalidate();
             }
         }
-
         // 1 - normal
         // 2 - hover
         // 3 - press
         private int state = 1;
         private SolidBrush privateBrush = new SolidBrush(Color.Black);
+        StringFormat stringFormat = new StringFormat();
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            base.OnPaint(e);
+            stringFormat.Alignment = StringAlignment.Center;
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
             GraphicsPath roundBackground = Helper.RoundRect(ClientRectangle, Rounding);
@@ -119,6 +132,14 @@ namespace CuoreUI.Controls
 
             privateBrush.Color = renderedBackgroundColor;
             e.Graphics.FillPath(privateBrush, roundBackground);
+
+            Rectangle textRectangle = ClientRectangle;
+            int textY = (Height / 2) - (Font.Height / 2);
+            textRectangle.Location = new Point(0, textY);
+            using (SolidBrush brush = new SolidBrush(ForeColor))
+            {
+                e.Graphics.DrawString(privateContent, Font, brush, textRectangle, stringFormat);
+            }
         }
 
 
