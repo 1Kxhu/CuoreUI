@@ -49,6 +49,18 @@
     <Compile Include="Controls\cuiButton.Designer.cs">
       <DependentUpon>cuiButton.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\cuiCheckbox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\cuiCheckbox.Designer.cs">
+      <DependentUpon>cuiCheckbox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\cuiCircleProgressBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\cuiCircleProgressBar.Designer.cs">
+      <DependentUpon>cuiCircleProgressBar.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\cuiListbox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -100,6 +112,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\cuiButton.resx">
       <DependentUpon>cuiButton.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\cuiCheckbox.resx">
+      <DependentUpon>cuiCheckbox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\cuiLabel.resx">
       <DependentUpon>cuiLabel.cs</DependentUpon>

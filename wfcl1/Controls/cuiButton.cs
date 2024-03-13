@@ -10,6 +10,7 @@ namespace CuoreUI.Controls
         public cuiButton()
         {
             InitializeComponent();
+
         }
 
         private int privateRounding = 8;

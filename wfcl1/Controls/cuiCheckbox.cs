@@ -1,34 +1,17 @@
-﻿using System;
+﻿using System.Drawing.Drawing2D;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using System;
 
-namespace CuoreUI
+namespace CuoreUI.Controls
 {
-    public partial class cuiBorder : UserControl
+    public partial class cuiCheckbox : cuiSwitch
     {
-        private Color privatePanelColor = Color.MediumSlateBlue;
-        public Color PanelColor
-        {
-            get
-            {
-                return privatePanelColor;
-            }
-            set
-            {
-                privatePanelColor = value;
-                Invalidate();
-            }
-        }
-
-        public cuiBorder()
+        public cuiCheckbox()
         {
             InitializeComponent();
-            DoubleBuffered = true;
-            AutoScaleMode = AutoScaleMode.None;
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
         }
-
 
         private int privateRounding = 8;
         public int Rounding
@@ -61,14 +44,33 @@ namespace CuoreUI
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            base.OnPaint(e);
-
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-            GraphicsPath roundBackground = Helper.RoundRect(ClientRectangle, Rounding);
-            using (SolidBrush brush = new SolidBrush(PanelColor))
+            RectangleF squareClientRectangle = new Rectangle(0, 0, ClientRectangle.Height, ClientRectangle.Height);
+            GraphicsPath roundBackground = Helper.RoundRect(squareClientRectangle, Rounding);
+
+            using (SolidBrush brush = new SolidBrush(Background))
             {
                 e.Graphics.FillPath(brush, roundBackground);
+            }
+
+            int thumbDim = Height - 6;
+            RectangleF thumbRect = new RectangleF(3, 3, thumbDim, thumbDim);
+            GraphicsPath roundThumbRect = Helper.RoundRect(thumbRect, Rounding);
+
+            if (Checked)
+            {
+                using (SolidBrush brush = new SolidBrush(CheckedForeground))
+                {
+                    e.Graphics.FillPath(brush, roundThumbRect);
+                }
+            }
+            else
+            {
+                using (SolidBrush brush = new SolidBrush(UncheckedForeground))
+                {
+                    e.Graphics.FillPath(brush, roundThumbRect);
+                }
             }
         }
     }
