@@ -1,4 +1,5 @@
-![cuoreui alt](https://github.com/1Kxhu/CuoreUI/assets/115172127/60749352-ae9e-463f-8cb7-efd0d1b6338a)
+![CuoreUI](https://github.com/1Kxhu/CuoreUI/assets/115172127/352d85cd-e0c7-4202-bc28-6c2b08205726)
+
 # What is CuoreUI?
 It's a C# .NET Winforms UI Framework similar to FourUI.
 This is just basically FourUI rewritten, because I thought to myself I could do better than what FourUI was.
