@@ -8,7 +8,7 @@ In short, as previously said, it's an UI Framework, that tries to keep winforms 
 I try to do this through adding properties such as corner rounding and drawing everything with antialias.
 
 # Why should you use CuoreUI?
-As of the 8th March 2024, there is really no reason.
+As of March 2024, there is really no reason.
 However, give it a couple of months and I'm sure I'll add lots of more interesting controls and components.
 
 # How to download and use CuoreUI?
