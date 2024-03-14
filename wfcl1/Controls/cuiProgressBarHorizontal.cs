@@ -17,6 +17,20 @@ namespace wfcl1
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
         }
 
+        private bool privateRoundedCorners = true;
+        public bool RoundedCorners
+        {
+            get
+            {
+                return privateRoundedCorners;
+            }
+            set
+            {
+                privateRoundedCorners = value;
+                Invalidate();
+            }
+        }
+
         private int privateValue = 50;
         public int Value
         {
@@ -146,23 +160,38 @@ namespace wfcl1
                 tempGraphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 tempGraphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-                GraphicsPath roundBackground = Helper.RoundRect(new Rectangle(0, 0, ClientSize.Width * 2, ClientSize.Height * 2), privateRounding * 2);
+                GraphicsPath roundBackground = Helper.RoundRect(new Rectangle(0, 0, ClientSize.Width * 2, ClientSize.Height * 2), Rounding * 2);
                 tempGraphics.SetClip(roundBackground);
 
                 float filledPercent = (float)Value / MaxValue;
                 float foreWidth = ClientRectangle.Width * filledPercent * 2;
                 RectangleF foreHalf = new RectangleF(0, 0, foreWidth, ClientRectangle.Height * 2 + 1);
-                RectangleF client = new RectangleF(foreWidth, 0, ClientRectangle.Width * 2 - foreWidth, ClientRectangle.Height * 2);
+                RectangleF client = new RectangleF(foreWidth - Rounding, 0, ClientRectangle.Width * 2 - foreWidth + (Rounding * 2), ClientRectangle.Height * 2);
 
-                using (SolidBrush brush = new SolidBrush(Foreground))
-                {
-                    tempGraphics.FillRectangle(brush, foreHalf);
-                }
 
                 using (SolidBrush brush = new SolidBrush(Background))
                 {
                     tempGraphics.FillRectangle(brush, client);
                 }
+
+                if (RoundedCorners)
+                {
+                    GraphicsPath graphicsPath = Helper.RoundRect(foreHalf, Rounding);
+
+                    using (SolidBrush brush = new SolidBrush(Foreground))
+                    {
+                        tempGraphics.FillPath(brush, graphicsPath);
+                    }
+                }
+                else
+                {
+
+                    using (SolidBrush brush = new SolidBrush(Foreground))
+                    {
+                        tempGraphics.FillRectangle(brush, foreHalf);
+                    }
+                }
+
             }
 
             if (Flipped)
@@ -174,6 +203,12 @@ namespace wfcl1
             e.Graphics.DrawImage(tempBitmap, ClientRectangle);
 
             tempBitmap.Dispose();
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+            Invalidate();
         }
     }
 }

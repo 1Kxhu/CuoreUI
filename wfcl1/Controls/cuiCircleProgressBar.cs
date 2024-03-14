@@ -96,10 +96,24 @@ namespace CuoreUI.Controls
             }
         }
 
+        private bool privateRoundedEnds = true;
+        public bool RoundedEnds
+        {
+            get
+            {
+                return privateRoundedEnds;
+            }
+            set
+            {
+                privateRoundedEnds = value;
+                Invalidate();
+            }
+        }
+
         protected override void OnPaint(PaintEventArgs e)
         {
-            int circleWidth = Width - BorderWidth;
-            int circleHeight = Height - BorderWidth;
+            int circleWidth = Width - BorderWidth -1;
+            int circleHeight = Height - BorderWidth -1;
             int borderHalf = BorderWidth / 2;
 
             MinimumSize = new Size(BorderWidth*2, BorderWidth * 2);
@@ -118,6 +132,12 @@ namespace CuoreUI.Controls
             using (GraphicsPath path = new GraphicsPath())
             using (Pen pen = new Pen(ProgressColor, BorderWidth))
             {
+                if (RoundedEnds)
+                {
+                    pen.StartCap = LineCap.Round;
+                    pen.EndCap = LineCap.Round;
+                }
+
                 path.AddArc(new Rectangle(borderHalf, borderHalf, circleWidth, circleHeight), -92, percent * 3.6f);
                 e.Graphics.DrawPath(pen, path);
             }

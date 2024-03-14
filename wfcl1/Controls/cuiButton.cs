@@ -1,15 +1,19 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace CuoreUI.Controls
 {
+    [DefaultEvent("Click")]
     public partial class cuiButton : UserControl
     {
         public cuiButton()
         {
             InitializeComponent();
+            ForeColor = Color.White;
+            Font = new Font("Microsoft Sans Serif", 9.75f);
         }
 
         private string privateContent = "Your text here!";

@@ -20,12 +20,11 @@ namespace wfcl1
         protected override void OnPaint(PaintEventArgs e)
         {
 
-            e.Graphics.FillRectangle(new SolidBrush(BackColor), ClientRectangle);
-
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
             e.Graphics.InterpolationMode = InterpolationMode.HighQualityBilinear;
 
             Bitmap tempBitmap = new Bitmap(ClientSize.Width * 2, ClientSize.Height * 2);
+
             using (Graphics tempGraphics = Graphics.FromImage(tempBitmap))
             {
                 tempGraphics.SmoothingMode = SmoothingMode.AntiAlias;
@@ -33,30 +32,41 @@ namespace wfcl1
                 tempGraphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 tempGraphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-                float filledPercent = (float)Value / MaxValue;
-                float foreHeight = ClientRectangle.Height * filledPercent * 2;
-                RectangleF foreHalf = new RectangleF(0, 0, ClientRectangle.Width * 2, ClientRectangle.Height * 2);
-                RectangleF client = new RectangleF(-5, foreHeight, ClientRectangle.Width * 2 + 7, ClientRectangle.Height * 2 + 1);
-                int roundedclientHeight = (int)Math.Round((double)Height, 0);
-
-                GraphicsPath roundBackground = Helper.RoundRect(new Rectangle(0, 0, ClientSize.Width * 2, ClientSize.Height * 2), Rounding);
+                GraphicsPath roundBackground = Helper.RoundRect(new Rectangle(0, 0, ClientSize.Width * 2, ClientSize.Height * 2), Rounding * 2);
                 tempGraphics.SetClip(roundBackground);
 
-                using (SolidBrush brush = new SolidBrush(Foreground))
-                {
-                    tempGraphics.FillRectangle(brush, foreHalf);
-                }
+                float filledPercent = (float)Value / MaxValue;
+                float foreHeight = ClientRectangle.Height * filledPercent * 2;
+                RectangleF foreHalf = new RectangleF(0, 0, ClientRectangle.Width*2+1, Height);
+                RectangleF client = new RectangleF(0, Height - Rounding, ClientRectangle.Width*2, ClientRectangle.Height * 2 - foreHeight + (Rounding*2));
 
                 using (SolidBrush brush = new SolidBrush(Background))
                 {
                     tempGraphics.FillRectangle(brush, client);
+                }
+
+                if (RoundedCorners)
+                {
+                    GraphicsPath graphicsPath = Helper.RoundRect(foreHalf, Rounding);
+
+                    using (SolidBrush brush = new SolidBrush(Foreground))
+                    {
+                        tempGraphics.FillPath(brush, graphicsPath);
+                    }
+                }
+                else
+                {
+                    using (SolidBrush brush = new SolidBrush(Foreground))
+                    {
+                        tempGraphics.FillRectangle(brush, foreHalf);
+                    }
                 }
             }
 
 
             if (Flipped)
             {
-                tempBitmap.RotateFlip(RotateFlipType.Rotate180FlipX);
+                tempBitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
             }
 
             e.Graphics.DrawImage(tempBitmap, ClientRectangle);
