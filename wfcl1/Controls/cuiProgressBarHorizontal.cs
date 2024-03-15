@@ -18,7 +18,7 @@ namespace wfcl1
         }
 
         private bool privateRoundedCorners = true;
-        public bool RoundedCorners
+        public bool RoundedInsideCorners
         {
             get
             {
@@ -174,7 +174,7 @@ namespace wfcl1
                     tempGraphics.FillRectangle(brush, client);
                 }
 
-                if (RoundedCorners)
+                if (RoundedInsideCorners)
                 {
                     GraphicsPath graphicsPath = Helper.RoundRect(foreHalf, Rounding);
 

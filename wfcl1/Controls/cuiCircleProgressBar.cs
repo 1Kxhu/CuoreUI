@@ -12,7 +12,7 @@ namespace CuoreUI.Controls
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
         }
 
-        private int privateBorderWidth = 2;
+        private int privateBorderWidth = 12;
         public int BorderWidth
         {
             get
@@ -26,7 +26,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private int privateProgressValue = 2;
+        private int privateProgressValue = 50;
         public int ProgressValue
         {
             get
@@ -40,7 +40,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private int privateMinimumValue = 1;
+        private int privateMinimumValue = 0;
         public int MinimumValue
         {
             get
@@ -54,7 +54,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private int privateMaximumValue = 3;
+        private int privateMaximumValue = 100;
         public int MaximumValue
         {
             get
@@ -112,11 +112,11 @@ namespace CuoreUI.Controls
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            int circleWidth = Width - BorderWidth -1;
-            int circleHeight = Height - BorderWidth -1;
+            int circleWidth = Width - BorderWidth - 1;
+            int circleHeight = Height - BorderWidth - 1;
             int borderHalf = BorderWidth / 2;
 
-            MinimumSize = new Size(BorderWidth*2, BorderWidth * 2);
+            MinimumSize = new Size(BorderWidth * 2, BorderWidth * 2);
 
             float percent = (float)(ProgressValue - MinimumValue) / (MaximumValue - MinimumValue) * 100;
 

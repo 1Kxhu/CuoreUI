@@ -155,6 +155,7 @@ namespace CuoreUI.Controls
             SelectionMode = SelectionMode.One;
             Graphics g = e.Graphics;
             g.SmoothingMode = SmoothingMode.AntiAlias;
+            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
 
             Rectangle cr = ClientRectangle;
             Rectangle backgroundRect = cr;

@@ -5,9 +5,9 @@ using System.Runtime.InteropServices;
 // zestaw atrybutów. Zmień wartości tych atrybutów, aby zmodyfikować informacje
 // skojarzone z zestawem.
 [assembly: AssemblyTitle("CuoreUI")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("C# .NET Winforms UI Framework")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("itzkxhu")]
 [assembly: AssemblyProduct("CuoreUI")]
 [assembly: AssemblyCopyright("Copyright ©  2024")]
 [assembly: AssemblyTrademark("")]

@@ -1,5 +1,4 @@
 ﻿using CuoreUI;
-using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
@@ -37,15 +36,15 @@ namespace wfcl1
 
                 float filledPercent = (float)Value / MaxValue;
                 float foreHeight = ClientRectangle.Height * filledPercent * 2;
-                RectangleF foreHalf = new RectangleF(0, 0, ClientRectangle.Width*2+1, Height);
-                RectangleF client = new RectangleF(0, Height - Rounding, ClientRectangle.Width*2, ClientRectangle.Height * 2 - foreHeight + (Rounding*2));
+                RectangleF foreHalf = new RectangleF(0, 0, ClientRectangle.Width * 2 + 1, Height);
+                RectangleF client = new RectangleF(0, Height - Rounding, ClientRectangle.Width * 2, ClientRectangle.Height * 2 - foreHeight + (Rounding * 2));
 
                 using (SolidBrush brush = new SolidBrush(Background))
                 {
                     tempGraphics.FillRectangle(brush, client);
                 }
 
-                if (RoundedCorners)
+                if (RoundedInsideCorners)
                 {
                     GraphicsPath graphicsPath = Helper.RoundRect(foreHalf, Rounding);
 
