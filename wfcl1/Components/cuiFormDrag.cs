@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel;
+using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CuoreUI
@@ -6,9 +8,20 @@ namespace CuoreUI
     public partial class cuiFormDrag : Component
     {
         private Form targetForm;
-        private bool isDragging;
-        private int offsetX;
-        private int offsetY;
+        private Point previousMousePosition;
+
+        private int privateDragFrequency = 4;
+        public int DragFrequency
+        {
+            get
+            {
+                return privateDragFrequency;
+            }  
+            set
+            {
+                privateDragFrequency = value;
+            }
+        }
 
         public cuiFormDrag(IContainer container)
         {
@@ -27,7 +40,6 @@ namespace CuoreUI
                 {
                     targetForm.MouseDown -= MouseDown;
                     targetForm.MouseMove -= MouseMove;
-                    targetForm.MouseUp -= MouseUp;
                 }
 
                 targetForm = value;
@@ -36,30 +48,31 @@ namespace CuoreUI
                 {
                     targetForm.MouseDown += MouseDown;
                     targetForm.MouseMove += MouseMove;
-                    targetForm.MouseUp += MouseUp;
                 }
+            }
+        }
+
+        private async void MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                Point currentMousePosition = Cursor.Position;
+                int deltaX = currentMousePosition.X - previousMousePosition.X;
+                int deltaY = currentMousePosition.Y - previousMousePosition.Y;
+
+                targetForm.Left += deltaX;
+                targetForm.Top += deltaY;
+
+                previousMousePosition = currentMousePosition;
+
+                await Task.Delay(DragFrequency);
             }
         }
 
         private void MouseDown(object sender, MouseEventArgs e)
         {
-            isDragging = true;
-            offsetX = e.X;
-            offsetY = e.Y;
+            previousMousePosition = Cursor.Position;
         }
 
-        private void MouseMove(object sender, MouseEventArgs e)
-        {
-            if (isDragging)
-            {
-                targetForm.Left = Cursor.Position.X - offsetX;
-                targetForm.Top = Cursor.Position.Y - offsetY;
-            }
-        }
-
-        private void MouseUp(object sender, MouseEventArgs e)
-        {
-            isDragging = false;
-        }
     }
 }

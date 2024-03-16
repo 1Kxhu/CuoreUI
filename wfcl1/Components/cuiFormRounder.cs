@@ -25,7 +25,8 @@ namespace CuoreUI.Components
                 if (!DesignMode)
                 {
                     DrawForm(null, null);
-                    InitializeDrawTimer();
+                    targetForm.Resize += OnPaint;
+                    targetForm.Paint += OnPaint;
                 }
             }
         }
@@ -43,51 +44,40 @@ namespace CuoreUI.Components
             }
         }
 
-        public cuiFormRounder()
+        private void OnPaint(object sender, EventArgs e)
         {
-            InitializeDrawTimer();
-        }
-
-        private void InitializeDrawTimer()
-        {
-            if (targetForm != null && !DesignMode)
-            {
-                drawTimer.Interval = 1000 / 60;
-                drawTimer.Tick += DrawForm;
-                drawTimer.Start();
-            }
+            ModifyFormStyles();
+            DrawForm(null, null);
         }
 
         private void DrawForm(object pSender, EventArgs pE)
         {
-            ModifyFormStyles();
             if (targetForm != null)
             {
                 using (Bitmap backImage = new Bitmap(targetForm.Width, targetForm.Height))
                 {
                     using (Graphics graphics = Graphics.FromImage(backImage))
                     {
+                        graphics.SmoothingMode = SmoothingMode.HighQuality;
+
                         Rectangle gradientRectangle = new Rectangle(0, 0, targetForm.Width - 1, targetForm.Height - 1);
-                        using (Brush b = new LinearGradientBrush(gradientRectangle, Color.DarkSlateBlue, Color.MediumPurple, 0.0f))
+                        GraphicsPath roundedRectangle = Helper.RoundRect(gradientRectangle, Rounding);
+                        using (SolidBrush brush = new SolidBrush(targetForm.BackColor))
                         {
-                            graphics.SmoothingMode = SmoothingMode.HighQuality;
-
-                            GraphicsPath roundedRectangle = Helper.RoundRect(gradientRectangle, Rounding);
-                            SolidBrush brush = new SolidBrush(targetForm.BackColor);
                             graphics.FillPath(brush, roundedRectangle);
-
-                            foreach (Control ctrl in targetForm.Controls)
-                            {
-                                using (Bitmap bmp = new Bitmap(ctrl.Width, ctrl.Height))
-                                {
-                                    Rectangle rect = new Rectangle(0, 0, ctrl.Width, ctrl.Height);
-                                    ctrl.DrawToBitmap(bmp, rect);
-                                    graphics.DrawImage(bmp, ctrl.Location);
-                                }
-                            }
-
-                            PerPixelAlphaBlend.SetBitmap(backImage, targetForm.Left, targetForm.Top, targetForm.Handle);
                         }
+
+                        foreach (Control ctrl in targetForm.Controls)
+                        {
+                            using (Bitmap bmp = new Bitmap(ctrl.Width, ctrl.Height))
+                            {
+                                Rectangle rect = new Rectangle(0, 0, ctrl.Width, ctrl.Height);
+                                ctrl.DrawToBitmap(bmp, rect);
+                                graphics.DrawImage(bmp, ctrl.Location);
+                            }
+                        }
+
+                        PerPixelAlphaBlend.SetBitmap(backImage, targetForm.Left, targetForm.Top, targetForm.Handle);
                     }
                 }
             }
