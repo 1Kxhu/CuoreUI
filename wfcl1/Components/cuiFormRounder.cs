@@ -27,7 +27,36 @@ namespace CuoreUI.Components
                     DrawForm(null, null);
                     targetForm.Resize += OnPaint;
                     targetForm.Paint += OnPaint;
+                    drawTimer.Interval = UpdateFrequency;
+                    drawTimer.Tick += DrawForm;
+                    drawTimer.Start();
                 }
+            }
+        }
+
+        private int privateUpdateFrequency = 4;
+        public int UpdateFrequency
+        {
+            get
+            {
+                return privateUpdateFrequency;
+            }
+            set
+            {
+                privateUpdateFrequency = value;
+            }
+        }
+
+        private int privateSizableOffset = 32;
+        public int SizableOffset
+        {
+            get
+            {
+                return privateSizableOffset;
+            }
+            set
+            {
+                privateSizableOffset = value;
             }
         }
 
@@ -46,21 +75,26 @@ namespace CuoreUI.Components
 
         private void OnPaint(object sender, EventArgs e)
         {
-            ModifyFormStyles();
             DrawForm(null, null);
         }
 
         private void DrawForm(object pSender, EventArgs pE)
         {
+            ModifyFormStyles();
             if (targetForm != null)
             {
+                int tempSizableOffset = SizableOffset;
+                if (targetForm.FormBorderStyle == FormBorderStyle.None)
+                {
+                    SizableOffset = 0;
+                }
                 using (Bitmap backImage = new Bitmap(targetForm.Width, targetForm.Height))
                 {
                     using (Graphics graphics = Graphics.FromImage(backImage))
                     {
                         graphics.SmoothingMode = SmoothingMode.HighQuality;
 
-                        Rectangle gradientRectangle = new Rectangle(0, 0, targetForm.Width - 1, targetForm.Height - 1);
+                        Rectangle gradientRectangle = new Rectangle(0, SizableOffset, targetForm.Width - 1, targetForm.Height - 1 - SizableOffset);
                         GraphicsPath roundedRectangle = Helper.RoundRect(gradientRectangle, Rounding);
                         using (SolidBrush brush = new SolidBrush(targetForm.BackColor))
                         {
@@ -69,9 +103,9 @@ namespace CuoreUI.Components
 
                         foreach (Control ctrl in targetForm.Controls)
                         {
-                            using (Bitmap bmp = new Bitmap(ctrl.Width, ctrl.Height))
+                            using (Bitmap bmp = new Bitmap(ctrl.Width, ctrl.Height + SizableOffset))
                             {
-                                Rectangle rect = new Rectangle(0, 0, ctrl.Width, ctrl.Height);
+                                Rectangle rect = new Rectangle(0, SizableOffset, ctrl.Width, ctrl.Height + SizableOffset);
                                 ctrl.DrawToBitmap(bmp, rect);
                                 graphics.DrawImage(bmp, ctrl.Location);
                             }
@@ -80,6 +114,7 @@ namespace CuoreUI.Components
                         PerPixelAlphaBlend.SetBitmap(backImage, targetForm.Left, targetForm.Top, targetForm.Handle);
                     }
                 }
+                SizableOffset = tempSizableOffset;
             }
         }
 
