@@ -88,7 +88,7 @@ namespace CuoreUI.Controls
                 e.Graphics.FillPath(brush, roundBackground);
             }
 
-            int thumbDim = Height - 6;
+            int thumbDim = Height - 7;
             RectangleF thumbRect = new RectangleF(3, 3, thumbDim, thumbDim);
 
             if (Checked)
