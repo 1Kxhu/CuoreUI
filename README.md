@@ -8,8 +8,8 @@ In short, as previously said, it's an UI Framework, that tries to keep winforms 
 I try to do this through adding properties such as corner rounding and drawing everything with antialias.
 
 # Why should you use CuoreUI?
-As of March 2024, there is really no reason.
-However, give it a couple of months and I'm sure I'll add lots of more interesting controls and components.
+Right now, it's an amazing component "cuiFormRounder" that SMOOTHLY rounds up your form!
+It's very performant and looks better than FourUI.
 
 # How to download and use CuoreUI?
 At the moment, I'm not providing any direct release, because it's still in active development.
