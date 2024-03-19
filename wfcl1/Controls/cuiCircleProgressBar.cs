@@ -141,6 +141,8 @@ namespace CuoreUI.Controls
                 path.AddArc(new Rectangle(borderHalf, borderHalf, circleWidth, circleHeight), -92, percent * 3.6f);
                 e.Graphics.DrawPath(pen, path);
             }
+
+            base.OnPaint(e);
         }
     }
 }

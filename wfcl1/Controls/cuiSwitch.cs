@@ -69,6 +69,7 @@ namespace CuoreUI.Controls
 
         protected override void OnPaint(PaintEventArgs e)
         {
+
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
             int Rounding;
@@ -106,6 +107,8 @@ namespace CuoreUI.Controls
                     e.Graphics.FillEllipse(brush, thumbRect);
                 }
             }
+
+            base.OnPaint(e);
         }
 
         protected override void OnMouseClick(MouseEventArgs e)

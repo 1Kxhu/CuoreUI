@@ -61,8 +61,6 @@ namespace CuoreUI
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            base.OnPaint(e);
-
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
             GraphicsPath roundBackground = Helper.RoundRect(ClientRectangle, Rounding);
@@ -70,6 +68,8 @@ namespace CuoreUI
             {
                 e.Graphics.FillPath(brush, roundBackground);
             }
+            base.OnPaint(e);
+
         }
     }
 }

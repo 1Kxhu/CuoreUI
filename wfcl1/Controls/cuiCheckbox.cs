@@ -72,6 +72,8 @@ namespace CuoreUI.Controls
                     e.Graphics.FillPath(brush, roundThumbRect);
                 }
             }
+
+            base.OnPaint(e);
         }
     }
 }

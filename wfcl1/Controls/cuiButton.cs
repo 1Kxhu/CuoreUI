@@ -144,6 +144,8 @@ namespace CuoreUI.Controls
             {
                 e.Graphics.DrawString(privateContent, Font, brush, textRectangle, stringFormat);
             }
+
+            base.OnPaint(e);
         }
 
 

@@ -210,6 +210,7 @@ namespace CuoreUI.Controls
                     }
                 }
             }
+            base.OnPaint(e);
         }
 
         protected override void OnMouseDown(MouseEventArgs e)

@@ -31,7 +31,7 @@ namespace wfcl1
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            base.OnPaint(e);
+
 
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
             e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
@@ -54,6 +54,7 @@ namespace wfcl1
             {
                 e.Graphics.DrawString(privateContent, Font, brush, ClientRectangle, stringFormat);
             }
+            base.OnPaint(e);
         }
 
         private HorizontalAlignments privateHorizontalAlignment = HorizontalAlignments.Center;

@@ -33,6 +33,7 @@ namespace CuoreUI.Controls
             {
                 e.Graphics.DrawRectangle(pen, lineRect);
             }
+            base.OnPaint(e);
         }
     }
 }

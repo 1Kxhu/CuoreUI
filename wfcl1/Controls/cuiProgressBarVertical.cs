@@ -60,6 +60,8 @@ namespace wfcl1
                         tempGraphics.FillRectangle(brush, foreHalf);
                     }
                 }
+
+                base.OnPaint(e);
             }
 
 

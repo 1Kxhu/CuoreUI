@@ -147,8 +147,6 @@ namespace wfcl1
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            base.OnPaint(e);
-
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
             e.Graphics.InterpolationMode = InterpolationMode.HighQualityBilinear;
 
@@ -192,6 +190,7 @@ namespace wfcl1
                     }
                 }
 
+                base.OnPaint(e);
             }
 
             if (Flipped)
