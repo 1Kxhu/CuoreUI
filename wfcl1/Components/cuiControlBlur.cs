@@ -40,7 +40,7 @@ namespace CuoreUI.Components
         }
 
         private double privateSigma = 1.1;
-        public double Sigma
+        private double Sigma
         {
             get
             {
@@ -59,7 +59,7 @@ namespace CuoreUI.Components
         }
 
         private int privateBlurAmount = 5;
-        private int BlurAmount
+        public int BlurAmount
         {
             get
             {
@@ -108,7 +108,7 @@ namespace CuoreUI.Components
 
                         g.Clear(Color.Transparent);
                         targetControl.DrawToBitmap(cachedBitmap, new Rectangle(0, 0, targetControl.Width, targetControl.Height));
-                        cachedBitmap = GaussianBlur.Apply(cachedBitmap, Sigma, BlurAmount);
+                        GaussianBlur.Apply(ref cachedBitmap, BlurAmount);
                     }
                 }
 
