@@ -17,41 +17,46 @@ public static class GaussianBlur
         BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadWrite, bitmap.PixelFormat);
         int bytesPerPixel = Bitmap.GetPixelFormatSize(bitmap.PixelFormat) / 8;
         int stride = bmpData.Stride;
+        int radius2 = 2 * radius;
 
         unsafe
         {
             byte* ptr = (byte*)bmpData.Scan0;
 
-            // Iterate over each pixel
             for (int y = 0; y < height; y++)
             {
+                byte* pixel = ptr + y * stride;
+
                 for (int x = 0; x < width; x++)
                 {
                     double[] rgba = { 0, 0, 0, 0 };
+                    byte* currentPixel = pixel;
 
-                    // Apply kernel
                     for (int ky = -radius; ky <= radius; ky++)
                     {
                         for (int kx = -radius; kx <= radius; kx++)
                         {
-                            int px = Math.Min(Math.Max(x + kx, 0), width - 1);
-                            int py = Math.Min(Math.Max(y + ky, 0), height - 1);
+                            int px = x + kx;
+                            int py = y + ky;
 
-                            byte* currentPixel = ptr + py * stride + px * bytesPerPixel;
-
-                            for (int i = 0; i < 4; i++)
+                            if (px >= 0 && px < width && py >= 0 && py < height)
                             {
-                                rgba[i] += kernel[ky + radius, kx + radius] * currentPixel[i];
+                                currentPixel = ptr + py * stride + px * bytesPerPixel;
+
+                                for (int i = 0; i < 4; i++)
+                                {
+                                    rgba[i] += kernel[ky + radius, kx + radius] * currentPixel[i];
+                                }
                             }
                         }
                     }
 
-                    // Update pixel
-                    byte* pixel = ptr + y * stride + x * bytesPerPixel;
                     for (int i = 0; i < 4; i++)
                     {
                         pixel[i] = (byte)Math.Min(Math.Max(rgba[i], 0), 255);
                     }
+
+                    pixel += bytesPerPixel;
                 }
             }
         }
@@ -63,8 +68,7 @@ public static class GaussianBlur
     {
         int size = 2 * radius + 1;
         double[,] kernel = new double[size, size];
-        double sigma = radius / 20.0; // Adjust sigma as needed
-
+        double sigma = radius / 20.0;
         double sumTotal = 0;
 
         for (int y = -radius; y <= radius; y++)
@@ -77,6 +81,7 @@ public static class GaussianBlur
                 sumTotal += val;
             }
         }
+
         for (int y = 0; y < size; y++)
         {
             for (int x = 0; x < size; x++)
