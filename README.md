@@ -3,7 +3,7 @@ THE SUCCESSOR TO FOURUI
 
 # What is CuoreUI?
 It's a C# .NET Winforms UI Framework similar to FourUI.
-This is just basically FourUI rewritten, because I thought to myself I could do better than what FourUI was.
+This is just basically FourUI rewritten + I plan to add more, because I thought to myself I could do better than what FourUI was.
 In short, as previously said, it's an UI Framework, that tries to keep winforms alive for a little more.
 I try to do this through adding properties such as corner rounding and drawing everything with antialias.
 
