@@ -100,16 +100,20 @@ namespace CuoreUI.Components
                         {
                             graphics.FillPath(brush, roundedRectangle);
                         }
-
-                        foreach (Control ctrl in targetForm.Controls)
+                        using (Pen pen = new Pen(targetForm.ForeColor))
                         {
-                            using (Bitmap bmp = new Bitmap(ctrl.Width, ctrl.Height + SizableOffset))
-                            {
-                                Rectangle rect = new Rectangle(0, SizableOffset, ctrl.Width, ctrl.Height + SizableOffset);
-                                ctrl.DrawToBitmap(bmp, rect);
-                                graphics.DrawImage(bmp, ctrl.Location);
-                            }
+                            graphics.DrawPath(pen, roundedRectangle);
                         }
+
+                            foreach (Control ctrl in targetForm.Controls)
+                            {
+                                using (Bitmap bmp = new Bitmap(ctrl.Width, ctrl.Height + SizableOffset))
+                                {
+                                    Rectangle rect = new Rectangle(0, SizableOffset, ctrl.Width, ctrl.Height + SizableOffset);
+                                    ctrl.DrawToBitmap(bmp, rect);
+                                    graphics.DrawImage(bmp, ctrl.Location);
+                                }
+                            }
 
                         PerPixelAlphaBlend.SetBitmap(backImage, targetForm.Left, targetForm.Top, targetForm.Handle);
                     }

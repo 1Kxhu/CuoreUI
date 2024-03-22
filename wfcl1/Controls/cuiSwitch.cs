@@ -1,9 +1,11 @@
-﻿using System.Drawing;
+﻿using System.ComponentModel;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace CuoreUI.Controls
 {
+    [DefaultEvent("Click")]
     public partial class cuiSwitch : UserControl
     {
         public cuiSwitch()
