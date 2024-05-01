@@ -3,7 +3,7 @@ using System.Drawing.Drawing2D;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-namespace wfcl1
+namespace CuoreUI.Controls
 {
     public partial class cuiLabel : UserControl
     {

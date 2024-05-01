@@ -34,7 +34,7 @@ namespace CuoreUI.Components
             }
         }
 
-        private int privateUpdateFrequency = 4;
+        private int privateUpdateFrequency = 32;
         public int UpdateFrequency
         {
             get
@@ -73,6 +73,20 @@ namespace CuoreUI.Components
             }
         }
 
+        private Color privateBorderColor = Color.White;
+        public Color BorderColor
+        {
+            get
+            {
+                return privateBorderColor;
+            }
+            set
+            {
+                privateBorderColor = value;
+                OnPaint(null, null);
+            }
+        }
+
         private void OnPaint(object sender, EventArgs e)
         {
             DrawForm(null, null);
@@ -80,6 +94,7 @@ namespace CuoreUI.Components
 
         private void DrawForm(object pSender, EventArgs pE)
         {
+            drawTimer.Interval = UpdateFrequency;
             ModifyFormStyles();
             if (targetForm != null)
             {
@@ -89,35 +104,30 @@ namespace CuoreUI.Components
                     SizableOffset = 0;
                 }
                 using (Bitmap backImage = new Bitmap(targetForm.Width, targetForm.Height))
+                using (Graphics graphics = Graphics.FromImage(backImage))
                 {
-                    using (Graphics graphics = Graphics.FromImage(backImage))
+                    graphics.SmoothingMode = SmoothingMode.HighQuality;
+
+                    Rectangle gradientRectangle = new Rectangle(0, SizableOffset, targetForm.Width - 1, targetForm.Height - 1 - SizableOffset);
+                    GraphicsPath roundedRectangle = Helper.RoundRect(gradientRectangle, Rounding);
+
+                    using (SolidBrush brush = new SolidBrush(targetForm.BackColor))
+                    using (Pen pen = new Pen(BorderColor))
                     {
-                        graphics.SmoothingMode = SmoothingMode.HighQuality;
+                        graphics.FillPath(brush, roundedRectangle);
+                        graphics.DrawPath(pen, roundedRectangle);
 
-                        Rectangle gradientRectangle = new Rectangle(0, SizableOffset, targetForm.Width - 1, targetForm.Height - 1 - SizableOffset);
-                        GraphicsPath roundedRectangle = Helper.RoundRect(gradientRectangle, Rounding);
-                        using (SolidBrush brush = new SolidBrush(targetForm.BackColor))
+                        foreach (Control ctrl in targetForm.Controls)
                         {
-                            graphics.FillPath(brush, roundedRectangle);
-                        }
-                        using (Pen pen = new Pen(targetForm.ForeColor))
-                        {
-                            graphics.DrawPath(pen, roundedRectangle);
-                        }
+                            Rectangle rect = new Rectangle(ctrl.Location, ctrl.Size);
 
-                            foreach (Control ctrl in targetForm.Controls)
-                            {
-                                using (Bitmap bmp = new Bitmap(ctrl.Width, ctrl.Height + SizableOffset))
-                                {
-                                    Rectangle rect = new Rectangle(0, SizableOffset, ctrl.Width, ctrl.Height + SizableOffset);
-                                    ctrl.DrawToBitmap(bmp, rect);
-                                    graphics.DrawImage(bmp, ctrl.Location);
-                                }
-                            }
-
-                        PerPixelAlphaBlend.SetBitmap(backImage, targetForm.Left, targetForm.Top, targetForm.Handle);
+                            ctrl.DrawToBitmap(backImage, rect);
+                        }
                     }
+
+                    PerPixelAlphaBlend.SetBitmap(backImage, targetForm.Left, targetForm.Top, targetForm.Handle);
                 }
+
                 SizableOffset = tempSizableOffset;
             }
         }

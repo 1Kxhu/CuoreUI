@@ -1,11 +1,10 @@
-﻿using CuoreUI;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.Windows.Forms;
 
-namespace wfcl1
+namespace CuoreUI.Controls
 {
     public partial class cuiProgressBarHorizontal : UserControl
     {
@@ -17,20 +16,6 @@ namespace wfcl1
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
         }
 
-        private bool privateRoundedCorners = true;
-        public bool RoundedInsideCorners
-        {
-            get
-            {
-                return privateRoundedCorners;
-            }
-            set
-            {
-                privateRoundedCorners = value;
-                Invalidate();
-            }
-        }
-
         private int privateValue = 50;
         public int Value
         {
@@ -40,14 +25,7 @@ namespace wfcl1
             }
             set
             {
-                if (value > MaxValue)
-                {
-                    throw new Exception("Value cannot be more than the MaxValue");
-                }
-                else
-                {
-                    privateValue = value;
-                }
+                privateValue = value;
                 Invalidate();
             }
         }
@@ -61,14 +39,7 @@ namespace wfcl1
             }
             set
             {
-                if (value < privateValue)
-                {
-                    throw new Exception("MaxValue cannot be less than the Value");
-                }
-                else
-                {
-                    privateMaxValue = value;
-                }
+                privateMaxValue = value;
                 Invalidate();
             }
         }
@@ -164,7 +135,7 @@ namespace wfcl1
                 float filledPercent = (float)Value / MaxValue;
                 float foreWidth = ClientRectangle.Width * filledPercent * 2;
                 RectangleF foreHalf = new RectangleF(0, 0, foreWidth, ClientRectangle.Height * 2 + 1);
-                RectangleF client = new RectangleF(foreWidth - Rounding, 0, ClientRectangle.Width * 2 - foreWidth + (Rounding * 2), ClientRectangle.Height * 2);
+                RectangleF client = new RectangleF(foreWidth - Rounding - (foreWidth / 4), 0, ClientRectangle.Width * 2 - foreWidth + (Rounding * 2) + (foreWidth / 4), ClientRectangle.Height * 2);
 
 
                 using (SolidBrush brush = new SolidBrush(Background))
@@ -172,22 +143,12 @@ namespace wfcl1
                     tempGraphics.FillRectangle(brush, client);
                 }
 
-                if (RoundedInsideCorners)
-                {
-                    GraphicsPath graphicsPath = Helper.RoundRect(foreHalf, Rounding);
 
-                    using (SolidBrush brush = new SolidBrush(Foreground))
-                    {
-                        tempGraphics.FillPath(brush, graphicsPath);
-                    }
-                }
-                else
-                {
+                GraphicsPath graphicsPath = Helper.RoundRect(foreHalf, Rounding * 2);
 
-                    using (SolidBrush brush = new SolidBrush(Foreground))
-                    {
-                        tempGraphics.FillRectangle(brush, foreHalf);
-                    }
+                using (SolidBrush brush = new SolidBrush(Foreground))
+                {
+                    tempGraphics.FillPath(brush, graphicsPath);
                 }
 
                 base.OnPaint(e);

@@ -5,9 +5,9 @@ using System.Windows.Forms;
 
 namespace CuoreUI
 {
-    public partial class cuiFormDrag : Component
+    public partial class cuiControlDrag : Component
     {
-        private Form targetForm;
+        private Control targetControl;
         private Point previousMousePosition;
 
         private int privateDragFrequency = 4;
@@ -23,31 +23,31 @@ namespace CuoreUI
             }
         }
 
-        public cuiFormDrag(IContainer container)
+        public cuiControlDrag(IContainer container)
         {
             container.Add(this);
         }
 
-        public Form TargetForm
+        public Control TargetControl
         {
             get
             {
-                return targetForm;
+                return targetControl;
             }
             set
             {
-                if (targetForm != null)
+                if (targetControl != null)
                 {
-                    targetForm.MouseDown -= MouseDown;
-                    targetForm.MouseMove -= MouseMove;
+                    targetControl.MouseDown -= MouseDown;
+                    targetControl.MouseMove -= MouseMove;
                 }
 
-                targetForm = value;
+                targetControl = value;
 
-                if (targetForm != null)
+                if (targetControl != null)
                 {
-                    targetForm.MouseDown += MouseDown;
-                    targetForm.MouseMove += MouseMove;
+                    targetControl.MouseDown += MouseDown;
+                    targetControl.MouseMove += MouseMove;
                 }
             }
         }
@@ -60,8 +60,11 @@ namespace CuoreUI
                 int deltaX = currentMousePosition.X - previousMousePosition.X;
                 int deltaY = currentMousePosition.Y - previousMousePosition.Y;
 
-                targetForm.Left += deltaX;
-                targetForm.Top += deltaY;
+                if (targetControl.Parent != null && targetControl.Parent is Form controlParent)
+                {
+                    controlParent.Left += deltaX;
+                    controlParent.Top += deltaY;
+                }
 
                 previousMousePosition = currentMousePosition;
 

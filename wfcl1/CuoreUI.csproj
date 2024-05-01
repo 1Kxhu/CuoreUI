@@ -40,6 +40,9 @@
     <Compile Include="Components\cuiControlBlur.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Components\cuiControlDrag.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Components\cuiFormDrag.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -70,6 +73,12 @@
     <Compile Include="Controls\cuiListbox.Designer.cs">
       <DependentUpon>cuiListbox.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\cuiPictureBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\cuiPictureBox.Designer.cs">
+      <DependentUpon>cuiPictureBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\cuiSeparator.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -81,6 +90,9 @@
     </Compile>
     <Compile Include="Controls\cuiSwitch.Designer.cs">
       <DependentUpon>cuiSwitch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\cuiTextBox.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="GaussianBlurTest.cs" />
     <Compile Include="Helper.cs" />
@@ -132,6 +144,9 @@
     <EmbeddedResource Include="Controls\cuiListbox.resx">
       <DependentUpon>cuiListbox.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\cuiPictureBox.resx">
+      <DependentUpon>cuiPictureBox.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\cuiSeparator.resx">
       <DependentUpon>cuiSeparator.cs</DependentUpon>
     </EmbeddedResource>
@@ -168,6 +183,7 @@
     <Reference Include="System.CodeDom, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.CodeDom.8.0.0\lib\net462\System.CodeDom.dll</HintPath>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
     <Reference Include="System.Text.RegularExpressions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -176,6 +192,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

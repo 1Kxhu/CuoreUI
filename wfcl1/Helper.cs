@@ -3,7 +3,8 @@ using System.Drawing.Drawing2D;
 
 namespace CuoreUI
 {
-    internal class Helper
+    // change private to public to allow external use of this because why not
+    public class Helper
     {
         public static GraphicsPath RoundRect(int x, int y, int width, int height, int borderRadius)
         {

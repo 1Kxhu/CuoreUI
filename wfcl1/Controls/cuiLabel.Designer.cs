@@ -1,4 +1,4 @@
-﻿namespace wfcl1
+﻿namespace CuoreUI.Controls
 {
     partial class cuiLabel
     {

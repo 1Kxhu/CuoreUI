@@ -1,10 +1,9 @@
-﻿using CuoreUI;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.Windows.Forms;
 
-namespace wfcl1
+namespace CuoreUI.Controls
 {
     public partial class cuiProgressBarVertical : cuiProgressBarHorizontal
     {
@@ -36,29 +35,18 @@ namespace wfcl1
 
                 float filledPercent = (float)Value / MaxValue;
                 float foreHeight = ClientRectangle.Height * filledPercent * 2;
-                RectangleF foreHalf = new RectangleF(0, 0, ClientRectangle.Width * 2 + 1, Height);
+                RectangleF foreHalf = new RectangleF(0, 0, ClientRectangle.Width * 2 + (ClientRectangle.Width / 4), Height);
                 RectangleF client = new RectangleF(0, Height - Rounding, ClientRectangle.Width * 2, ClientRectangle.Height * 2 - foreHeight + (Rounding * 2));
 
                 using (SolidBrush brush = new SolidBrush(Background))
                 {
                     tempGraphics.FillRectangle(brush, client);
                 }
+                GraphicsPath graphicsPath = Helper.RoundRect(foreHalf, Rounding * 2);
 
-                if (RoundedInsideCorners)
+                using (SolidBrush brush = new SolidBrush(Foreground))
                 {
-                    GraphicsPath graphicsPath = Helper.RoundRect(foreHalf, Rounding);
-
-                    using (SolidBrush brush = new SolidBrush(Foreground))
-                    {
-                        tempGraphics.FillPath(brush, graphicsPath);
-                    }
-                }
-                else
-                {
-                    using (SolidBrush brush = new SolidBrush(Foreground))
-                    {
-                        tempGraphics.FillRectangle(brush, foreHalf);
-                    }
+                    tempGraphics.FillPath(brush, graphicsPath);
                 }
 
                 base.OnPaint(e);

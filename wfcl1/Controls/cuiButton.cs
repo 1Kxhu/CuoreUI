@@ -12,6 +12,7 @@ namespace CuoreUI.Controls
         public cuiButton()
         {
             InitializeComponent();
+            DoubleBuffered = true;
             ForeColor = Color.White;
             Font = new Font("Microsoft Sans Serif", 9.75f);
         }
@@ -111,6 +112,7 @@ namespace CuoreUI.Controls
         {
             stringFormat.Alignment = StringAlignment.Center;
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
 
             GraphicsPath roundBackground = Helper.RoundRect(ClientRectangle, Rounding);
 

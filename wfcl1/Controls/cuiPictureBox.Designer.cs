@@ -1,13 +1,13 @@
 ﻿namespace CuoreUI.Controls
 {
-    partial class cuiBorder
+    partial class cuiPictureBox
     {
-        /// <summary>
+        /// <summary> 
         /// Wymagana zmienna projektanta.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
+        /// <summary> 
         /// Wyczyść wszystkie używane zasoby.
         /// </summary>
         /// <param name="disposing">prawda, jeżeli zarządzane zasoby powinny zostać zlikwidowane; Fałsz w przeciwnym wypadku.</param>
@@ -22,7 +22,7 @@
 
         #region Kod wygenerowany przez Projektanta składników
 
-        /// <summary>
+        /// <summary> 
         /// Metoda wymagana do obsługi projektanta — nie należy modyfikować 
         /// jej zawartości w edytorze kodu.
         /// </summary>
@@ -30,12 +30,12 @@
         {
             this.SuspendLayout();
             // 
-            // cuiBorder
+            // cuiPictureBox
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Name = "cuiBorder";
-            this.Size = new System.Drawing.Size(346, 150);
+            this.Name = "cuiPictureBox";
+            this.Resize += new System.EventHandler(this.cuiPictureBox_Resize);
             this.ResumeLayout(false);
 
         }
