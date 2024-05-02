@@ -85,6 +85,12 @@
     <Compile Include="Controls\cuiSeparator.Designer.cs">
       <DependentUpon>cuiSeparator.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\cuiSpinner.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\cuiSpinner.Designer.cs">
+      <DependentUpon>cuiSpinner.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\cuiSwitch.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -149,6 +155,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\cuiSeparator.resx">
       <DependentUpon>cuiSeparator.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\cuiSpinner.resx">
+      <DependentUpon>cuiSpinner.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\cuiSwitch.resx">
       <DependentUpon>cuiSwitch.cs</DependentUpon>
