@@ -1,5 +1,5 @@
 ![CuoreUI](https://github.com/1Kxhu/CuoreUI/assets/115172127/352d85cd-e0c7-4202-bc28-6c2b08205726)
-THE SUCCESSOR TO FOURUI (DO NOT USE IN PROD)
+THE SUCCESSOR TO FOURUI (DO NOT USE IN PRODUCTION YET)
 
 # What is CuoreUI?
 It's a C# .NET Winforms UI Framework similar to FourUI.
