@@ -97,6 +97,18 @@
     <Compile Include="Controls\cuiSwitch.Designer.cs">
       <DependentUpon>cuiSwitch.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\cuiTabControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\cuiTabControl.Designer.cs">
+      <DependentUpon>cuiTabControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\cuiTabControlExperimental.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\cuiTabControlExperimental.Designer.cs">
+      <DependentUpon>cuiTabControlExperimental.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\cuiTextBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -132,6 +144,12 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="TabControlStuff\cuiTabPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TabControlStuff\cuiTabPage.Designer.cs">
+      <DependentUpon>cuiTabPage.cs</DependentUpon>
+    </Compile>
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
@@ -162,6 +180,9 @@
     <EmbeddedResource Include="Controls\cuiSwitch.resx">
       <DependentUpon>cuiSwitch.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\cuiTabControlExperimental.resx">
+      <DependentUpon>cuiTabControlExperimental.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -171,7 +192,9 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Graphics\" />
+  </ItemGroup>
   <ItemGroup>
     <Reference Include="Accord, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
       <HintPath>..\packages\Accord.3.8.0\lib\net462\Accord.dll</HintPath>
@@ -188,18 +211,36 @@
     <Reference Include="Accord.Statistics, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
       <HintPath>..\packages\Accord.Statistics.3.8.0\lib\net462\Accord.Statistics.dll</HintPath>
     </Reference>
+    <Reference Include="ExCSS, Version=4.2.3.0, Culture=neutral, PublicKeyToken=bdbe16be9b936b9a, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExCSS.4.2.3\lib\netstandard2.0\ExCSS.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
     <Reference Include="System.CodeDom, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.CodeDom.8.0.0\lib\net462\System.CodeDom.dll</HintPath>
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Text.RegularExpressions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Text.RegularExpressions.4.3.1\lib\net463\System.Text.RegularExpressions.dll</HintPath>
       <Private>True</Private>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>

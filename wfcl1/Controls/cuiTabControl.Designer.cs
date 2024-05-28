@@ -1,6 +1,6 @@
 ﻿namespace CuoreUI.Controls
 {
-    partial class cuiProgressBarVertical
+    partial class cuiTabControl
     {
         private System.ComponentModel.IContainer components = null;
 
@@ -10,6 +10,7 @@
             {
                 components.Dispose();
             }
+            TabPages.Clear();
             base.Dispose(disposing);
         }
 
@@ -18,7 +19,6 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         }
 
         #endregion

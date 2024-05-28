@@ -33,7 +33,7 @@ namespace CuoreUI.Controls
             DoubleBuffered = true;
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
 
-            backsiteSmoothRotation = RotateSpeed;
+            privateSmoothRotation = RotateSpeed;
             Rotation = 0;
 
             updateTimer.Interval = 500 / Helper.Win32.GetRefreshRate();
@@ -47,7 +47,6 @@ namespace CuoreUI.Controls
             rotationTimer.Interval = 4;
             rotationTimer.Tick += (obj, args) =>
             {
-                // weird workaround because of interpolating Rotation (check SmoothRotation variable)
                 if (Rotation >= FloatLimitHalf)
                 {
                     Rotation = 0;
@@ -61,7 +60,7 @@ namespace CuoreUI.Controls
             rotationTimer.Start();
         }
 
-        private Color privateArcColor = Color.White;
+        private Color privateArcColor = Color.MediumSlateBlue;
         public Color ArcColor
         {
             get
@@ -84,30 +83,29 @@ namespace CuoreUI.Controls
             }
             set
             {
-                backsiteSmoothRotation = value;
+                privateSmoothRotation = value;
                 privateRotation = value;
                 Invalidate();
             }
         }
 
-        private float backsiteSmoothRotation = 0;
+        private float privateSmoothRotation = 0;
         private float SmoothRotation
         {
             get
             {
-                // interpolate or whatever it's called to see the spinner spinning smoothly on all refresh rates
-                backsiteSmoothRotation = ((backsiteSmoothRotation * 14) + Rotation) / 15;
-                if (backsiteSmoothRotation > FloatLimitHalf)
+                privateSmoothRotation = ((privateSmoothRotation * 14) + Rotation) / 15;
+                if (privateSmoothRotation > FloatLimitHalf)
                 {
-                    backsiteSmoothRotation = 0;
-                    Rotation = 0;
+                    privateSmoothRotation = RotateSpeed;
+                    Rotation = RotateSpeed;
                 }
 
-                if (backsiteSmoothRotation > 360 && Rotation > 360)
+                if (privateSmoothRotation > 360 && Rotation > 360)
                 {
-                    Rotation = 360 - backsiteSmoothRotation;
+                    Rotation = 360 - privateSmoothRotation + RotateSpeed;
                 }
-                return backsiteSmoothRotation;
+                return privateSmoothRotation;
             }
         }
 
@@ -139,7 +137,7 @@ namespace CuoreUI.Controls
         {
             base.OnLoad(e);
             Rotation = 0;
-            backsiteSmoothRotation = 0;
+            privateSmoothRotation = 0;
         }
     }
 }

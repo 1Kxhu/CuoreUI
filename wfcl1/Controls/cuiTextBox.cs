@@ -6,8 +6,7 @@ using System.Windows.Forms;
 
 public class cuiTextBox : UserControl
 {
-    private int borderRadius = 10; // Default border radius
-
+    private int borderRadius = 10;
     public int BorderRadius
     {
         get
@@ -159,7 +158,6 @@ public class cuiTextBox : UserControl
         Point textLocation = new Point(Height / 8, (Height / 2) - (Font.Height / 2));
         e.Graphics.DrawString(Content, Font, new SolidBrush(ForeColor), textLocation);
 
-        // caret code
         if (showCaret)
         {
             int newXLoc = textLocation.X + (int)Math.Ceiling(e.Graphics.MeasureString(Content, Font).Width);
@@ -213,14 +211,14 @@ public class cuiTextBox : UserControl
                 Content = Content.Remove(Content.Length - 1);
             }
         }
-        else if (e.KeyChar == (char)3 && ModifierKeys == Keys.Control) // Ctrl + C
+        else if (e.KeyChar == (char)3 && ModifierKeys == Keys.Control)
         {
             if (Content != string.Empty || Content != null)
             {
                 Clipboard.SetText(Content + "\r");
             }
         }
-        else if (e.KeyChar == (char)1 && ModifierKeys == Keys.Control) // Ctrl + A
+        else if (e.KeyChar == (char)1 && ModifierKeys == Keys.Control)
         {
             if (Content != string.Empty || Content != null)
             {
@@ -228,7 +226,7 @@ public class cuiTextBox : UserControl
                 Content = string.Empty + "\r";
             }
         }
-        else if (e.KeyChar == (char)22 && ModifierKeys == Keys.Control) // Ctrl + V
+        else if (e.KeyChar == (char)22 && ModifierKeys == Keys.Control)
         {
             if (Clipboard.ContainsText())
             {

@@ -13,52 +13,35 @@ namespace CuoreUI.Components
             container.Add(this);
         }
 
-        private Control targetControl;
+        private Control privateTargetControl;
         public Control TargetControl
         {
             get
             {
-                return targetControl;
+                return privateTargetControl;
             }
             set
             {
-                if (targetControl != null)
+                if (privateTargetControl != null)
                 {
-                    targetControl.Paint -= TargetControl_Paint;
-                    targetControl.Invalidated -= TargetControl_Invalidated;
+                    privateTargetControl.Paint -= TargetControl_Paint;
+                    privateTargetControl.Invalidated -= TargetControl_Invalidated;
                 }
-                targetControl = value;
-                if (targetControl != null)
+                value.Parent?.Refresh();
+
+                privateTargetControl = value;
+                if (privateTargetControl != null)
                 {
-                    targetControl.Paint += TargetControl_Paint;
-                    targetControl.Invalidated += TargetControl_Invalidated;
+                    privateTargetControl.Paint += TargetControl_Paint;
+                    privateTargetControl.Invalidated += TargetControl_Invalidated;
                 }
                 cachedBitmap?.Dispose();
                 cachedBitmap = null;
-                targetControl?.Invalidate();
+                privateTargetControl?.Invalidate();
             }
         }
 
-        private double privateSigma = 1.1;
-        private double Sigma
-        {
-            get
-            {
-                return privateSigma;
-            }
-            set
-            {
-                if (value > 0)
-                {
-                    privateSigma = value;
-                }
-                cachedBitmap?.Dispose();
-                cachedBitmap = null;
-                targetControl?.Invalidate();
-            }
-        }
-
-        private int privateBlurAmount = 5;
+        private int privateBlurAmount = 3;
         public int BlurAmount
         {
             get
@@ -73,7 +56,7 @@ namespace CuoreUI.Components
                 }
                 cachedBitmap?.Dispose();
                 cachedBitmap = null;
-                targetControl?.Refresh();
+                privateTargetControl?.Refresh();
             }
         }
 
@@ -83,45 +66,40 @@ namespace CuoreUI.Components
             cachedBitmap = null;
         }
 
-        private void TargetControl_Paint(object sender, PaintEventArgs e)
+        private unsafe void TargetControl_Paint(object sender, PaintEventArgs e)
         {
-            targetControl?.SuspendLayout();
-            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
-            e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear;
-
-            GraphicsPath path = new GraphicsPath();
-            path.AddRectangle(targetControl.ClientRectangle);
-
-            using (Region clipRegion = new Region(path))
+            e.Graphics.FillRectangle(new SolidBrush(TargetControl.BackColor), TargetControl.ClientRectangle);
+            if (cachedBitmap == null || cachedBitmap.Width != privateTargetControl.Width || cachedBitmap.Height != privateTargetControl.Height)
             {
-                e.Graphics.Clip = clipRegion;
-
-                if (cachedBitmap == null)
+                cachedBitmap?.Dispose();
+                cachedBitmap = new Bitmap(privateTargetControl.Width, privateTargetControl.Height);
+                using (Graphics g = Graphics.FromImage(cachedBitmap))
                 {
-                    cachedBitmap = new Bitmap(targetControl.Width, targetControl.Height);
-                    using (Graphics g = Graphics.FromImage(cachedBitmap))
-                    {
-                        g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-                        g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                        g.InterpolationMode = InterpolationMode.HighQualityBicubic;
 
-                        g.Clear(Color.Transparent);
-                        targetControl.DrawToBitmap(cachedBitmap, new Rectangle(0, 0, targetControl.Width, targetControl.Height));
-                        GaussianBlur.Apply(ref cachedBitmap, BlurAmount);
-                    }
+
+                    g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
+                    g.PixelOffsetMode = PixelOffsetMode.None;
+                    g.InterpolationMode = InterpolationMode.Low;
+                    g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SingleBitPerPixel;
+
+                    privateTargetControl.DrawToBitmap(cachedBitmap, new Rectangle(0, 0, privateTargetControl.Width, privateTargetControl.Height));
+
+                    GaussianBlur.ApplyBox(ref cachedBitmap, BlurAmount);
                 }
-
-                e.Graphics.DrawImage(cachedBitmap, targetControl.ClientRectangle);
             }
-            targetControl?.ResumeLayout(false);
+            e.Graphics.DrawImage(cachedBitmap, privateTargetControl.ClientRectangle);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
+                cachedBitmap = null;
                 cachedBitmap?.Dispose();
+                TargetControl.Paint -= TargetControl_Paint;
+                TargetControl.Invalidated -= TargetControl_Invalidated;
+                TargetControl.Invalidate();
+                TargetControl = null;
             }
             base.Dispose(disposing);
         }

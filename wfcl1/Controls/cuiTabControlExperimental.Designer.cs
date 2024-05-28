@@ -1,6 +1,6 @@
 ﻿namespace CuoreUI.Controls
 {
-    partial class cuiProgressBarVertical
+    partial class cuiTabControlExperimental
     {
         private System.ComponentModel.IContainer components = null;
 

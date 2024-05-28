@@ -92,43 +92,57 @@ namespace CuoreUI.Components
             DrawForm(null, null);
         }
 
+        private Bitmap backImage; private Graphics backGraphics;
         private void DrawForm(object pSender, EventArgs pE)
         {
             drawTimer.Interval = UpdateFrequency;
             ModifyFormStyles();
+
             if (targetForm != null)
             {
+                int tempSizableXOffset = Rounding - 1;
                 int tempSizableOffset = SizableOffset;
                 if (targetForm.FormBorderStyle == FormBorderStyle.None)
                 {
-                    SizableOffset = 0;
+                    tempSizableOffset = 0;
+                    tempSizableXOffset = 0;
                 }
-                using (Bitmap backImage = new Bitmap(targetForm.Width, targetForm.Height))
-                using (Graphics graphics = Graphics.FromImage(backImage))
+
+                if (backImage == null || backImage.Size != targetForm.Size)
                 {
-                    graphics.SmoothingMode = SmoothingMode.HighQuality;
-
-                    Rectangle gradientRectangle = new Rectangle(0, SizableOffset, targetForm.Width - 1, targetForm.Height - 1 - SizableOffset);
-                    GraphicsPath roundedRectangle = Helper.RoundRect(gradientRectangle, Rounding);
-
-                    using (SolidBrush brush = new SolidBrush(targetForm.BackColor))
-                    using (Pen pen = new Pen(BorderColor))
-                    {
-                        graphics.FillPath(brush, roundedRectangle);
-                        graphics.DrawPath(pen, roundedRectangle);
-
-                        foreach (Control ctrl in targetForm.Controls)
-                        {
-                            Rectangle rect = new Rectangle(ctrl.Location, ctrl.Size);
-
-                            ctrl.DrawToBitmap(backImage, rect);
-                        }
-                    }
-
-                    PerPixelAlphaBlend.SetBitmap(backImage, targetForm.Left, targetForm.Top, targetForm.Handle);
+                    backImage?.Dispose();
+                    backImage = new Bitmap(targetForm.Width, targetForm.Height);
+                    backGraphics?.Dispose();
+                    backGraphics = Graphics.FromImage(backImage);
+                    backGraphics.SmoothingMode = SmoothingMode.None;
+                }
+                else
+                {
+                    backGraphics.Clear(Color.Transparent);
                 }
 
-                SizableOffset = tempSizableOffset;
+                Rectangle gradientRectangle = new Rectangle(0, SizableOffset, targetForm.Width - 1, targetForm.Height - 1 - tempSizableOffset);
+                GraphicsPath roundedRectangle = Helper.RoundRect(gradientRectangle, Rounding);
+
+                using (SolidBrush brush = new SolidBrush(targetForm.BackColor))
+                using (Pen pen = new Pen(BorderColor))
+                {
+                    backGraphics.SmoothingMode = SmoothingMode.AntiAlias;
+                    backGraphics.FillPath(brush, roundedRectangle);
+                    backGraphics.DrawPath(pen, roundedRectangle);
+                    backGraphics.SmoothingMode = SmoothingMode.None;
+
+                    foreach (Control ctrl in targetForm.Controls)
+                    {
+                        Point loc = ctrl.Location;
+                        loc.Y += SizableOffset;
+                        loc.X += tempSizableXOffset;
+                        Rectangle rect = new Rectangle(loc, ctrl.Size);
+                        ctrl.DrawToBitmap(backImage, rect);
+                    }
+                }
+
+                PerPixelAlphaBlend.SetBitmap(backImage, targetForm.Left, targetForm.Top, targetForm.Handle);
             }
         }
 
@@ -162,6 +176,11 @@ namespace CuoreUI.Components
 
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         public static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        internal static extern bool SetLayeredWindowAttributes(IntPtr hwnd, int crKey, byte bAlpha, int dwFlags);
+
+        internal const int LWA_ALPHA = 0x2;
     }
 
     internal static class PerPixelAlphaBlend
@@ -171,7 +190,7 @@ namespace CuoreUI.Components
             SetBitmap(bitmap, 255, left, top, handle);
         }
 
-        public static void SetBitmap(Bitmap bitmap, byte opacity, int left, int top, IntPtr handle)
+        public unsafe static void SetBitmap(Bitmap bitmap, byte opacity, int left, int top, IntPtr handle)
         {
             if (bitmap.PixelFormat != PixelFormat.Format32bppArgb)
                 throw new ApplicationException("The bitmap must be 32ppp with alpha-channel.");
@@ -188,15 +207,18 @@ namespace CuoreUI.Components
                 oldBitmap = Win32.SelectObject(memDc, hBitmap);
 
                 Win32.Size size = new Win32.Size(bitmap.Width, bitmap.Height);
-                Win32.Point pointSource = new Win32.Point(0, 0);
                 Win32.Point topPos = new Win32.Point(left, top);
-                Win32.BLENDFUNCTION blend = new Win32.BLENDFUNCTION();
-                blend.BlendOp = Win32.AC_SRC_OVER;
-                blend.BlendFlags = 0;
-                blend.SourceConstantAlpha = opacity;
-                blend.AlphaFormat = Win32.AC_SRC_ALPHA;
+                Win32.Point pointSource = new Win32.Point(0, 0);
+                Win32.BLENDFUNCTION blend = new Win32.BLENDFUNCTION
+                {
+                    BlendOp = Win32.AC_SRC_OVER,
+                    BlendFlags = 0,
+                    SourceConstantAlpha = opacity,
+                    AlphaFormat = Win32.AC_SRC_ALPHA
+                };
 
                 Win32.UpdateLayeredWindow(handle, screenDc, ref topPos, ref size, memDc, ref pointSource, 0, ref blend, Win32.ULW_ALPHA);
+
             }
             finally
             {
@@ -212,7 +234,7 @@ namespace CuoreUI.Components
         }
     }
 
-    internal class Win32
+    internal static class Win32
     {
         public enum Bool
         {
@@ -297,5 +319,7 @@ namespace CuoreUI.Components
 
         [DllImport("gdi32.dll", ExactSpelling = true, SetLastError = true)]
         public static extern Bool DeleteObject(IntPtr hObject);
+
+
     }
 }

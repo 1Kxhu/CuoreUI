@@ -68,7 +68,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private Color privateNormalColor = Color.FromArgb(222, 222, 222);
+        private Color privateNormalColor = Color.FromArgb(34, 34, 34);
         public Color NormalColor
         {
             get

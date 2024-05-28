@@ -56,11 +56,23 @@ namespace CuoreUI.Controls
             Rectangle clipRectangle = ClientRectangle;
             clipRectangle.Inflate(-1, -1);
 
-            GraphicsPath clipGraphicsPath = Helper.RoundRect(clipRectangle, CornerRadius);
-
-            if (Content != null && cachedImageBrush != null && cachedImage != null)
+            if (CornerRadius == 0)
             {
-                e.Graphics.FillPath(cachedImageBrush, clipGraphicsPath);
+                GraphicsPath clipGraphicsPath = Helper.RoundRect(clipRectangle, 1);
+
+                if (Content != null && cachedImageBrush != null && cachedImage != null)
+                {
+                    e.Graphics.FillPath(cachedImageBrush, clipGraphicsPath);
+                }
+            }
+            else
+            {
+                GraphicsPath clipGraphicsPath = Helper.RoundRect(clipRectangle, CornerRadius);
+
+                if (Content != null && cachedImageBrush != null && cachedImage != null)
+                {
+                    e.Graphics.FillPath(cachedImageBrush, clipGraphicsPath);
+                }
             }
         }
 
@@ -88,7 +100,10 @@ namespace CuoreUI.Controls
 
         private void cuiPictureBox_Resize(object sender, EventArgs e)
         {
-            Content = Content;
+            if (Content != null)
+            {
+                Content = Content;
+            }
         }
     }
 }
