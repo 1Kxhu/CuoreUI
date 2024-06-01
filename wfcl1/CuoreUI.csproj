@@ -49,6 +49,25 @@
     <Compile Include="Components\cuiFormRounder.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Components\cuiFormRounderV2.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Components\cuiFormRounderV2.Designer.cs">
+      <DependentUpon>cuiFormRounderV2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\cuiFormRounderV2Resources\FakeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\cuiFormRounderV2Resources\FakeForm.Designer.cs">
+      <DependentUpon>FakeForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\cuiFormRounderV2Resources\RoundedForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\cuiFormRounderV2Resources\RoundedForm.Designer.cs">
+      <DependentUpon>RoundedForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\cuiFormRounderV2Resources\SharedVariables.cs" />
     <Compile Include="Controls\cuiButton.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -153,6 +172,12 @@
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Components\cuiFormRounderV2Resources\FakeForm.resx">
+      <DependentUpon>FakeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Components\cuiFormRounderV2Resources\RoundedForm.resx">
+      <DependentUpon>RoundedForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\cuiBorder.resx">
       <DependentUpon>cuiBorder.cs</DependentUpon>
     </EmbeddedResource>

@@ -245,7 +245,7 @@ namespace CuoreUI.Controls
 
         private void CountChanged(object sender, EventArgs e)
         {
-            
+
             Invalidate();
         }
 
@@ -282,6 +282,16 @@ namespace CuoreUI.Controls
             panel.Padding = Padding.Empty;
             tabControl.Dock = DockStyle.Fill;
         }
+
+        public bool AllowNoTabs => tabControl.AllowNoTabs;
+
+        public object GetSelectedTab()
+        {
+            return tabControl.SelectedTab;
+        }
+
+        public int SelectedIndex => tabControl.SelectedIndex;
+        public object SelectedTab => tabControl.SelectedTab;
 
         private void panelPaint(object sender, PaintEventArgs e)
         {

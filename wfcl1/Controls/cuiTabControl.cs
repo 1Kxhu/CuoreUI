@@ -32,6 +32,8 @@ namespace CuoreUI.Controls
             Invalidate();
         }
 
+        public bool AllowNoTabs { get; set; } = false;
+
         private Color privateBackgroundColor = Color.FromArgb(10, 10, 10);
         public Color BackgroundColor
         {
@@ -433,6 +435,14 @@ namespace CuoreUI.Controls
                     {
                         if (i == TabSelectedToDeletion)
                         {
+                            if (!AllowNoTabs)
+                            {
+                                if (TabPages.Count == 1)
+                                {
+                                    break;
+                                }
+                            }
+
                             TabPages.RemoveAt(i);
                             break;
                         }

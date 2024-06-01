@@ -8,8 +8,18 @@ using System.Windows.Forms;
 
 namespace CuoreUI.Components
 {
+    [Obsolete("cuiFormRounder is obsolete, use cuiFormRounderV2 for better performance.")]
     public partial class cuiFormRounder : Component
     {
+        public cuiFormRounder(IContainer ic)
+        {
+            if (MessageBox.Show("cuiFormRounder is obsolete, do you still want to use it?", "Warning", MessageBoxButtons.YesNo) == DialogResult.No)
+            {
+                ic.Add(new cuiFormRounderV2());
+                throw new InvalidOperationException("OK! Added an instance of cuiFormRounderV2 instead!");
+            }
+        }
+
         private Timer drawTimer = new Timer();
 
         private Form targetForm;
