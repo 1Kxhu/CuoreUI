@@ -16,6 +16,7 @@ namespace CuoreUI.Components.cuiFormRounderV2Resources
         public FakeForm()
         {
             InitializeComponent();
+            SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
             SuspendLayout();
         }
 

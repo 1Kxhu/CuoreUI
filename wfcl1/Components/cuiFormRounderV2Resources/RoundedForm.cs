@@ -53,6 +53,7 @@ namespace CuoreUI.Components.cuiFormRounderV2Resources
         public RoundedForm(Color init_backgroundColor, Color init_borderColor)
         {
             InitializeComponent();
+            SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
             BackgroundColor = init_backgroundColor;
             BorderColor = init_borderColor;
         }
