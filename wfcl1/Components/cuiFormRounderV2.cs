@@ -128,7 +128,7 @@ namespace CuoreUI.Components
 
             Timer bitmapTimer = new Timer
             {
-                Interval = 16
+                Interval = 32
             };
             Bitmap tempBitmap = new Bitmap(TargetForm.Width, TargetForm.Height);
             bitmapTimer.Tick += ((a1, a2) =>
@@ -140,11 +140,13 @@ namespace CuoreUI.Components
                     TargetForm.DrawToBitmap(tempBitmap, new Rectangle(0, 0, TargetForm.Width, TargetForm.Height));
                 }
 
-                //gpt, i wouldnt have known i could just do this (reduced cpu usage by ALOT)
                 SharedVariables.FakeBitmap = (Bitmap)tempBitmap.Clone();
                 FakeForm.Invoke((MethodInvoker)delegate {
                     FakeForm.Refresh();
                 });
+
+                // 30 mb
+                GC.AddMemoryPressure(30000000);
             });
             bitmapTimer.Start();
 

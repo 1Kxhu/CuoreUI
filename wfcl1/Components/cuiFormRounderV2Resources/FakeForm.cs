@@ -16,6 +16,7 @@ namespace CuoreUI.Components.cuiFormRounderV2Resources
         public FakeForm()
         {
             InitializeComponent();
+            SuspendLayout();
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -25,6 +26,7 @@ namespace CuoreUI.Components.cuiFormRounderV2Resources
             if (SharedVariables.FakeBitmap != null)
             {
                 e.Graphics.DrawImage(SharedVariables.FakeBitmap, Point.Empty);
+                SharedVariables.FakeBitmap.Dispose();
             }
         }
     }
