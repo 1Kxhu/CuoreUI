@@ -32,8 +32,8 @@ namespace CuoreUI.Controls
             }
         }
 
-        private int privateRounding = 8;
-        public int Rounding
+        private Padding privateRounding = new Padding(8, 8, 8, 8);
+        public Padding Rounding
         {
             get
             {
@@ -41,22 +41,7 @@ namespace CuoreUI.Controls
             }
             set
             {
-                if (value > 0)
-                {
-                    if (value > (ClientRectangle.Height / 2))
-                    {
-                        privateRounding = ClientRectangle.Height / 2;
-                        Rounding = privateRounding;
-                    }
-                    else
-                    {
-                        privateRounding = value;
-                    }
-                }
-                else
-                {
-                    throw new Exception("Rounding cannot be less than 1");
-                }
+                privateRounding = value;
                 Invalidate();
             }
         }
@@ -169,8 +154,10 @@ namespace CuoreUI.Controls
             stringFormat.Alignment = StringAlignment.Center;
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
             e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+            Rectangle modifiedCR = ClientRectangle;
+            modifiedCR.Inflate(-1, -1);
 
-            GraphicsPath roundBackground = Helper.RoundRect(ClientRectangle, Rounding);
+            GraphicsPath roundBackground = Helper.RoundRect(modifiedCR, Rounding);
 
             Color renderedBackgroundColor;
             Color renderedOutlineColor;

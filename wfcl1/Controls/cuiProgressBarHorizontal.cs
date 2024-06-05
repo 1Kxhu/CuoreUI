@@ -95,21 +95,14 @@ namespace CuoreUI.Controls
             }
             set
             {
-                if (value > 0)
+                if (value > (ClientRectangle.Height / 2))
                 {
-                    if (value > (ClientRectangle.Height / 2))
-                    {
-                        privateRounding = ClientRectangle.Height / 2;
-                        Rounding = privateRounding;
-                    }
-                    else
-                    {
-                        privateRounding = value;
-                    }
+                    privateRounding = ClientRectangle.Height / 2;
+                    Rounding = privateRounding;
                 }
                 else
                 {
-                    throw new Exception("Rounding cannot be less than 1");
+                    privateRounding = value;
                 }
                 Invalidate();
             }

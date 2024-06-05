@@ -42,14 +42,8 @@ namespace CuoreUI.Controls
             set
             {
                 privateSvgCode = value;
-                if (OverrideColor == Color.Empty)
-                {
-                    SaveSVG(false);
-                }
-                else
-                {
-                    SaveSVG(true);
-                }
+                OverrideStroke = OverrideStroke;
+                OverrideFill = OverrideFill;
             }
         }
 
@@ -59,23 +53,34 @@ namespace CuoreUI.Controls
             private set;
         } = new string[] { "" };
 
-        private async void SaveSVG(bool alternative)
+        private async void SaveSVG(bool alternativeStroke, bool alternativeFill)
         {
             string path = GetSVGLocation();
             string[] tempSVGCODE = SvgCode;
 
-            if (alternative && OverrideColor != Color.Empty)
+            if (alternativeStroke && OverrideStroke != Color.Empty)
             {
-                string yourColor = ColorToHexString(OverrideColor);
+                string strokeColor = ColorToHexString(OverrideStroke);
 
-                string pattern1 = @"stroke=""([^""]+)""";
-                string pattern2 = @"fill=""([^""]+)""";
+                string strokeRegex = @"stroke=""([^""]+)""";
 
 
                 for (int i = 0; i < tempSVGCODE.Length; i++)
                 {
-                    tempSVGCODE[i] = Regex.Replace(tempSVGCODE[i], pattern1, $"stroke=\"{yourColor}\"");
-                    tempSVGCODE[i] = Regex.Replace(tempSVGCODE[i], pattern2, $"fill=\"{yourColor}\"");
+                    tempSVGCODE[i] = Regex.Replace(tempSVGCODE[i], strokeRegex, $"stroke=\"{strokeColor}\"");
+                }
+            }
+
+            if (alternativeFill && OverrideFill != Color.Empty)
+            {
+                string fillColor = ColorToHexString(OverrideFill);
+
+                string fillRegex = @"fill=""([^""]+)""";
+
+
+                for (int i = 0; i < tempSVGCODE.Length; i++)
+                {
+                    tempSVGCODE[i] = Regex.Replace(tempSVGCODE[i], fillRegex, $"fill=\"{fillColor}\"");
                 }
             }
 
@@ -101,25 +106,48 @@ namespace CuoreUI.Controls
             return "#" + r + g + b;
         }
 
-        private Color privateOverrideColor = Color.Empty;
-        public Color OverrideColor
+        private Color privateOverrideStroke = Color.Empty;
+        public Color OverrideStroke
         {
             get
             {
-                return privateOverrideColor;
+                return privateOverrideStroke;
             }
             set
             {
-                privateOverrideColor = value;
-                SaveSVG(true);
+                if (value == Color.Transparent || value == Color.Empty)
+                {
+                    value = BackColor;
+                }
+                privateOverrideStroke = value;
+                SaveSVG(true, false);
             }
+        }
 
+        private Color privateOverrideFill = Color.Empty;
+        public Color OverrideFill
+        {
+            get
+            {
+                return privateOverrideFill;
+            }
+            set
+            {
+                if (value == Color.Transparent || value == Color.Empty)
+                {
+                    value = BackColor;
+                }
+                privateOverrideFill = value;
+                SaveSVG(false, true);
+            }
         }
 
         Bitmap bitmap;
 
         protected override void OnPaint(PaintEventArgs e)
         {
+            e.Graphics.Clear(BackColor);
+
             if (SvgCode.Length > 0)
             {
                 string result = string.Join("\n", SvgCode);

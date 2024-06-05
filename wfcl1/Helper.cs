@@ -3,8 +3,10 @@ using Svg.Pathing;
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Numerics;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace CuoreUI
 {
@@ -14,6 +16,12 @@ namespace CuoreUI
         {
             GraphicsPath path = new GraphicsPath();
             Rectangle rectangle = new Rectangle(x, y, width, height);
+
+            if (borderRadius == 0)
+            {
+                path.AddRectangle(rectangle);
+                return path;
+            }
 
             int diameter = borderRadius * 2;
             Size size = new Size(diameter, diameter);
@@ -35,6 +43,13 @@ namespace CuoreUI
         {
             GraphicsPath path = new GraphicsPath();
 
+            if (borderRadius == 0)
+            {
+                rectangle.Inflate(-1, -1);
+                path.AddRectangle(rectangle);
+                return path;
+            }
+
             int diameter = borderRadius * 2;
             Size size = new Size(diameter, diameter);
             Rectangle arc = new Rectangle(rectangle.Location, size);
@@ -55,6 +70,12 @@ namespace CuoreUI
         {
             GraphicsPath path = new GraphicsPath();
 
+            if (borderRadius == 0)
+            {
+                path.AddRectangle(rectangle);
+                return path;
+            }
+
             int diameter = borderRadius * 2;
             Size size = new Size(diameter, diameter);
             RectangleF arc = new RectangleF(rectangle.Location, size);
@@ -66,6 +87,41 @@ namespace CuoreUI
             path.AddArc(arc, 0, 90);
             arc.X = rectangle.Left;
             path.AddArc(arc, 90, 90);
+            path.CloseFigure();
+
+            return path;
+        }
+
+        public static GraphicsPath RoundRect(RectangleF rectangle, Padding borderRadius)
+        {
+            GraphicsPath path = new GraphicsPath();
+
+            if (borderRadius.All == 0)
+            {
+                path.AddRectangle(rectangle);
+                return path;
+            }
+
+            // Top-left corner
+            int diameter1 = Convert.ToInt32(borderRadius.Top) * 2;
+            RectangleF arc1 = new RectangleF(rectangle.X, rectangle.Y, diameter1, diameter1);
+            path.AddArc(arc1, 180, 90);
+
+            // Top-right corner
+            int diameter2 = Convert.ToInt32(borderRadius.Left) * 2;
+            RectangleF arc2 = new RectangleF(rectangle.Right - diameter2, rectangle.Y, diameter2, diameter2);
+            path.AddArc(arc2, 270, 90);
+
+            // Bottom-right corner
+            int diameter3 = Convert.ToInt32(borderRadius.Bottom) * 2;
+            RectangleF arc3 = new RectangleF(rectangle.Right - diameter3, rectangle.Bottom - diameter3, diameter3, diameter3);
+            path.AddArc(arc3, 0, 90);
+
+            // Bottom-left corner
+            int diameter4 = Convert.ToInt32(borderRadius.Right) * 2;
+            RectangleF arc4 = new RectangleF(rectangle.X, rectangle.Bottom - diameter4, diameter4, diameter4);
+            path.AddArc(arc4, 90, 90);
+
             path.CloseFigure();
 
             return path;

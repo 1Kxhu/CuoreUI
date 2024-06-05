@@ -140,10 +140,16 @@
     <Compile Include="Controls\cuiSvgBox.Designer.cs">
       <DependentUpon>cuiSvgBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Forms\ComboBoxDropDown.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\Forms\ComboBoxDropDown.Designer.cs">
+      <DependentUpon>ComboBoxDropDown.cs</DependentUpon>
+    </Compile>
     <Compile Include="GaussianBlurTest.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Controls\cuiBorder.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\cuiBorder.Designer.cs">
       <DependentUpon>cuiBorder.cs</DependentUpon>
