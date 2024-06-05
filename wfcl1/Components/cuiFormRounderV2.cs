@@ -12,7 +12,7 @@ namespace CuoreUI.Components
     public partial class cuiFormRounderV2 : Component
     {
         private Form RoundedForm;
-        private Form FakeForm = new cuiFormRounderV2Resources.FakeForm();
+        private readonly Form FakeForm = new FakeForm();
 
         private Form privateTargetForm;
         public Form TargetForm
@@ -26,13 +26,33 @@ namespace CuoreUI.Components
                 privateTargetForm = value;
                 if (privateTargetForm != null)
                 {
+                    //TargetForm.HandleCreated += TargetForm_HandleCreated;
                     TargetForm.Load += TargetForm_Load;
                     TargetForm.Resize += TargetForm_Resize;
                     TargetForm.LocationChanged += TargetForm_LocationChanged;
                     TargetForm.TextChanged += TargetForm_TextChanged;
+                    TargetForm.FormClosing += TargetForm_FormClosing;
 
                     FakeForm.Activated += FakeForm_Activated;
+                    FakeForm.FormClosing += TargetForm_FormClosing;
                 }
+            }
+        }
+
+        private void TargetForm_HandleCreated(object sender, EventArgs e)
+        {
+            FakeForm.ShowInTaskbar = true;
+            FakeForm.Opacity = 0;
+        }
+
+        private void TargetForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.Cancel == false)
+            {
+                RoundedForm.Dispose();
+                FakeForm.Dispose();
+                TargetForm.Dispose();
+                Environment.Exit(0);
             }
         }
 
@@ -67,10 +87,7 @@ namespace CuoreUI.Components
             set
             {
                 privateRounding = value;
-                if (RoundedForm != null)
-                {
-                    RoundedForm.Invalidate();
-                }
+                RoundedForm?.Invalidate();
             }
         }
 
@@ -83,7 +100,7 @@ namespace CuoreUI.Components
             }
         }
 
-        private Color privateOutlineColor = Color.White;
+        private Color privateOutlineColor = Color.FromArgb(30, 0, 0, 0);
         public Color OutlineColor
         {
             get
@@ -93,22 +110,38 @@ namespace CuoreUI.Components
             set
             {
                 privateOutlineColor = value;
+                RoundedForm?.Invalidate();
+            }
+        }
+
+        private Color privateBackColor = Color.FromArgb(10, 10, 10);
+        public Color BackColor
+        {
+            get
+            {
+                return privateBackColor;
+            }
+            set
+            {
+                privateBackColor = value;
+                RoundedForm?.Invalidate();
             }
         }
 
         private async void TargetForm_Load(object sender, EventArgs e)
         {
-            RoundedForm = new cuiFormRounderV2Resources.RoundedForm(TargetForm.BackColor, OutlineColor);
-            RoundedForm.Activated += FakeForm_Activated;
-            RoundedForm.Show();
-
-            FakeForm.ShowInTaskbar = true;
-            FakeForm.Opacity = 0;
-            FakeForm.Show();
-
+            TargetForm.Opacity = 0;
             TargetForm.ShowInTaskbar = false;
             TargetForm.FormBorderStyle = FormBorderStyle.None;
 
+            RoundedForm = new RoundedForm(BackColor, OutlineColor);
+
+            RoundedForm.Show();
+            FakeForm.Show();
+
+            TargetForm.Opacity = 1;
+
+            RoundedForm.Activated += FakeForm_Activated;
             TargetForm_LocationChanged(this, EventArgs.Empty);
             TargetForm_Resize(this, EventArgs.Empty);
 
@@ -122,13 +155,14 @@ namespace CuoreUI.Components
                 TargetForm_Resize(this, EventArgs.Empty);
             });
             tempTimer.Start();
+
             await Task.Delay(1000);
             tempTimer.Stop();
             tempTimer.Dispose();
 
             Timer bitmapTimer = new Timer
             {
-                Interval = 32
+                Interval = 100
             };
             Bitmap tempBitmap = new Bitmap(TargetForm.Width, TargetForm.Height);
             bitmapTimer.Tick += ((a1, a2) =>
@@ -141,7 +175,8 @@ namespace CuoreUI.Components
                 }
 
                 SharedVariables.FakeBitmap = (Bitmap)tempBitmap.Clone();
-                FakeForm.Invoke((MethodInvoker)delegate {
+                FakeForm.Invoke((MethodInvoker)delegate
+                {
                     FakeForm.Refresh();
                 });
 
@@ -149,7 +184,6 @@ namespace CuoreUI.Components
                 GC.AddMemoryPressure(30000000);
             });
             bitmapTimer.Start();
-
         }
 
         Size addsize(Size s1, Size s2)

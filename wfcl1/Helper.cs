@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Svg;
+using Svg.Pathing;
+using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Reflection;
@@ -237,6 +239,39 @@ namespace CuoreUI
                 targetProperty.SetValue(destination, srcProp.GetValue(source, null), null);
             }
         }
+
+        public static GraphicsPath Star(float centerX, float centerY, float outerRadius, float innerRadius, int numPoints)
+        {
+            if (numPoints % 2 == 0 || numPoints < 5)
+            {
+                throw new ArgumentException("Number of points must be an odd number and greater than or equal to 5.");
+            }
+
+            var path = new GraphicsPath();
+            float angleIncrement = 360f / numPoints;
+            float currentAngle = -90f;
+            PointF[] points = new PointF[numPoints * 2];
+
+            for (int i = 0; i < numPoints * 2; i += 2)
+            {
+                points[i] = PointOnCircle(centerX, centerY, outerRadius, currentAngle);
+                points[i + 1] = PointOnCircle(centerX, centerY, innerRadius, currentAngle + angleIncrement / 2);
+                currentAngle += angleIncrement;
+            }
+
+            path.AddPolygon(points);
+
+            return path;
+        }
+
+        private static PointF PointOnCircle(float centerX, float centerY, float radius, float angleInDegrees)
+        {
+            float angleInRadians = (float)(angleInDegrees * Math.PI / 180.0);
+            float x = centerX + radius * (float)Math.Cos(angleInRadians);
+            float y = centerY + radius * (float)Math.Sin(angleInRadians);
+            return new PointF(x, y);
+        }
+
 
         public static class Win32
         {
