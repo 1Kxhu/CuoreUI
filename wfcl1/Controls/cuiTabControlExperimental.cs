@@ -117,8 +117,9 @@ namespace CuoreUI.Controls
 
         private void TabControl_TabAdded(object sender, EventArgs e)
         {
-            TabAdded.Invoke(sender, EventArgs.Empty);
+            TabAdded?.Invoke(sender, EventArgs.Empty);
         }
+
 
         [Description("sender is the added tab!")]
         [Browsable(true)]

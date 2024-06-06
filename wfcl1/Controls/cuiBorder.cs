@@ -4,8 +4,15 @@ using System.Windows.Forms;
 
 namespace CuoreUI.Controls
 {
-    public partial class cuiBorder : Control
+    public partial class cuiBorder : Panel
     {
+        public cuiBorder()
+        {
+            InitializeComponent();
+            DoubleBuffered = true;
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+        }
+
         private Color privatePanelColor = Color.MediumSlateBlue;
         public Color PanelColor
         {
@@ -20,11 +27,32 @@ namespace CuoreUI.Controls
             }
         }
 
-        public cuiBorder()
+        private Color privatePanelOutlineColor = Color.MediumSlateBlue;
+        public Color PanelOutlineColor
         {
-            InitializeComponent();
-            DoubleBuffered = true;
-            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            get
+            {
+                return privatePanelOutlineColor;
+            }
+            set
+            {
+                privatePanelOutlineColor = value;
+                Invalidate();
+            }
+        }
+
+        private float privateOutlineThickness = 1;
+        public float OutlineThickness
+        {
+            get
+            {
+                return privateOutlineThickness;
+            }
+            set
+            {
+                privateOutlineThickness = value;
+                Invalidate();
+            }
         }
 
 
@@ -51,8 +79,10 @@ namespace CuoreUI.Controls
 
             GraphicsPath roundBackground = Helper.RoundRect(modifiedCR, Rounding);
             using (SolidBrush brush = new SolidBrush(PanelColor))
+            using (Pen pen = new Pen(PanelOutlineColor, OutlineThickness))
             {
                 e.Graphics.FillPath(brush, roundBackground);
+                e.Graphics.DrawPath(pen, roundBackground);
             }
         }
     }

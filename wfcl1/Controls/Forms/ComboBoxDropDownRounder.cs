@@ -1,5 +1,4 @@
-﻿
-using CuoreUI.Components.cuiFormRounderV2Resources;
+﻿using CuoreUI.Components.cuiFormRounderV2Resources;
 using System;
 using System.ComponentModel;
 using System.Drawing;
@@ -9,17 +8,17 @@ using Color = System.Drawing.Color;
 
 namespace CuoreUI.Components
 {
-    public partial class cuiFormRounderV2 : Component
+    public partial class ComboBoxDropDownRounder : Component
     {
         public Form RoundedForm;
-        public Form FakeForm = new FakeForm();
 
-        public Form GetFakeForm()
+        public ComboBoxDropDownRounder()
         {
-            return FakeForm;
+            if (DesignMode)
+            throw new Exception("Not meant for other use than cuiComboBox");
         }
 
-        internal Form GetRoundedForm()
+        public Form GetRoundedForm()
         {
             return RoundedForm;
         }
@@ -40,20 +39,10 @@ namespace CuoreUI.Components
                     TargetForm.Load += TargetForm_Load;
                     TargetForm.Resize += TargetForm_Resize;
                     TargetForm.LocationChanged += TargetForm_LocationChanged;
-                    TargetForm.TextChanged += TargetForm_TextChanged;
                     TargetForm.FormClosing += TargetForm_FormClosing;
-                    TargetForm.VisibleChanged += TargetForm_VisibleChanged;
 
-                    FakeForm.Activated += FakeForm_Activated;
-                    FakeForm.FormClosing += TargetForm_FormClosing;
                 }
             }
-        }
-
-        private void TargetForm_VisibleChanged(object sender, EventArgs e)
-        {
-            if (!DesignMode)
-            RoundedForm.Visible = TargetForm.Visible;
         }
 
         private void TargetForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -61,7 +50,6 @@ namespace CuoreUI.Components
             if (e.Cancel == false)
             {
                 RoundedForm.Dispose();
-                FakeForm.Dispose();
                 TargetForm.Dispose();
                 Environment.Exit(0);
             }
@@ -75,12 +63,6 @@ namespace CuoreUI.Components
                 TargetForm.Focus();
             }
         }
-
-        private void TargetForm_TextChanged(object sender, EventArgs e)
-        {
-            FakeForm.Text = TargetForm.Text;
-        }
-
         Point pointsubstract(Point p1, Point p2)
         {
             int subx = p1.X - p2.X;
@@ -107,7 +89,6 @@ namespace CuoreUI.Components
             if (RoundedForm != null && TargetForm != null)
             {
                 RoundedForm.Location = pointsubstract(TargetForm.Location, new Point(Rounding, Rounding));
-                FakeForm.Location = TargetForm.Location;
             }
         }
 
@@ -145,13 +126,9 @@ namespace CuoreUI.Components
             TargetForm.ShowInTaskbar = false;
             TargetForm.FormBorderStyle = FormBorderStyle.None;
 
-            FakeForm.ShowInTaskbar = true;
-            FakeForm.Opacity = 0;
-
-            RoundedForm = new RoundedForm(BackColor, OutlineColor);
-
-            RoundedForm.Show();
-            FakeForm.Show();
+            RoundedForm = new RoundedForm(BackColor, OutlineColor, false);
+            RoundedForm.TopMost = true;
+            RoundedForm.SendToBack();
 
             TargetForm.Opacity = 1;
 
@@ -173,54 +150,6 @@ namespace CuoreUI.Components
             await Task.Delay(1000);
             tempTimer.Stop();
             tempTimer.Dispose();
-
-            // Inside TargetForm_Load method
-            Timer bitmapTimer = new Timer
-            {
-                Interval = 100
-            };
-            Bitmap tempBitmap = new Bitmap(TargetForm.Width, TargetForm.Height);
-            bitmapTimer.Tick += ((a1, a2) =>
-            {
-                SharedVariables.rounding = Rounding;
-
-                // Check if the form is visible
-                if (TargetForm.Visible)
-                {
-                    try
-                    {
-                        using (Graphics g = Graphics.FromImage(tempBitmap))
-                        {
-                            TargetForm.DrawToBitmap(tempBitmap, new Rectangle(0, 0, TargetForm.Width, TargetForm.Height));
-                        }
-
-                        if (SharedVariables.FakeBitmap != null)
-                        {
-                            SharedVariables.FakeBitmap.Dispose();
-                        }
-                        SharedVariables.FakeBitmap = (Bitmap)tempBitmap.Clone();
-
-                        FakeForm.Invoke((MethodInvoker)delegate
-                        {
-                            FakeForm.Refresh();
-                        });
-                    }
-                    catch (Exception)
-                    {
-                        // uhhh yeahhhhh but atleast the app won't crash
-                    }
-                    finally
-                    {
-                        tempBitmap.Dispose(); // Dispose of the bitmap to release resources
-                    }
-                }
-
-                // 30 mb
-                GC.AddMemoryPressure(30000000);
-            });
-            bitmapTimer.Start();
-
-
         }
 
         Size addsize(Size s1, Size s2)
@@ -236,7 +165,6 @@ namespace CuoreUI.Components
             {
                 int r2 = Rounding * 2;
                 RoundedForm.Size = addsize(TargetForm.Size, new Size(r2 + 1, r2 + 1));
-                FakeForm.Size = TargetForm.Size;
             }
         }
     }

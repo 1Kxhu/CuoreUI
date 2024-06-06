@@ -86,6 +86,12 @@
     <Compile Include="Controls\cuiCircleProgressBar.Designer.cs">
       <DependentUpon>cuiCircleProgressBar.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\cuiComboBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\cuiComboBox.Designer.cs">
+      <DependentUpon>cuiComboBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\cuiListbox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -146,6 +152,9 @@
     <Compile Include="Controls\Forms\ComboBoxDropDown.Designer.cs">
       <DependentUpon>ComboBoxDropDown.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Forms\ComboBoxDropDownRounder.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GaussianBlurTest.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Controls\cuiBorder.cs">
@@ -202,6 +211,9 @@
     <EmbeddedResource Include="Controls\cuiCheckbox.resx">
       <DependentUpon>cuiCheckbox.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\cuiComboBox.resx">
+      <DependentUpon>cuiComboBox.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\cuiLabel.resx">
       <DependentUpon>cuiLabel.cs</DependentUpon>
     </EmbeddedResource>
@@ -222,6 +234,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\cuiTabControlExperimental.resx">
       <DependentUpon>cuiTabControlExperimental.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Forms\ComboBoxDropDown.resx">
+      <DependentUpon>ComboBoxDropDown.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -295,6 +310,9 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="todo.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

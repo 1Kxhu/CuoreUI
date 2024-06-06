@@ -36,7 +36,7 @@ namespace CuoreUI.Controls
             privateSmoothRotation = RotateSpeed;
             Rotation = 0;
 
-            updateTimer.Interval = 500 / Helper.Win32.GetRefreshRate();
+            updateTimer.Interval = 1000 / Helper.Win32.GetRefreshRate();
             updateTimer.Tick += (obj, args) =>
             {
                 Invalidate();

@@ -28,12 +28,34 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.comboBoxRounder1 = new CuoreUI.Components.ComboBoxDropDownRounder();
+            this.SuspendLayout();
+            // 
+            // comboBoxRounder1
+            // 
+            this.comboBoxRounder1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.comboBoxRounder1.OutlineColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.comboBoxRounder1.Rounding = 8;
+            this.comboBoxRounder1.TargetForm = this;
+            // 
+            // ComboBoxDropDown
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
+            this.ClientSize = new System.Drawing.Size(0, 0);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Name = "ComboBoxDropDown";
             this.Text = "ComboBoxDropDown";
+            this.TopMost = true;
+            this.Click += new System.EventHandler(this.ComboBoxDropDown_Click);
+            this.MouseLeave += new System.EventHandler(this.ComboBoxDropDown_MouseLeave);
+            this.ResumeLayout(false);
+
         }
 
         #endregion
+
+        public Components.ComboBoxDropDownRounder comboBoxRounder1;
     }
 }

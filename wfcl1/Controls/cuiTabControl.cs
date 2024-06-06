@@ -270,7 +270,7 @@ namespace CuoreUI.Controls
                     e.Graphics.DrawString(TabPages[i].Text, Font, new SolidBrush(tempTextColor), tabRectangle, stringFormat);
                 }
 
-                if (i == (TabPages.Count - 1))
+                if (i == (TabPages.Count - 1) && i != TabSelectedToDeletion)
                 {
                     //last tab, draw plus button
                     Rectangle rect = GetTabRect(i);
@@ -425,7 +425,7 @@ namespace CuoreUI.Controls
             {
                 for (int i = 0; i < TabCount; i++)
                 {
-                    if (addTabRectangle.Contains(e.Location))
+                    if (i != TabSelectedToDeletion && addTabRectangle.Contains(e.Location) && i == HoveredTabIndex)
                     {
                         AddTab();
                         return;
