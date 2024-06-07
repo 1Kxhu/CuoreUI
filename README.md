@@ -2,14 +2,13 @@
 THE SUCCESSOR TO FOURUI (NOT READY FOR PRODUCTION YET)
 
 # What is CuoreUI?
-It's a C# .NET Winforms UI Library similar to FourUI.
-This is just basically FourUI rewritten + I plan to add more, because I thought to myself I could do better than what FourUI was.
-In short, as previously said, it's an UI Library, that tries to keep winforms alive for a little more.
-I try to do this through adding properties such as corner rounding and drawing everything with antialias.
+A C# .NET Winforms UI Library with modern-looking control.
 
 # Why should you use CuoreUI?
-I add unique elements such as "cuiFormRounder", which is the first component I know of that smoothly rounds up the target form.
-There's also other cool stuff like the "cuiControlBlur", which blurs controls. The controls' designs are also pretty modern-looking.
+Have you ever used an UI Library only to find out you need a license, it is unpolished, or it was abandoned?
+Well, this is none of that. I plan to update this Library as long as I can, I will update it until I physically can't.
+I add unique elements such as "cuiFormRounder", which is the first component I know of that smoothly rounds up the target form with low cpu/ram usage.
+There's also other awesome stuff like the "cuiControlBlur", which blurs controls, or a literal SVG Renderer all In-Winforms!
 
 # How to download and use CuoreUI?
 The latest beta releases can be [downloaded here](https://github.com/1Kxhu/CuoreUI/releases) at the releases section.
