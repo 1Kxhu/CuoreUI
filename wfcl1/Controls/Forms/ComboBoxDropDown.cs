@@ -58,22 +58,23 @@ namespace CuoreUI.Controls.Forms
                 defaultHeight = cuiButton.Height;
                 defaultWidth = cuiButton.Width;
 
+
                 if (i == firstItem)
                 {
-                    cuiButton.Rounding = new Padding(8, 8, 0, 0);
+                    cuiButton.Rounding = new Padding(Rounding.All, Rounding.All, 0, 0);
                 }
                 else if (i == lastItem)
                 {
-                    cuiButton.Rounding = new Padding(0, 0, 8, 8);
+                    cuiButton.Rounding = new Padding(0, 0, Rounding.All, Rounding.All);
                 }
                 else
                 {
-                    cuiButton.Rounding = new Padding(0, 0, 0, 0);
+                    cuiButton.Rounding = new Padding(0);
                 }
 
                 if (i == firstItem && i == lastItem)
                 {
-                    cuiButton.Rounding = new Padding(8, 8, 8, 8);
+                    cuiButton.Rounding = Rounding;
                 }
 
                 cuiButton.Click += (e, s) =>
@@ -126,6 +127,22 @@ namespace CuoreUI.Controls.Forms
             Invalidate();
         }
 
+        public void updateButtons()
+        {
+            foreach (Control ctrl in Controls)
+            {
+                if (ctrl is cuiButton cb)
+                {
+                    cb.NormalBackground = NormalBackground;
+                    cb.HoverBackground = HoverBackground;
+                    cb.PressedBackground = PressedBackground;
+                    cb.NormalOutline = NormalOutline;
+                    cb.HoverOutline = HoverOutline;
+                    cb.PressedOutline = PressedOutline;
+                }
+            }
+        }
+
         public EventHandler SelectedIndexChanged;
 
         internal void GoTo(Point position)
@@ -171,6 +188,106 @@ namespace CuoreUI.Controls.Forms
         private void ComboBoxDropDown_Click(object sender, EventArgs e)
         {
         
+        }
+
+        // button properties
+
+        private Padding privateRounding = new Padding(8);
+        public Padding Rounding
+        {
+            get
+            {
+                return privateRounding;
+            }
+            set
+            {
+                privateRounding = value;
+                Invalidate();
+            }
+        }
+
+        private Color privateNormalBackground = Color.MediumSlateBlue;
+        public Color NormalBackground
+        {
+            get
+            {
+                return privateNormalBackground;
+            }
+            set
+            {
+                privateNormalBackground = value;
+                Invalidate();
+            }
+        }
+
+        private Color privateHoverBackground = Color.FromArgb(200, 123, 104, 238);
+        public Color HoverBackground
+        {
+            get
+            {
+                return privateHoverBackground;
+            }
+            set
+            {
+                privateHoverBackground = value;
+                Invalidate();
+            }
+        }
+
+        private Color privatePressedBackground = Color.MediumSlateBlue;
+        public Color PressedBackground
+        {
+            get
+            {
+                return privatePressedBackground;
+            }
+            set
+            {
+                privatePressedBackground = value;
+                Invalidate();
+            }
+        }
+
+        private Color privateNormalOutline = Color.MediumSlateBlue;
+        public Color NormalOutline
+        {
+            get
+            {
+                return privateNormalOutline;
+            }
+            set
+            {
+                privateNormalOutline = value;
+                Invalidate();
+            }
+        }
+
+        private Color privateHoverOutline = Color.MediumSlateBlue;
+        public Color HoverOutline
+        {
+            get
+            {
+                return privateHoverOutline;
+            }
+            set
+            {
+                privateHoverOutline = value;
+                Invalidate();
+            }
+        }
+
+        private Color privatePressedOutline = Color.MediumSlateBlue;
+        public Color PressedOutline
+        {
+            get
+            {
+                return privatePressedOutline;
+            }
+            set
+            {
+                privatePressedOutline = value;
+                Invalidate();
+            }
         }
     }
 }

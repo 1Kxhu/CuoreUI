@@ -11,7 +11,7 @@ namespace CuoreUI.Controls
     public partial class cuiComboBox : UserControl
     {
         private string privateSelectedItem = string.Empty;
-        private string[] privateItems;
+        private string[] privateItems = new string[0];
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public string[] Items
@@ -48,6 +48,8 @@ namespace CuoreUI.Controls
             InitializeComponent();
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             SetStyle(ControlStyles.UserPaint, true);
+
+            ForeColor = SystemColors.Control;
 
             Timer timer = new Timer();
             timer.Interval = 100;
@@ -108,7 +110,7 @@ namespace CuoreUI.Controls
         }
 
 
-        private Color privateBackgroundColor = Color.MediumSlateBlue;
+        private Color privateBackgroundColor = Color.FromArgb(10, 10, 10);
         public Color BackgroundColor
         {
             get
@@ -122,7 +124,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private Color privateOutlineColor = Color.MediumSlateBlue;
+        private Color privateOutlineColor = Color.FromArgb(35, 255, 255, 255);
         public Color OutlineColor
         {
             get
@@ -291,7 +293,24 @@ namespace CuoreUI.Controls
 
         private void cuiComboBox_Click(object sender, EventArgs e)
         {
+            if (isBrowsingOptions)
+            {
+                IndexChanged(null, EventArgs.Empty);
+                return;
+            }
+
             ComboBoxDropDown DropDown = new ComboBoxDropDown(Items, Width, DropDownBackgroundColor, DropDownOutlineColor, this);
+            DropDown.NormalBackground = ButtonNormalBackground;
+            DropDown.HoverBackground = ButtonHoverBackground;
+            DropDown.PressedBackground = ButtonPressedBackground;
+
+            DropDown.NormalBackground = ButtonNormalOutline;
+            DropDown.HoverBackground = ButtonHoverOutline;
+            DropDown.PressedBackground = ButtonPressedOutline;
+
+            DropDown.Rounding = new Padding(Rounding);
+            DropDown.updateButtons();
+
             isBrowsingOptions = true;
             Refresh();
 
@@ -376,6 +395,43 @@ namespace CuoreUI.Controls
             {
                 throw new Exception($"Invalid sender\n{sender}");
             }
+        }
+
+        // dropdown buttons
+
+        public int Rounding
+        {
+            get; set;
+        }
+
+        public Color ButtonNormalBackground
+        {
+            get; set;
+        }
+
+        public Color ButtonHoverBackground
+        {
+            get; set;
+        }
+
+        public Color ButtonPressedBackground
+        {
+            get; set;
+        }
+
+        public Color ButtonNormalOutline
+        {
+            get; set;
+        }
+
+        public Color ButtonHoverOutline
+        {
+            get; set;
+        }
+
+        public Color ButtonPressedOutline
+        {
+            get; set;
         }
     }
 }
