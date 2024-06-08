@@ -304,9 +304,9 @@ namespace CuoreUI.Controls
             DropDown.HoverBackground = ButtonHoverBackground;
             DropDown.PressedBackground = ButtonPressedBackground;
 
-            DropDown.NormalBackground = ButtonNormalOutline;
-            DropDown.HoverBackground = ButtonHoverOutline;
-            DropDown.PressedBackground = ButtonPressedOutline;
+            DropDown.NormalOutline = ButtonNormalOutline;
+            DropDown.HoverOutline = ButtonHoverOutline;
+            DropDown.PressedOutline = ButtonPressedOutline;
 
             DropDown.Rounding = new Padding(Rounding);
             DropDown.updateButtons();
@@ -407,31 +407,31 @@ namespace CuoreUI.Controls
         public Color ButtonNormalBackground
         {
             get; set;
-        }
+        } = Color.MediumSlateBlue;
 
         public Color ButtonHoverBackground
         {
             get; set;
-        }
+        } = Color.FromArgb(200, 123, 104, 238);
 
         public Color ButtonPressedBackground
         {
             get; set;
-        }
+        } = Color.MediumSlateBlue;
 
         public Color ButtonNormalOutline
         {
             get; set;
-        }
+        } = Color.MediumSlateBlue;
 
         public Color ButtonHoverOutline
         {
             get; set;
-        }
+        } = Color.MediumSlateBlue;
 
         public Color ButtonPressedOutline
         {
             get; set;
-        }
+        } = Color.MediumSlateBlue;
     }
 }

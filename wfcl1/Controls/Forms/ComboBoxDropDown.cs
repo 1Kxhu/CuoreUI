@@ -136,6 +136,7 @@ namespace CuoreUI.Controls.Forms
                     cb.NormalBackground = NormalBackground;
                     cb.HoverBackground = HoverBackground;
                     cb.PressedBackground = PressedBackground;
+
                     cb.NormalOutline = NormalOutline;
                     cb.HoverOutline = HoverOutline;
                     cb.PressedOutline = PressedOutline;
