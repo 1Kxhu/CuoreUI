@@ -11,5 +11,6 @@ I add unique elements such as "cuiFormRounder", which is the first component I k
 There's also other awesome stuff like the "cuiControlBlur", which blurs controls, or a literal SVG Renderer all In-Winforms!
 
 # How to download and use CuoreUI?
+Releases may be outdated until the end of beta.
 The latest beta releases can be [downloaded here](https://github.com/1Kxhu/CuoreUI/releases) at the releases section.
 While this library looks good, it's still not production ready. There are many controls I want to try to add so stay tuned.
