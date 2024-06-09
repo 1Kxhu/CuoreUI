@@ -68,7 +68,7 @@ namespace CuoreUI.Components
 
         private unsafe void TargetControl_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.FillRectangle(new SolidBrush(TargetControl.BackColor), TargetControl.ClientRectangle);
+            //e.Graphics.FillRectangle(new SolidBrush(TargetControl.BackColor), TargetControl.ClientRectangle);
             if (cachedBitmap == null || cachedBitmap.Width != privateTargetControl.Width || cachedBitmap.Height != privateTargetControl.Height)
             {
                 cachedBitmap?.Dispose();
@@ -84,9 +84,10 @@ namespace CuoreUI.Components
 
                     privateTargetControl.DrawToBitmap(cachedBitmap, new Rectangle(0, 0, privateTargetControl.Width, privateTargetControl.Height));
 
-                    GaussianBlur.ApplyBox(ref cachedBitmap, BlurAmount);
+                    GaussianBlur.Apply(ref cachedBitmap, BlurAmount);
                 }
             }
+
             e.Graphics.DrawImage(cachedBitmap, privateTargetControl.ClientRectangle);
         }
 

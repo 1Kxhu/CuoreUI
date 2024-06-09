@@ -1,195 +1,116 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Threading.Tasks;
 
 public static class GaussianBlur
 {
     public unsafe static void Apply(ref Bitmap bitmap, int radius)
     {
-        if (bitmap == null)
-            throw new ArgumentNullException(nameof(bitmap));
+        if (radius < 1)
+            return;
+
+        BitmapData srcData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
+        int stride = srcData.Stride;
+        IntPtr scan0 = srcData.Scan0;
 
         int width = bitmap.Width;
         int height = bitmap.Height;
 
-        double[,] kernel = GenerateGaussianKernel(radius);
+        byte* src = (byte*)scan0.ToPointer();
 
-        BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadWrite, bitmap.PixelFormat);
-        int bytesPerPixel = Bitmap.GetPixelFormatSize(bitmap.PixelFormat) / 8;
-        int stride = bmpData.Stride;
+        float[] kernel = CreateGaussianKernel(radius);
+        int kernelSize = kernel.Length;
+        int halfKernel = kernelSize / 2;
 
-        byte* ptr = (byte*)bmpData.Scan0;
+        byte* temp = stackalloc byte[height * stride];
 
-        int[] yOffset = new int[2 * radius + 1];
-        for (int ky = -radius; ky <= radius; ky++)
-        {
-            yOffset[ky + radius] = ky * stride;
-        }
-
+        // Horizontal pass
         for (int y = 0; y < height; y++)
         {
-            byte* pixel = ptr + y * stride;
-
             for (int x = 0; x < width; x++)
             {
-                double[] rgba = { 0, 0, 0, 0 };
+                float b = 0, g = 0, r = 0;
+                float weightSum = 0;
 
-                for (int ky = -radius; ky <= radius; ky++)
+                for (int k = -halfKernel; k <= halfKernel; k++)
                 {
-                    int offsetY = yOffset[ky + radius];
-                    byte* currentPixel = pixel + offsetY;
+                    int pixelPos = x + k;
+                    if (pixelPos < 0 || pixelPos >= width)
+                        continue;
 
-                    for (int kx = -radius; kx <= radius; kx++)
-                    {
-                        int px = x + kx;
-                        int py = y + ky;
+                    byte* p = src + y * stride + pixelPos * 3;
 
-                        if (px >= 0 && px < width && py >= 0 && py < height)
-                        {
-                            currentPixel = pixel + offsetY + kx * bytesPerPixel;
-
-                            for (int i = 0; i < 4; i++)
-                            {
-                                rgba[i] += kernel[ky + radius, kx + radius] * currentPixel[i];
-                            }
-                        }
-                    }
+                    b += p[0] * kernel[halfKernel + k];
+                    g += p[1] * kernel[halfKernel + k];
+                    r += p[2] * kernel[halfKernel + k];
+                    weightSum += kernel[halfKernel + k];
                 }
 
-                byte* targetPixel = pixel;
-                for (int i = 0; i < 4; i++)
-                {
-                    targetPixel[i] = (byte)(rgba[i] < 0 ? 0 : (rgba[i] > 255 ? 255 : rgba[i]));
-                }
+                byte* dst = temp + y * stride + x * 3;
 
-                pixel += bytesPerPixel;
+                dst[0] = (byte)Clamp(b / weightSum, 0, 255);
+                dst[1] = (byte)Clamp(g / weightSum, 0, 255);
+                dst[2] = (byte)Clamp(r / weightSum, 0, 255);
             }
         }
-        bitmap.UnlockBits(bmpData);
-    }
 
-    public unsafe static void ApplyBox(ref Bitmap bitmap, int radius)
-    {
-        if (bitmap == null)
-            throw new ArgumentNullException(nameof(bitmap));
-
-        int width = bitmap.Width;
-        int height = bitmap.Height;
-
-        double[,] kernel = GenerateBoxKernel(radius);
-
-        BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadWrite, bitmap.PixelFormat);
-        int bytesPerPixel = Bitmap.GetPixelFormatSize(bitmap.PixelFormat) / 7;
-        int stride = bmpData.Stride;
-
-        byte* ptr = (byte*)bmpData.Scan0;
-
-        int[] yOffset = new int[2 * radius + 1];
-        for (int ky = -radius, idx = 0; ky <= radius; ky++, idx++)
+        // Vertical pass
+        for (int x = 0; x < width; x++)
         {
-            yOffset[idx] = ky * stride;
-        }
-
-        for (int y = 0; y < height; y++)
-        {
-            byte* pixel = ptr + y * stride;
-
-            for (int x = 0; x < width; x++)
+            for (int y = 0; y < height; y++)
             {
-                double red = 0, green = 0, blue = 0, alpha = 0;
+                float b = 0, g = 0, r = 0;
+                float weightSum = 0;
 
-                for (int ky = -radius, kyIdx = 0; ky <= radius; ky++, kyIdx++)
+                for (int k = -halfKernel; k <= halfKernel; k++)
                 {
-                    int offsetY = yOffset[kyIdx];
-                    byte* currentPixel = pixel + offsetY;
+                    int pixelPos = y + k;
+                    if (pixelPos < 0 || pixelPos >= height)
+                        continue;
 
-                    for (int kx = -radius; kx <= radius; kx++)
-                    {
-                        int px = x + kx;
-                        int py = y + ky;
+                    byte* p = temp + pixelPos * stride + x * 3;
 
-                        if (px >= 0 && px < width && py >= 0 && py < height)
-                        {
-                            currentPixel = pixel + offsetY + kx * bytesPerPixel;
-
-                            double kernelValue = kernel[kyIdx, kx + radius];
-
-                            red += kernelValue * currentPixel[0];
-                            green += kernelValue * currentPixel[1];
-                            blue += kernelValue * currentPixel[2];
-                            alpha += kernelValue * currentPixel[3];
-                        }
-                    }
+                    b += p[0] * kernel[halfKernel + k];
+                    g += p[1] * kernel[halfKernel + k];
+                    r += p[2] * kernel[halfKernel + k];
+                    weightSum += kernel[halfKernel + k];
                 }
 
-                byte* targetPixel = pixel;
-                targetPixel[0] = (byte)(red < 0 ? 0 : (red > 255 ? 255 : red));
-                targetPixel[1] = (byte)(green < 0 ? 0 : (green > 255 ? 255 : green));
-                targetPixel[2] = (byte)(blue < 0 ? 0 : (blue > 255 ? 255 : blue));
-                targetPixel[3] = (byte)(alpha < 0 ? 0 : (alpha > 255 ? 255 : alpha));
+                byte* dst = src + y * stride + x * 3;
 
-                pixel += bytesPerPixel;
+                dst[0] = (byte)Clamp(b / weightSum, 0, 255);
+                dst[1] = (byte)Clamp(g / weightSum, 0, 255);
+                dst[2] = (byte)Clamp(r / weightSum, 0, 255);
             }
         }
-        bitmap.UnlockBits(bmpData);
+
+        bitmap.UnlockBits(srcData);
     }
 
-    private static unsafe double[,] GenerateBoxKernel(int radius)
+    private static float[] CreateGaussianKernel(int radius)
     {
         int size = radius * 2 + 1;
-        double[,] kernel = new double[size, size];
-        double value = 1.0 / (size * size);
+        float[] kernel = new float[size];
+        float sigma = radius / 2.0f;
+        float norm = 1 / (float)(Math.Sqrt(2 * Math.PI) * sigma);
+        float coeff = 2 * sigma * sigma;
 
         for (int i = 0; i < size; i++)
         {
-            for (int j = 0; j < size; j++)
-            {
-                kernel[i, j] = value;
-            }
+            int x = i - radius;
+            kernel[i] = norm * (float)Math.Exp(-x * x / coeff);
         }
 
         return kernel;
     }
 
-
-
-    private static unsafe double[,] GenerateGaussianKernel(int radius)
+    private static float Clamp(float value, float min, float max)
     {
-        int size = 2 * radius + 1;
-        double[,] kernel = new double[size, size];
-        double sigma = radius / 5.0;
-        double twoSigmaSquared = 2 * sigma * sigma;
-        double constant = 1.0 / (2 * Math.PI * sigma * sigma);
-        double sumTotal = 0;
-        double invTwoSigmaSquared = 1.0 / twoSigmaSquared;
-        double invSumTotal;
-
-        fixed (double* kernelPtr = &kernel[0, 0])
-        {
-            double* ptr = kernelPtr;
-
-            double invTwoSigmaSquaredTimesConstant = invTwoSigmaSquared * constant;
-
-            for (int y = -radius; y <= radius; y++)
-            {
-                for (int x = -radius; x <= radius; x++)
-                {
-                    double val = Math.Exp(-(x * x + y * y) * invTwoSigmaSquared) * constant;
-
-                    *ptr = val;
-                    sumTotal += val;
-                    ptr++;
-                }
-            }
-
-            invSumTotal = 1.0 / sumTotal;
-
-            for (int i = 0; i < size * size; i++)
-            {
-                kernelPtr[i] *= invSumTotal;
-            }
-        }
-
-        return kernel;
+        if (value < min)
+            return min;
+        if (value > max)
+            return max;
+        return value;
     }
 }
