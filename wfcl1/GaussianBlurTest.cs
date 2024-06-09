@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 public static class GaussianBlur
 {
-    public unsafe static void Apply(ref Bitmap bitmap, int radius)
+    public unsafe static void Apply(ref Bitmap bitmap, float radius)
     {
-        if (radius < 1)
+        if (radius < 0.1f)
             return;
 
         BitmapData srcData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
@@ -88,9 +88,9 @@ public static class GaussianBlur
         bitmap.UnlockBits(srcData);
     }
 
-    private static float[] CreateGaussianKernel(int radius)
+    private static float[] CreateGaussianKernel(float radius)
     {
-        int size = radius * 2 + 1;
+        int size = (int)(Math.Ceiling(radius) * 2) + 1;
         float[] kernel = new float[size];
         float sigma = radius / 2.0f;
         float norm = 1 / (float)(Math.Sqrt(2 * Math.PI) * sigma);
@@ -98,7 +98,7 @@ public static class GaussianBlur
 
         for (int i = 0; i < size; i++)
         {
-            int x = i - radius;
+            int x = i - (size / 2);
             kernel[i] = norm * (float)Math.Exp(-x * x / coeff);
         }
 

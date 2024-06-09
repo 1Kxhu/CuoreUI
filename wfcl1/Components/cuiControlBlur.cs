@@ -41,8 +41,8 @@ namespace CuoreUI.Components
             }
         }
 
-        private int privateBlurAmount = 3;
-        public int BlurAmount
+        private float privateBlurAmount = 1.5f;
+        public float BlurAmount
         {
             get
             {
