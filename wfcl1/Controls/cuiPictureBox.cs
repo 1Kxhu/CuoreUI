@@ -22,12 +22,44 @@ namespace CuoreUI.Controls
             }
             set
             {
-                privateContent = value;
-                cachedImage = value;
-                cachedImageBrush = new TextureBrush(TransformImage(cachedImage));
-                cachedImageBrush.WrapMode = WrapMode.Clamp;
+                if (value != null)
+                {
+                    privateContent = value;
+                    cachedImage = value;
+                    Image transformedImage = TransformImage(cachedImage);
+                    cachedImageBrush = new TextureBrush(transformedImage);
+                    transformedImage.Dispose();
+                    cachedImageBrush.WrapMode = WrapMode.Clamp;
+                }
+                else
+                {
+                    privateContent = null;
+                }
                 Invalidate();
             }
+        }
+
+        private void DiposeIfPossible(ref Image target)
+        {
+            try
+            {
+                target.Dispose();
+                GC.Collect();
+            }
+            catch {; }
+            target = null;
+        }
+
+        private void DiposeIfPossible(ref TextureBrush target)
+        {
+            try
+            {
+                target.Image.Dispose();
+                target.Dispose();
+                GC.Collect();
+            }
+            catch { }
+            target = null;
         }
 
         private int privateCornerRadius = 8;
@@ -49,6 +81,15 @@ namespace CuoreUI.Controls
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
+
+            if (privateContent == null || cachedImage == null || cachedImageBrush == null)
+            {
+                DiposeIfPossible(ref privateContent);
+                DiposeIfPossible(ref cachedImage);
+                DiposeIfPossible(ref cachedImageBrush);
+                return;
+            }
+
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
             e.Graphics.InterpolationMode = InterpolationMode.HighQualityBilinear;
             e.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
@@ -62,6 +103,10 @@ namespace CuoreUI.Controls
 
                 if (Content != null && cachedImageBrush != null && cachedImage != null)
                 {
+                    if (privateContent == null || cachedImage == null || cachedImageBrush == null)
+                    {
+                        return;
+                    }
                     e.Graphics.FillPath(cachedImageBrush, clipGraphicsPath);
                 }
             }
@@ -71,6 +116,10 @@ namespace CuoreUI.Controls
 
                 if (Content != null && cachedImageBrush != null && cachedImage != null)
                 {
+                    if (privateContent == null || cachedImage == null || cachedImageBrush == null)
+                    {
+                        return;
+                    }
                     e.Graphics.FillPath(cachedImageBrush, clipGraphicsPath);
                 }
             }
@@ -78,6 +127,7 @@ namespace CuoreUI.Controls
 
         public Image TransformImage(Image inputImage)
         {
+
             int width = ClientRectangle.Width;
             int height = ClientRectangle.Height;
 
@@ -92,8 +142,6 @@ namespace CuoreUI.Controls
                 g.Dispose();
             }
 
-            //experimental
-            //privateContent = newImage;
             cachedImage = newImage;
             return newImage;
         }

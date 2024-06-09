@@ -10,7 +10,9 @@ namespace CuoreUI
         private Form targetForm;
         private Point previousMousePosition;
 
-        private int privateDragFrequency = 4;
+        private int privateDragFrequency = 0;
+
+        [Description("Leave at 0 for default value.")]
         public int DragFrequency
         {
             get
@@ -65,7 +67,13 @@ namespace CuoreUI
 
                 previousMousePosition = currentMousePosition;
 
-                await Task.Delay(DragFrequency);
+                if (DragFrequency < 1)
+                {
+                    await Task.Delay(1000 / Helper.Win32.GetRefreshRate());
+                }
+                {
+                    await Task.Delay(DragFrequency);
+                }
             }
         }
 
