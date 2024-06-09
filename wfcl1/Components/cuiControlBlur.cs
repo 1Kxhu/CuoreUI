@@ -22,6 +22,14 @@ namespace CuoreUI.Components
             }
             set
             {
+                if (TargetControl is Form)
+                {
+                    privateTargetControl = null;
+                    cachedBitmap?.Dispose();
+                    cachedBitmap = null;
+                    return;
+                }
+
                 if (privateTargetControl != null)
                 {
                     privateTargetControl.Paint -= TargetControl_Paint;
