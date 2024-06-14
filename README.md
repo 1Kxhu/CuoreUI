@@ -18,4 +18,5 @@ While this library looks good, it's still not production ready. There are many c
 
 # Want to leave feedback?
 a) Text me on discord (name: itzkxhu, id: 971053791480791121)
+
 b) Open a new discussion (https://github.com/1Kxhu/CuoreUI/discussions)
