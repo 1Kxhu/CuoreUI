@@ -1,6 +1,6 @@
 ﻿namespace CuoreUI.Components
 {
-    partial class cuiFormRounderV2
+    partial class cuiFormRounder
     {
         /// <summary>
         /// Required designer variable.

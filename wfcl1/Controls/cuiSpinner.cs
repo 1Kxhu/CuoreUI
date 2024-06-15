@@ -74,6 +74,20 @@ namespace CuoreUI.Controls
             }
         }
 
+        private Color privateRingColor = Color.FromArgb(34, 34, 34);
+        public Color RingColor
+        {
+            get
+            {
+                return privateRingColor;
+            }
+            set
+            {
+                privateRingColor = value;
+                Invalidate();
+            }
+        }
+
         private float privateRotation = 0;
         public float Rotation
         {
@@ -124,11 +138,14 @@ namespace CuoreUI.Controls
             ClientConsideringArcSize.Height = ClientConsideringArcSize.Width;
             ClientConsideringArcSize.Inflate(-SpinnerThickness, -SpinnerThickness);
 
+            Pen RingPen = new Pen(RingColor, SpinnerThickness);
+            e.Graphics.DrawArc(RingPen, ClientConsideringArcSize, 0, 360);
+
             Pen ArcPen = new Pen(ArcColor, SpinnerThickness);
             ArcPen.StartCap = System.Drawing.Drawing2D.LineCap.Round;
             ArcPen.EndCap = System.Drawing.Drawing2D.LineCap.Round;
-
             e.Graphics.DrawArc(ArcPen, ClientConsideringArcSize, SmoothRotation, ArcDegrees);
+
         }
 
         protected override void OnLoad(EventArgs e)

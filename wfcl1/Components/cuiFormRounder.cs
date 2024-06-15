@@ -1,76 +1,94 @@
-﻿using System;
+﻿
+using CuoreUI.Components.cuiFormRounderV2Resources;
+using System;
 using System.ComponentModel;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using Color = System.Drawing.Color;
 
 namespace CuoreUI.Components
 {
-    [Obsolete("cuiFormRounder is obsolete, use cuiFormRounderV2 for better performance.")]
     public partial class cuiFormRounder : Component
     {
-        public cuiFormRounder(IContainer ic)
+        public Form RoundedForm;
+        public Form FakeForm = new FakeForm();
+
+        public Form GetFakeForm()
         {
-            if (MessageBox.Show("cuiFormRounder is obsolete, do you still want to use it?", "Warning", MessageBoxButtons.YesNo) == DialogResult.No)
-            {
-                ic.Add(new cuiFormRounderV2());
-                throw new InvalidOperationException("OK! Added an instance of cuiFormRounderV2 instead!");
-            }
+            return FakeForm;
         }
 
-        private Timer drawTimer = new Timer();
+        internal Form GetRoundedForm()
+        {
+            return RoundedForm;
+        }
 
-        private Form targetForm;
+        private Form privateTargetForm;
         public Form TargetForm
         {
             get
             {
-                return targetForm;
+                return privateTargetForm;
             }
             set
             {
-                targetForm = value;
-                if (!DesignMode)
+                privateTargetForm = value;
+                if (privateTargetForm != null)
                 {
-                    DrawForm(null, null);
-                    targetForm.Resize += OnPaint;
-                    targetForm.Paint += OnPaint;
-                    drawTimer.Interval = UpdateFrequency;
-                    drawTimer.Tick += DrawForm;
-                    drawTimer.Start();
+                    //TargetForm.HandleCreated += TargetForm_HandleCreated;
+                    TargetForm.Load += TargetForm_Load;
+                    TargetForm.Resize += TargetForm_Resize;
+                    TargetForm.LocationChanged += TargetForm_LocationChanged;
+                    TargetForm.TextChanged += TargetForm_TextChanged;
+                    TargetForm.FormClosing += TargetForm_FormClosing;
+                    TargetForm.VisibleChanged += TargetForm_VisibleChanged;
+
+                    FakeForm.Activated += FakeForm_Activated;
+                    FakeForm.FormClosing += TargetForm_FormClosing;
                 }
             }
         }
 
-        private int privateUpdateFrequency = 32;
-        public int UpdateFrequency
+        private void TargetForm_VisibleChanged(object sender, EventArgs e)
         {
-            get
+            if (!DesignMode)
+            RoundedForm.Visible = TargetForm.Visible;
+        }
+
+        private void TargetForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.Cancel == false)
             {
-                return privateUpdateFrequency;
-            }
-            set
-            {
-                privateUpdateFrequency = value;
+                RoundedForm.Dispose();
+                FakeForm.Dispose();
+                TargetForm.Dispose();
+                Environment.Exit(0);
             }
         }
 
-        private int privateSizableOffset = 32;
-        public int SizableOffset
+        private void FakeForm_Activated(object sender, EventArgs e)
         {
-            get
+            if (TargetForm != null && RoundedForm != null)
             {
-                return privateSizableOffset;
-            }
-            set
-            {
-                privateSizableOffset = value;
+                RoundedForm.Focus();
+                TargetForm.Focus();
             }
         }
 
-        private int privateRounding = 10;
+        private void TargetForm_TextChanged(object sender, EventArgs e)
+        {
+            FakeForm.Text = TargetForm.Text;
+        }
+
+        Point pointsubstract(Point p1, Point p2)
+        {
+            int subx = p1.X - p2.X;
+            int suby = p1.Y - p2.Y;
+            return new Point(subx, suby);
+        }
+
+        private int privateRounding = 8;
         public int Rounding
         {
             get
@@ -80,256 +98,148 @@ namespace CuoreUI.Components
             set
             {
                 privateRounding = value;
+                RoundedForm?.Invalidate();
             }
         }
 
-        private Color privateBorderColor = Color.White;
-        public Color BorderColor
+        private void TargetForm_LocationChanged(object sender, EventArgs e)
+        {
+            if (RoundedForm != null && TargetForm != null)
+            {
+                RoundedForm.Location = pointsubstract(TargetForm.Location, new Point(Rounding, Rounding));
+                FakeForm.Location = TargetForm.Location;
+                if (new Random().Next(0, 6) == 3)
+                {
+                    FakeForm_Activated(sender, e);
+                }
+            }
+        }
+
+        private Color privateOutlineColor = Color.FromArgb(30, 0, 0, 0);
+        public Color OutlineColor
         {
             get
             {
-                return privateBorderColor;
+                return privateOutlineColor;
             }
             set
             {
-                privateBorderColor = value;
-                OnPaint(null, null);
+                privateOutlineColor = value;
+                RoundedForm?.Invalidate();
             }
         }
 
-        private void OnPaint(object sender, EventArgs e)
+        private Color privateBackColor = Color.FromArgb(10, 10, 10);
+        public Color BackColor
         {
-            DrawForm(null, null);
+            get
+            {
+                return privateBackColor;
+            }
+            set
+            {
+                privateBackColor = value;
+                RoundedForm?.Invalidate();
+            }
         }
 
-        private Bitmap backImage; private Graphics backGraphics;
-        private void DrawForm(object pSender, EventArgs pE)
+        private async void TargetForm_Load(object sender, EventArgs e)
         {
-            drawTimer.Interval = UpdateFrequency;
-            ModifyFormStyles();
+            TargetForm.Opacity = 0;
+            TargetForm.ShowInTaskbar = false;
+            TargetForm.FormBorderStyle = FormBorderStyle.None;
 
-            if (targetForm != null)
+            FakeForm.ShowInTaskbar = true;
+            FakeForm.Opacity = 0;
+
+            RoundedForm = new RoundedForm(BackColor, OutlineColor);
+
+            RoundedForm.Show();
+            FakeForm.Show();
+
+            TargetForm.Opacity = 1;
+
+            RoundedForm.Activated += FakeForm_Activated;
+            TargetForm_LocationChanged(this, EventArgs.Empty);
+            TargetForm_Resize(this, EventArgs.Empty);
+
+            Timer tempTimer = new Timer
             {
-                int tempSizableXOffset = Rounding - 1;
-                int tempSizableOffset = SizableOffset;
-                if (targetForm.FormBorderStyle == FormBorderStyle.None)
-                {
-                    tempSizableOffset = 0;
-                    tempSizableXOffset = 0;
-                }
+                Interval = 1
+            };
+            tempTimer.Tick += ((a1, a2) =>
+            {
+                TargetForm_LocationChanged(this, EventArgs.Empty);
+                TargetForm_Resize(this, EventArgs.Empty);
+            });
+            tempTimer.Start();
 
-                if (backImage == null || backImage.Size != targetForm.Size)
-                {
-                    backImage?.Dispose();
-                    backImage = new Bitmap(targetForm.Width, targetForm.Height);
-                    backGraphics?.Dispose();
-                    backGraphics = Graphics.FromImage(backImage);
-                    backGraphics.SmoothingMode = SmoothingMode.None;
-                }
-                else
-                {
-                    backGraphics.Clear(Color.Transparent);
-                }
+            await Task.Delay(1000);
+            tempTimer.Stop();
+            tempTimer.Dispose();
 
-                Rectangle gradientRectangle = new Rectangle(0, SizableOffset, targetForm.Width - 1, targetForm.Height - 1 - tempSizableOffset);
-                GraphicsPath roundedRectangle = Helper.RoundRect(gradientRectangle, Rounding);
+            Timer bitmapTimer = new Timer
+            {
+                Interval = 100
+            };
+            Bitmap tempBitmap = new Bitmap(TargetForm.Width, TargetForm.Height);
+            bitmapTimer.Tick += ((a1, a2) =>
+            {
+                SharedVariables.rounding = Rounding;
 
-                using (SolidBrush brush = new SolidBrush(targetForm.BackColor))
-                using (Pen pen = new Pen(BorderColor))
+                if (TargetForm.Visible)
                 {
-                    backGraphics.SmoothingMode = SmoothingMode.AntiAlias;
-                    backGraphics.FillPath(brush, roundedRectangle);
-                    backGraphics.DrawPath(pen, roundedRectangle);
-                    backGraphics.SmoothingMode = SmoothingMode.None;
-
-                    foreach (Control ctrl in targetForm.Controls)
+                    try
                     {
-                        Point loc = ctrl.Location;
-                        loc.Y += SizableOffset;
-                        loc.X += tempSizableXOffset;
-                        Rectangle rect = new Rectangle(loc, ctrl.Size);
-                        ctrl.DrawToBitmap(backImage, rect);
+                        using (Graphics g = Graphics.FromImage(tempBitmap))
+                        {
+                            TargetForm.DrawToBitmap(tempBitmap, new Rectangle(0, 0, TargetForm.Width, TargetForm.Height));
+                        }
+
+                        if (SharedVariables.FakeBitmap != null)
+                        {
+                            SharedVariables.FakeBitmap.Dispose();
+                        }
+                        SharedVariables.FakeBitmap = (Bitmap)tempBitmap.Clone();
+
+                        FakeForm.Invoke((MethodInvoker)delegate
+                        {
+                            FakeForm.Refresh();
+                        });
+                    }
+                    catch (Exception)
+                    {
+                        // uhhh yeahhhhh but atleast the app won't crash
+                    }
+                    finally
+                    {
+                        tempBitmap.Dispose(); // Dispose of the bitmap to release resources
                     }
                 }
 
-                PerPixelAlphaBlend.SetBitmap(backImage, targetForm.Left, targetForm.Top, targetForm.Handle);
-            }
+                // 30 mb
+                GC.AddMemoryPressure(30000000);
+            });
+            bitmapTimer.Start();
+
+
         }
 
-        private void ModifyFormStyles()
+        Size addsize(Size s1, Size s2)
         {
-            if (targetForm != null && !DesignMode)
+            int sizex = s1.Width + s2.Width;
+            int sizey = s1.Height + s2.Height;
+            return new Size(sizex, sizey);
+        }
+
+        private void TargetForm_Resize(object sender, EventArgs e)
+        {
+            if (RoundedForm != null && TargetForm != null)
             {
-                var cp = NativeMethods.GetWindowLong(targetForm.Handle, NativeMethods.GWL_EXSTYLE);
-                cp |= NativeMethods.WS_EX_LAYERED;
-                NativeMethods.SetWindowLong(targetForm.Handle, NativeMethods.GWL_EXSTYLE, cp);
+                int r2 = Rounding * 2;
+                RoundedForm.Size = addsize(TargetForm.Size, new Size(r2 + 1, r2 + 1));
+                FakeForm.Size = TargetForm.Size;
             }
         }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                drawTimer.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-    }
-
-    internal static class NativeMethods
-    {
-        public const int GWL_EXSTYLE = -20;
-        public const int WS_EX_LAYERED = 0x80000;
-
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
-        public static extern int GetWindowLong(IntPtr hWnd, int nIndex);
-
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
-        public static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        internal static extern bool SetLayeredWindowAttributes(IntPtr hwnd, int crKey, byte bAlpha, int dwFlags);
-
-        internal const int LWA_ALPHA = 0x2;
-    }
-
-    internal static class PerPixelAlphaBlend
-    {
-        public static void SetBitmap(Bitmap bitmap, int left, int top, IntPtr handle)
-        {
-            SetBitmap(bitmap, 255, left, top, handle);
-        }
-
-        public unsafe static void SetBitmap(Bitmap bitmap, byte opacity, int left, int top, IntPtr handle)
-        {
-            if (bitmap.PixelFormat != PixelFormat.Format32bppArgb)
-                throw new ApplicationException("The bitmap must be 32ppp with alpha-channel.");
-
-
-            IntPtr screenDc = Win32.GetDC(IntPtr.Zero);
-            IntPtr memDc = Win32.CreateCompatibleDC(screenDc);
-            IntPtr hBitmap = IntPtr.Zero;
-            IntPtr oldBitmap = IntPtr.Zero;
-
-            try
-            {
-                hBitmap = bitmap.GetHbitmap(Color.FromArgb(0));
-                oldBitmap = Win32.SelectObject(memDc, hBitmap);
-
-                Win32.Size size = new Win32.Size(bitmap.Width, bitmap.Height);
-                Win32.Point topPos = new Win32.Point(left, top);
-                Win32.Point pointSource = new Win32.Point(0, 0);
-                Win32.BLENDFUNCTION blend = new Win32.BLENDFUNCTION
-                {
-                    BlendOp = Win32.AC_SRC_OVER,
-                    BlendFlags = 0,
-                    SourceConstantAlpha = opacity,
-                    AlphaFormat = Win32.AC_SRC_ALPHA
-                };
-
-                Win32.UpdateLayeredWindow(handle, screenDc, ref topPos, ref size, memDc, ref pointSource, 0, ref blend, Win32.ULW_ALPHA);
-
-            }
-            finally
-            {
-                Win32.ReleaseDC(IntPtr.Zero, screenDc);
-                if (hBitmap != IntPtr.Zero)
-                {
-                    Win32.SelectObject(memDc, oldBitmap);
-                    Win32.DeleteObject(hBitmap);
-                }
-
-                Win32.DeleteDC(memDc);
-            }
-        }
-    }
-
-    internal static class Win32
-    {
-        public enum Bool
-        {
-            False = 0,
-            True
-        };
-
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct Point
-        {
-            public Int32 x;
-            public Int32 y;
-
-            public Point(Int32 x, Int32 y)
-            {
-                this.x = x;
-                this.y = y;
-            }
-        }
-
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct Size
-        {
-            public Int32 cx;
-            public Int32 cy;
-
-            public Size(Int32 cx, Int32 cy)
-            {
-                this.cx = cx;
-                this.cy = cy;
-            }
-        }
-
-
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        struct ARGB
-        {
-            public byte Blue;
-            public byte Green;
-            public byte Red;
-            public byte Alpha;
-        }
-
-
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        public struct BLENDFUNCTION
-        {
-            public byte BlendOp;
-            public byte BlendFlags;
-            public byte SourceConstantAlpha;
-            public byte AlphaFormat;
-        }
-
-
-        public const Int32 ULW_COLORKEY = 0x00000001;
-        public const Int32 ULW_ALPHA = 0x00000002;
-        public const Int32 ULW_OPAQUE = 0x00000004;
-
-        public const byte AC_SRC_OVER = 0x00;
-        public const byte AC_SRC_ALPHA = 0x01;
-
-
-        [DllImport("user32.dll", ExactSpelling = true, SetLastError = true)]
-        public static extern Bool UpdateLayeredWindow(IntPtr hwnd, IntPtr hdcDst, ref Point pptDst, ref Size psize, IntPtr hdcSrc, ref Point pprSrc, Int32 crKey, ref BLENDFUNCTION pblend, Int32 dwFlags);
-
-        [DllImport("user32.dll", ExactSpelling = true, SetLastError = true)]
-        public static extern IntPtr GetDC(IntPtr hWnd);
-
-        [DllImport("user32.dll", ExactSpelling = true)]
-        public static extern int ReleaseDC(IntPtr hWnd, IntPtr hDC);
-
-        [DllImport("gdi32.dll", ExactSpelling = true, SetLastError = true)]
-        public static extern IntPtr CreateCompatibleDC(IntPtr hDC);
-
-        [DllImport("gdi32.dll", ExactSpelling = true, SetLastError = true)]
-        public static extern Bool DeleteDC(IntPtr hdc);
-
-        [DllImport("gdi32.dll", ExactSpelling = true)]
-        public static extern IntPtr SelectObject(IntPtr hDC, IntPtr hObject);
-
-        [DllImport("gdi32.dll", ExactSpelling = true, SetLastError = true)]
-        public static extern Bool DeleteObject(IntPtr hObject);
-
-
     }
 }

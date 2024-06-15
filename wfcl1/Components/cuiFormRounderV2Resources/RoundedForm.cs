@@ -2,6 +2,8 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using static CuoreUI.Helper;
+using static CuoreUI.Helper.Win32;
 
 namespace CuoreUI.Components.cuiFormRounderV2Resources
 {
@@ -112,7 +114,7 @@ namespace CuoreUI.Components.cuiFormRounderV2Resources
             }
             catch
             {
-                // refer to cuiFormRounderV2 why I'm doing this
+                // refer to cuiFormRounder why I'm doing this
             }
         }
 

@@ -49,11 +49,8 @@
     <Compile Include="Components\cuiFormRounder.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Components\cuiFormRounderV2.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Components\cuiFormRounderV2.Designer.cs">
-      <DependentUpon>cuiFormRounderV2.cs</DependentUpon>
+    <Compile Include="Components\cuiFormRounder.Designer.cs">
+      <DependentUpon>cuiFormRounder.cs</DependentUpon>
     </Compile>
     <Compile Include="Components\cuiFormRounderV2Resources\FakeForm.cs">
       <SubType>Form</SubType>
