@@ -2,6 +2,7 @@
 using System;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -19,7 +20,7 @@ namespace CuoreUI.Controls
         string GetSVGLocation()
         {
             string current = Environment.CurrentDirectory;
-            string foldername = "\\cuore";
+            string foldername = "\\CuoreUI";
             string combinedFolders = current + foldername;
             if (Directory.Exists(combinedFolders) == false)
             {
@@ -57,6 +58,13 @@ namespace CuoreUI.Controls
         {
             string path = GetSVGLocation();
             string[] tempSVGCODE = SvgCode;
+
+            if (tempSVGCODE.Contains("class="))
+            {
+                SvgCode = new string[] { "" };
+                RunningSvgCode = new string[] { "" };
+                return;
+            }
 
             if (alternativeStroke && OverrideStroke != Color.Empty)
             {
@@ -148,20 +156,27 @@ namespace CuoreUI.Controls
         {
             e.Graphics.Clear(BackColor);
 
-            if (SvgCode.Length > 0)
+            string svgLocation = GetSVGLocation();
+            if (!File.Exists(svgLocation))
             {
-                string result = string.Join("\n", SvgCode);
-                var byteArray = Encoding.ASCII.GetBytes(result.ToCharArray());
+                return;
+            }
 
-                using (var stream = new MemoryStream(byteArray))
+            if (RunningSvgCode.Length > 0)
+            {
+                try
                 {
-                    SvgDocument svgDocument = SvgDocument.Open(GetSVGLocation());
+                    SvgDocument svgDocument = SvgDocument.Open(svgLocation);
 
                     svgDocument.Width = ClientRectangle.Width;
                     svgDocument.Height = ClientRectangle.Height;
 
                     bitmap = svgDocument.Draw();
                     e.Graphics.DrawImage(bitmap, Point.Empty);
+                }
+                catch
+                {
+                    e.Graphics.Clear(BackColor);
                 }
             }
         }

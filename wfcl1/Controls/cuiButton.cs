@@ -130,6 +130,35 @@ namespace CuoreUI.Controls
             }
         }
 
+        private bool privateCheckButton = false;
+        public bool CheckButton
+        {
+
+            get
+            {
+                return privateCheckButton;
+            }
+            set
+            {
+                privateCheckButton = value;
+                Invalidate();
+            }
+        }
+
+        private bool privateChecked = false;
+        public bool Checked
+        {
+            get
+            {
+                return privateChecked;
+            }
+            set
+            {
+                privateChecked = value;
+                Invalidate();
+            }
+        }
+
         private int state = 1;
         private SolidBrush privateBrush = new SolidBrush(Color.Black);
         private Pen privatePen = new Pen(Color.Black);
@@ -149,6 +178,35 @@ namespace CuoreUI.Controls
             }
         }
 
+
+        private Color privateCheckedBackground = Color.MediumSlateBlue;
+        public Color CheckedBackground
+        {
+            get
+            {
+                return privateCheckedBackground;
+            }
+            set
+            {
+                privateCheckedBackground = value;
+                Invalidate();
+            }
+        }
+
+        private Color privateCheckedOutline = Color.MediumSlateBlue;
+        public Color CheckedOutline
+        {
+            get
+            {
+                return privateCheckedOutline;
+            }
+            set
+            {
+                privateCheckedOutline = value;
+                Invalidate();
+            }
+        }
+
         protected override void OnPaint(PaintEventArgs e)
         {
             stringFormat.Alignment = StringAlignment.Center;
@@ -156,6 +214,11 @@ namespace CuoreUI.Controls
             e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
             Rectangle modifiedCR = ClientRectangle;
             modifiedCR.Inflate(-1, -1);
+
+            if (Rounding.Left == 0 & Rounding.Bottom == 0)
+            {
+                modifiedCR.Inflate(-1, 0);
+            }
 
             GraphicsPath roundBackground = Helper.RoundRect(modifiedCR, Rounding);
 
@@ -182,6 +245,12 @@ namespace CuoreUI.Controls
                     renderedBackgroundColor = Color.Black;
                     renderedOutlineColor = Color.Black;
                     break;
+            }
+
+            if (CheckButton && Checked)
+            {
+                renderedBackgroundColor = CheckedBackground;
+                renderedOutlineColor = CheckedOutline;
             }
 
             privateBrush.Color = renderedBackgroundColor;
@@ -284,6 +353,14 @@ namespace CuoreUI.Controls
         {
             if (ClientRectangle.Contains(e.Location))
             {
+                if (state == 3)
+                {
+                    if (CheckButton)
+                    {
+                        Checked = !Checked;
+                    }
+                }
+
                 state = 2;
                 Invalidate();
             }

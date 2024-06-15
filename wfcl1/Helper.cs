@@ -44,8 +44,9 @@ namespace CuoreUI
             }
             else
             {
-                path.AddLine(rectangle.X, rectangle.Y, rectangle.X, rectangle.Y + borderRadius.Left);
-                path.AddLine(rectangle.X, rectangle.Y + borderRadius.Left, rectangle.X + borderRadius.Left, rectangle.Y + borderRadius.Left);
+                float diameter1 = 0.000001f;
+                RectangleF arc1 = new RectangleF(rectangle.X, rectangle.Y, diameter1, diameter1);
+                path.AddArc(arc1, 180, 90);
             }
 
             // Top-right corner
@@ -57,8 +58,9 @@ namespace CuoreUI
             }
             else
             {
-                path.AddLine(rectangle.Right, rectangle.Y, rectangle.Right - borderRadius.Top, rectangle.Y);
-                path.AddLine(rectangle.Right - borderRadius.Top, rectangle.Y, rectangle.Right - borderRadius.Top, rectangle.Y + borderRadius.Top);
+                float diameter2 = 0.000001f;
+                RectangleF arc2 = new RectangleF(rectangle.Right - diameter2, rectangle.Y, diameter2, diameter2);
+                path.AddArc(arc2, 270, 90);
             }
 
             // Bottom-right corner
@@ -70,8 +72,9 @@ namespace CuoreUI
             }
             else
             {
-                path.AddLine(rectangle.Right, rectangle.Bottom, rectangle.Right, rectangle.Bottom - borderRadius.Right);
-                path.AddLine(rectangle.Right, rectangle.Bottom - borderRadius.Right, rectangle.Right - borderRadius.Right, rectangle.Bottom - borderRadius.Right);
+                float diameter3 = 0.000001f;
+                RectangleF arc3 = new RectangleF(rectangle.Right - diameter3, rectangle.Bottom - diameter3, diameter3, diameter3);
+                path.AddArc(arc3, 0, 90);
             }
 
             // Bottom-left corner
@@ -83,8 +86,9 @@ namespace CuoreUI
             }
             else
             {
-                path.AddLine(rectangle.X, rectangle.Bottom, rectangle.X + borderRadius.Bottom, rectangle.Bottom);
-                path.AddLine(rectangle.X + borderRadius.Bottom, rectangle.Bottom, rectangle.X + borderRadius.Bottom, rectangle.Bottom - borderRadius.Bottom);
+                float diameter4 = 0.000001f;
+                RectangleF arc4 = new RectangleF(rectangle.X, rectangle.Bottom - diameter4, diameter4, diameter4);
+                path.AddArc(arc4, 90, 90);
             }
 
             path.CloseFigure();
