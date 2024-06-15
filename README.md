@@ -1,6 +1,7 @@
 ![CuoreUI](https://github.com/1Kxhu/CuoreUI/assets/115172127/352d85cd-e0c7-4202-bc28-6c2b08205726)
-THE SUCCESSOR TO FOURUI (NOT READY FOR PRODUCTION YET)
+NOT READY FOR PRODUCTION YET
 
+Licensed under the [Unlicense](https://github.com/1Kxhu/CuoreUI?tab=Unlicense-1-ov-file#)
 # What is CuoreUI?
 A C# .NET Winforms UI Library with modern-looking control.
 
@@ -14,3 +15,8 @@ There's also other awesome stuff like the "cuiControlBlur", which blurs controls
 Releases may be outdated until the end of beta.
 The latest beta releases can be [downloaded here](https://github.com/1Kxhu/CuoreUI/releases) at the releases section.
 While this library looks good, it's still not production ready. There are many controls I want to try to add so stay tuned.
+
+# Want to leave feedback?
+a) Text me on discord (name: itzkxhu, id: 971053791480791121)
+
+b) Open a new discussion (https://github.com/1Kxhu/CuoreUI/discussions)
