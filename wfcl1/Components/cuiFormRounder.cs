@@ -36,7 +36,6 @@ namespace CuoreUI.Components
                 privateTargetForm = value;
                 if (privateTargetForm != null)
                 {
-                    //TargetForm.HandleCreated += TargetForm_HandleCreated;
                     TargetForm.Load += TargetForm_Load;
                     TargetForm.Resize += TargetForm_Resize;
                     TargetForm.LocationChanged += TargetForm_LocationChanged;
@@ -53,7 +52,7 @@ namespace CuoreUI.Components
         private void TargetForm_VisibleChanged(object sender, EventArgs e)
         {
             if (!DesignMode)
-            RoundedForm.Visible = TargetForm.Visible;
+                RoundedForm.Visible = TargetForm.Visible;
         }
 
         private void TargetForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -71,8 +70,15 @@ namespace CuoreUI.Components
         {
             if (TargetForm != null && RoundedForm != null)
             {
-                RoundedForm.Focus();
-                TargetForm.Focus();
+                if (RoundedForm.WindowState == FormWindowState.Minimized)
+                {
+                    TargetForm.WindowState = FormWindowState.Normal;
+                }
+                else
+                {
+                    RoundedForm.Focus();
+                    TargetForm.Focus();
+                }
             }
         }
 
@@ -174,7 +180,7 @@ namespace CuoreUI.Components
             });
             tempTimer.Start();
 
-            await Task.Delay(1000);
+            await Task.Delay(300);
             tempTimer.Stop();
             tempTimer.Dispose();
 
@@ -187,7 +193,14 @@ namespace CuoreUI.Components
             {
                 SharedVariables.rounding = Rounding;
 
-                if (TargetForm.Visible)
+                if (TargetForm.WindowState == FormWindowState.Minimized)
+                {
+                    FakeForm.WindowState = FormWindowState.Minimized;
+                    RoundedForm.WindowState = FormWindowState.Minimized;
+                    TargetForm.WindowState = FormWindowState.Minimized;
+                    return;
+                }
+                if (TargetForm.Visible && TargetForm.WindowState == FormWindowState.Minimized)
                 {
                     try
                     {
@@ -204,7 +217,7 @@ namespace CuoreUI.Components
 
                         FakeForm.Invoke((MethodInvoker)delegate
                         {
-                            FakeForm.Refresh();
+                            FakeForm.ResumeLayout(false);
                         });
                     }
                     catch (Exception)
@@ -213,7 +226,7 @@ namespace CuoreUI.Components
                     }
                     finally
                     {
-                        tempBitmap.Dispose(); // Dispose of the bitmap to release resources
+                        tempBitmap.Dispose();
                     }
                 }
 

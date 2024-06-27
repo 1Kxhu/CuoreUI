@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Windows.Forms;
 
 namespace CuoreUI.Controls
@@ -25,11 +26,7 @@ namespace CuoreUI.Controls
                 if (value != null)
                 {
                     privateContent = value;
-                    cachedImage = value;
-                    Image transformedImage = TransformImage(cachedImage);
-                    cachedImageBrush = new TextureBrush(transformedImage);
-                    transformedImage.Dispose();
-                    cachedImageBrush.WrapMode = WrapMode.Clamp;
+                    TintImage();
                 }
                 else
                 {
@@ -76,13 +73,67 @@ namespace CuoreUI.Controls
             }
         }
 
+        private void TintImage()
+        {
+            if (privateContent == null)
+                return;
+
+            Bitmap tintedBitmap = new Bitmap(privateContent.Width, privateContent.Height);
+
+            using (Graphics g = Graphics.FromImage(tintedBitmap))
+            {
+                g.SmoothingMode = SmoothingMode.AntiAlias;
+                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                float r = ImageTint.R / 255f;
+                float gVal = ImageTint.G / 255f;
+                float b = ImageTint.B / 255f;
+                float a = ImageTint.A / 255f;
+
+                ColorMatrix colorMatrix = new ColorMatrix(new float[][]
+                {
+                    new float[] {r, 0, 0, 0, 0},
+                    new float[] {0, gVal, 0, 0, 0},
+                    new float[] {0, 0, b, 0, 0},
+                    new float[] {0, 0, 0, a, 0},
+                    new float[] {0, 0, 0, 0, 1}
+                });
+
+                ImageAttributes imageAttributes = new ImageAttributes();
+                imageAttributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+
+                g.DrawImage(privateContent, new Rectangle(0, 0, privateContent.Width, privateContent.Height),
+                            0, 0, privateContent.Width, privateContent.Height,
+                            GraphicsUnit.Pixel, imageAttributes);
+            }
+
+            cachedImageBrush = new TextureBrush(privateContent, WrapMode.Clamp);
+            cachedImage = TransformImage(tintedBitmap);
+        }
+
         private TextureBrush cachedImageBrush = null;
+
+        private Color privateImageTint = Color.White;
+        public Color ImageTint
+        {
+            get
+            {
+                return privateImageTint;
+            }
+            set
+            {
+                privateImageTint = value;
+                TintImage();
+                Invalidate();
+            }
+        }
 
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
 
-            if (privateContent == null || cachedImage == null || cachedImageBrush == null)
+            if (cachedImage == null)
             {
                 DiposeIfPossible(ref privateContent);
                 DiposeIfPossible(ref cachedImage);
@@ -97,37 +148,17 @@ namespace CuoreUI.Controls
             Rectangle clipRectangle = ClientRectangle;
             clipRectangle.Inflate(-1, -1);
 
-            if (CornerRadius == 0)
-            {
-                GraphicsPath clipGraphicsPath = Helper.RoundRect(clipRectangle, 1);
+            GraphicsPath clipGraphicsPath = Helper.RoundRect(clipRectangle, CornerRadius);
 
-                if (Content != null && cachedImageBrush != null && cachedImage != null)
-                {
-                    if (privateContent == null || cachedImage == null || cachedImageBrush == null)
-                    {
-                        return;
-                    }
-                    e.Graphics.FillPath(cachedImageBrush, clipGraphicsPath);
-                }
-            }
-            else
+            if (cachedImage != null)
             {
-                GraphicsPath clipGraphicsPath = Helper.RoundRect(clipRectangle, CornerRadius);
-
-                if (Content != null && cachedImageBrush != null && cachedImage != null)
-                {
-                    if (privateContent == null || cachedImage == null || cachedImageBrush == null)
-                    {
-                        return;
-                    }
-                    e.Graphics.FillPath(cachedImageBrush, clipGraphicsPath);
-                }
+                e.Graphics.SetClip(clipGraphicsPath);
+                e.Graphics.DrawImage(cachedImage, clipRectangle);
             }
         }
 
         public Image TransformImage(Image inputImage)
         {
-
             int width = ClientRectangle.Width;
             int height = ClientRectangle.Height;
 
@@ -135,14 +166,9 @@ namespace CuoreUI.Controls
 
             using (Graphics g = Graphics.FromImage(newImage))
             {
-                g.TranslateTransform(width / 2, height / 2);
-                g.ScaleTransform((float)width / inputImage.Width, (float)height / inputImage.Height);
-                g.TranslateTransform(-inputImage.Width / 2, -inputImage.Height / 2);
-                g.DrawImage(inputImage, Point.Empty);
-                g.Dispose();
+                g.DrawImage(inputImage, new Rectangle(0, 0, width, height));
             }
 
-            cachedImage = newImage;
             return newImage;
         }
 
