@@ -1,4 +1,4 @@
-![CuoreUI](https://github.com/1Kxhu/CuoreUI/assets/115172127/352d85cd-e0c7-4202-bc28-6c2b08205726)
+![CuoreUI](https://github.com/1Kxhu/CuoreUI/assets/115172127/2118fd57-da6c-42a0-998a-b92f92774646)
 NOT READY FOR PRODUCTION YET
 
 Licensed under the [Unlicense](https://github.com/1Kxhu/CuoreUI?tab=Unlicense-1-ov-file#)
