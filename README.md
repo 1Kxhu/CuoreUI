@@ -3,7 +3,7 @@ NOT READY FOR PRODUCTION YET
 
 Licensed under the [Unlicense](https://github.com/1Kxhu/CuoreUI?tab=Unlicense-1-ov-file#)
 # What is CuoreUI?
-A C# .NET Winforms UI Library with modern-looking control.
+A C# .NET Winforms UI Library with modern-looking controls, components and forms.
 
 # Why should you use CuoreUI?
 Have you ever used an UI Library only to find out you need a license, it is unpolished, or it was abandoned?
