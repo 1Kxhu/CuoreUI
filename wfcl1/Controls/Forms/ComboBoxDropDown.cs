@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CuoreUI.Controls.Forms
@@ -165,7 +159,7 @@ namespace CuoreUI.Controls.Forms
         public ComboBoxDropDown(string[] userItems, int userWidth, Color bg, Color outline, cuiComboBox userCaller)
         {
             InitializeComponent();
-            Width = userWidth - (comboBoxRounder1.Rounding*2);
+            Width = userWidth - (comboBoxRounder1.Rounding * 2);
             comboBoxRounder1.BackColor = bg;
             comboBoxRounder1.OutlineColor = outline;
             BackColor = bg;
@@ -183,12 +177,12 @@ namespace CuoreUI.Controls.Forms
 
         private void ComboBoxDropDown_MouseLeave(object sender, EventArgs e)
         {
-        
+
         }
 
         private void ComboBoxDropDown_Click(object sender, EventArgs e)
         {
-        
+
         }
 
         // button properties
@@ -207,7 +201,7 @@ namespace CuoreUI.Controls.Forms
             }
         }
 
-        private Color privateNormalBackground = Color.MediumSlateBlue;
+        private Color privateNormalBackground = Color.Coral;
         public Color NormalBackground
         {
             get
@@ -235,7 +229,7 @@ namespace CuoreUI.Controls.Forms
             }
         }
 
-        private Color privatePressedBackground = Color.MediumSlateBlue;
+        private Color privatePressedBackground = Color.Coral;
         public Color PressedBackground
         {
             get
@@ -249,7 +243,7 @@ namespace CuoreUI.Controls.Forms
             }
         }
 
-        private Color privateNormalOutline = Color.MediumSlateBlue;
+        private Color privateNormalOutline = Color.Coral;
         public Color NormalOutline
         {
             get
@@ -263,7 +257,7 @@ namespace CuoreUI.Controls.Forms
             }
         }
 
-        private Color privateHoverOutline = Color.MediumSlateBlue;
+        private Color privateHoverOutline = Color.Coral;
         public Color HoverOutline
         {
             get
@@ -277,7 +271,7 @@ namespace CuoreUI.Controls.Forms
             }
         }
 
-        private Color privatePressedOutline = Color.MediumSlateBlue;
+        private Color privatePressedOutline = Color.Coral;
         public Color PressedOutline
         {
             get

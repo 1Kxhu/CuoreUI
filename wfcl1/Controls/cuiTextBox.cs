@@ -62,7 +62,7 @@ public class cuiTextBox : UserControl
         caretBlinkTimer.Start();
     }
 
-    private Color privateBackground = Color.White;
+    private Color privateBackground = Color.FromArgb(50, 34, 34, 34);
     public Color Background
     {
         get
@@ -77,7 +77,7 @@ public class cuiTextBox : UserControl
     }
 
 
-    private Color privateBorder = Color.White;
+    private Color privateBorder = Color.FromArgb(34, 34, 34);
     public Color Border
     {
         get
@@ -91,7 +91,7 @@ public class cuiTextBox : UserControl
         }
     }
 
-    private float privateBorderSize = 1.0f;
+    private float privateBorderSize = 1.6f;
     public float BorderSize
     {
         get
@@ -105,7 +105,7 @@ public class cuiTextBox : UserControl
         }
     }
 
-    private Color privateFocusedBorder = Color.White;
+    private Color privateFocusedBorder = Color.FromArgb(46, 46, 46);
     public Color FocusedBorder
     {
         get
@@ -120,7 +120,7 @@ public class cuiTextBox : UserControl
     }
 
 
-    private Color privateFocusedBackground = Color.White;
+    private Color privateFocusedBackground = Color.FromArgb(100, 34, 34, 34);
     public Color FocusedBackground
     {
         get
@@ -142,7 +142,9 @@ public class cuiTextBox : UserControl
         e.Graphics.InterpolationMode = InterpolationMode.HighQualityBilinear;
         e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
 
-        GraphicsPath path = Helper.RoundRect(ClientRectangle, borderRadius);
+        Rectangle modifiedCR = ClientRectangle;
+        modifiedCR.Inflate(-1, -1);
+        GraphicsPath path = Helper.RoundRect(modifiedCR, borderRadius);
 
         if (Focused)
         {

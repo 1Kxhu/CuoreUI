@@ -1,10 +1,8 @@
-﻿using Svg;
-using Svg.Pathing;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Numerics;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -13,6 +11,16 @@ namespace CuoreUI
 {
     public static class Helper
     {
+        public static int[] GetRefreshRates()
+        {
+            return Win32.GetRefreshRates();
+        }
+
+        public static int GetHighestRefreshRate()
+        {
+            return Win32.GetRefreshRate();
+        }
+
         public static GraphicsPath RoundRect(int x, int y, int width, int height, int borderRadius)
         {
             GraphicsPath path = new GraphicsPath();
@@ -114,6 +122,40 @@ namespace CuoreUI
             return path;
         }
 
+        public static GraphicsPath Checkmark(RectangleF area)
+        {
+            GraphicsPath path = new GraphicsPath();
+
+            PointF[] points = new PointF[]
+            {
+            new PointF(area.Left + (int)(area.Width * 0.25), area.Top + (int)(area.Height * 0.5)),
+            new PointF(area.Left + (int)(area.Width * 0.45), area.Top + (int)(area.Height * 0.7)),
+            new PointF(area.Right - (int)(area.Width * 0.3), area.Top + (int)(area.Height * 0.3))
+            };
+
+            path.AddLines(points);
+
+            return path;
+        }
+
+        public static GraphicsPath Checkmark(RectangleF area, Point symbolsOffset)
+        {
+            GraphicsPath path = new GraphicsPath();
+
+            area.Offset(symbolsOffset);
+
+            PointF[] points = new PointF[]
+            {
+            new PointF(area.Left + (int)(area.Width * 0.25), area.Top + (int)(area.Height * 0.5)),
+            new PointF(area.Left + (int)(area.Width * 0.45), area.Top + (int)(area.Height * 0.7)),
+            new PointF(area.Right - (int)(area.Width * 0.3), area.Top + (int)(area.Height * 0.3))
+            };
+
+            path.AddLines(points);
+
+            return path;
+        }
+
         public static GraphicsPath Crossmark(Rectangle rect)
         {
             Rectangle area = rect;
@@ -142,6 +184,82 @@ namespace CuoreUI
             {
             new Point(area.Left, area.Bottom),
             new Point(area.Right, area.Top)
+            };
+
+            path2.AddLines(points2);
+
+            path.AddPath(path2, false);
+
+            return path;
+        }
+
+        public static GraphicsPath Crossmark(Rectangle rect, Point symbolsOffset)
+        {
+            Rectangle area = rect;
+            area.Offset(symbolsOffset);
+            int WidthBeforeScale = area.Width;
+            area.Width = (int)Math.Round(area.Width * 0.7f, 0);
+            area.Height = area.Width;
+
+            int WidthAfterScale = area.Width;
+            int WidthDifference = WidthBeforeScale - WidthAfterScale;
+
+            area.Offset(WidthDifference / 2, 1 + (WidthDifference / 2));
+
+            GraphicsPath path = new GraphicsPath();
+
+            Point[] points = new Point[]
+            {
+            new Point(area.Left, area.Top),
+            new Point(area.Right, area.Bottom)
+            };
+
+            path.AddLines(points);
+
+            GraphicsPath path2 = new GraphicsPath();
+
+            Point[] points2 = new Point[]
+            {
+            new Point(area.Left, area.Bottom),
+            new Point(area.Right, area.Top)
+            };
+
+            path2.AddLines(points2);
+
+            path.AddPath(path2, false);
+
+            return path;
+        }
+
+        public static GraphicsPath Crossmark(RectangleF rect, Point symbolsOffset)
+        {
+            RectangleF area = rect;
+            area.Offset(symbolsOffset);
+            float WidthBeforeScale = area.Width;
+            area.Width = (int)Math.Round(area.Width * 0.7f, 0);
+            area.Height = area.Width;
+
+            float WidthAfterScale = area.Width;
+            float WidthDifference = WidthBeforeScale - WidthAfterScale;
+
+            area.Offset(WidthDifference / 2, 1 + (WidthDifference / 2));
+
+            GraphicsPath path = new GraphicsPath();
+
+            PointF[] points = new PointF[]
+            {
+            new PointF(area.Left, area.Top),
+            new PointF(area.Right, area.Bottom)
+            };
+
+            path.AddLines(points);
+
+            GraphicsPath path2 = new GraphicsPath();
+
+            PointF[] points2 = new PointF[]
+            {
+            new PointF(area.Left, area.Bottom),
+            new PointF(area.Right, area.Top)
             };
 
             path2.AddLines(points2);
@@ -372,22 +490,80 @@ namespace CuoreUI
                 public int dmPanningHeight;
             }
 
+            [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+            public struct DISPLAY_DEVICE
+            {
+                public int cb;
+                [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
+                public string DeviceName;
+                [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
+                public string DeviceString;
+                public int StateFlags;
+                [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
+                public string DeviceID;
+                [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
+                public string DeviceKey;
+            }
+
             [DllImport("user32.dll")]
-            public static extern bool EnumDisplaySettings(string deviceName, int modeNum, ref DEVMODE devMode);
+            private static extern bool EnumDisplaySettings(string lpszDeviceName, int iModeNum, ref DEVMODE lpDevMode);
+
+            [DllImport("user32.dll")]
+            private static extern bool EnumDisplayDevices(string lpDevice, uint iDevNum, ref DISPLAY_DEVICE lpDisplayDevice, uint dwFlags);
+
+            public static bool REFRESH_RATE_OVERRIDE = false;
+            public static int SPOOFED_REFRESH_RATE = 60;
 
             public static int GetRefreshRate()
             {
-                DEVMODE devMode = new DEVMODE();
-                devMode.dmSize = (short)Marshal.SizeOf(typeof(DEVMODE));
+                if (REFRESH_RATE_OVERRIDE)
+                {
+                    return SPOOFED_REFRESH_RATE;
+                }
 
-                if (EnumDisplaySettings(null, -1, ref devMode))
+                DISPLAY_DEVICE d = new DISPLAY_DEVICE();
+                d.cb = Marshal.SizeOf(d);
+                DEVMODE vDevMode = new DEVMODE();
+                vDevMode.dmSize = (short)Marshal.SizeOf(typeof(DEVMODE));
+
+                uint deviceIndex = 0;
+                int maxRefreshRate = 1;
+
+                while (EnumDisplayDevices(null, deviceIndex, ref d, 0))
                 {
-                    return devMode.dmDisplayFrequency;
+                    if (EnumDisplaySettings(d.DeviceName, -1, ref vDevMode))
+                    {
+                        int refreshRate = vDevMode.dmDisplayFrequency;
+                        if (refreshRate > maxRefreshRate)
+                        {
+                            maxRefreshRate = refreshRate;
+                        }
+                    }
+                    deviceIndex++;
                 }
-                else
+
+                return maxRefreshRate;
+            }
+
+            public static int[] GetRefreshRates()
+            {
+                List<int> refreshRates = new List<int>();
+                DISPLAY_DEVICE d = new DISPLAY_DEVICE();
+                d.cb = Marshal.SizeOf(d);
+                DEVMODE vDevMode = new DEVMODE();
+                vDevMode.dmSize = (short)Marshal.SizeOf(typeof(DEVMODE));
+
+                uint deviceIndex = 0;
+                while (EnumDisplayDevices(null, deviceIndex, ref d, 0))
                 {
-                    return 60;
+                    if (EnumDisplaySettings(d.DeviceName, -1, ref vDevMode))
+                    {
+                        refreshRates.Add(vDevMode.dmDisplayFrequency);
+                    }
+                    deviceIndex++;
                 }
+
+                return refreshRates.ToArray();
             }
 
             internal static class NativeMethods

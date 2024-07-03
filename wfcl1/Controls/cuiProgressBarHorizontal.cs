@@ -58,7 +58,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private Color privateBackground = Color.FromArgb(222, 222, 222);
+        private Color privateBackground = Color.FromArgb(34, 34, 34);
         public Color Background
         {
             get
@@ -72,7 +72,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private Color privateForeground = Color.FromArgb(50, 240, 117);
+        private Color privateForeground = Color.Coral;
         public Color Foreground
         {
             get

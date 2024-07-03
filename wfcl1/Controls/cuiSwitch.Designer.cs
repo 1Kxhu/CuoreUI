@@ -18,9 +18,13 @@
         private void InitializeComponent()
         {
             this.SuspendLayout();
+            // 
+            // cuiSwitch
+            // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.Name = "cuiSwitch";
             this.Size = new System.Drawing.Size(50, 24);
+            this.Load += new System.EventHandler(this.cuiSwitch_Load);
             this.ResumeLayout(false);
 
         }

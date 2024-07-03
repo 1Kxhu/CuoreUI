@@ -6,10 +6,6 @@ namespace CuoreUI.Controls
 {
     public partial class cuiCheckbox : cuiSwitch
     {
-
-        Timer unlockedColorTimer = new Timer();
-        Timer fixedTimeColorTimer = new Timer();
-
         public cuiCheckbox()
         {
             InitializeComponent();
@@ -21,126 +17,95 @@ namespace CuoreUI.Controls
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             MinimumSize = new Size(24, 24);
-
-            if (Checked)
-            {
-                ThumbRenderColor = CheckedForeground;
-            }
-            else
-            {
-                ThumbRenderColor = UncheckedForeground;
-            }
-            fixedTimeThumbRenderColor = ThumbRenderColor;
-
-            //timers intervals
-            unlockedColorTimer.Interval = 1000 / Helper.Win32.GetRefreshRate();
-            fixedTimeColorTimer.Interval = 1;
-
-            //locked fps timer
-            fixedTimeColorTimer.Tick += (s, e) =>
-            {
-                if (UncheckedForeground == CheckedForeground)
-                {
-                    return;
-                }
-                if (Checked)
-                {
-                    int R = ((fixedTimeThumbRenderColor.R * 1) + CheckedForeground.R * 9) / 10;
-                    int G = ((fixedTimeThumbRenderColor.G * 1) + CheckedForeground.G * 9) / 10;
-                    int B = ((fixedTimeThumbRenderColor.B * 1) + CheckedForeground.B * 9) / 10;
-                    fixedTimeThumbRenderColor = Color.FromArgb(R, G, B);
-                }
-                else
-                {
-                    int R = ((fixedTimeThumbRenderColor.R * 1) + UncheckedForeground.R * 9) / 10;
-                    int G = ((fixedTimeThumbRenderColor.G * 1) + UncheckedForeground.G * 9) / 10;
-                    int B = ((fixedTimeThumbRenderColor.B * 1) + UncheckedForeground.B * 9) / 10;
-                    fixedTimeThumbRenderColor = Color.FromArgb(R, G, B);
-                }
-
-                //MessageBox.Show("a");
-            };
-            fixedTimeColorTimer.Start();
-
-            //unlocked fps timer
-            unlockedColorTimer.Tick += (s, e) =>
-            {
-                if (UncheckedForeground == CheckedForeground)
-                {
-                    return;
-                }
-                int R = ((ThumbRenderColor.R * 4) + fixedTimeThumbRenderColor.R) / 5;
-                int G = ((ThumbRenderColor.G * 4) + fixedTimeThumbRenderColor.G) / 5;
-                int B = ((ThumbRenderColor.B * 4) + fixedTimeThumbRenderColor.B) / 5;
-                ThumbRenderColor = Color.FromArgb(R, G, B);
-                Refresh();
-                //MessageBox.Show("b");
-            };
-            unlockedColorTimer.Start();
         }
 
-        private int privateThumbOffset = 1;
-        public int ThumbOffset
+        private float privateCheckmarkThickness;
+
+        public float CheckmarkThickness
         {
             get
             {
-                return privateThumbOffset;
+                return privateCheckmarkThickness;
             }
             set
             {
-                privateThumbOffset = value;
+                privateCheckmarkThickness = value;
                 Invalidate();
             }
+
         }
 
-        private Color privateUncheckedForeground = Color.Black;
-        new public Color UncheckedForeground
-        {
-            get
-            {
-                return privateUncheckedForeground;
-            }
-            set
-            {
-                privateUncheckedForeground = value;
-                Invalidate();
-            }
-        }
-
-        public Color CheckmarkColor { get; set; } = Color.White;
-        public int CheckmarkThickness { get; set; } = 2;
-
-        private Color fixedTimeThumbRenderColor;
-        public Color ThumbRenderColor;
+        public Point symbolsOffset = new Point(0, 1);
 
         protected override void OnPaint(PaintEventArgs e)
         {
+            symbolsOffset = new Point(0, 1);
+
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-            Rectangle squareClientRectangle = new Rectangle(0, 0, Height, Height);
-            GraphicsPath roundBackground = Helper.RoundRect(squareClientRectangle, Height / 2);
+            RectangleF squareClientRectangle = new RectangleF(OutlineThickness + 0.6f, OutlineThickness + 0.6f, Height - (OutlineThickness * 2) - 1.2f, Height - (OutlineThickness * 2) - 1.2f);
+
+            GraphicsPath roundBackground = Helper.RoundRect(squareClientRectangle, (int)((Height / 2) - OutlineThickness - 0.6f));
 
             using (SolidBrush brush = new SolidBrush(Background))
             {
                 e.Graphics.FillPath(brush, roundBackground);
             }
 
-            int thumbDim = Height - privateThumbOffset * 2;
-            Rectangle thumbRect = new Rectangle(privateThumbOffset, privateThumbOffset, thumbDim, thumbDim);
-            GraphicsPath roundThumbRect = Helper.RoundRect(thumbRect, (Height / 2) - privateThumbOffset);
-
-            using (SolidBrush brush = new SolidBrush(ThumbRenderColor))
-            {
-                e.Graphics.FillPath(brush, roundThumbRect);
-            }
+            float thumbDim = Height - (int)(OutlineThickness * 2);
+            RectangleF thumbRect = new RectangleF(squareClientRectangle.X + OutlineThickness, squareClientRectangle.Y + OutlineThickness, thumbDim - (OutlineThickness * 2) - 1.2f, thumbDim - (OutlineThickness * 2) - 1.2f);
+            thumbRect.Inflate(-1.0f, -1.0f);
 
             if (Checked)
             {
-                Pen checkmarkPen = new Pen(CheckmarkColor, CheckmarkThickness);
-                checkmarkPen.StartCap = LineCap.Round;
-                checkmarkPen.EndCap = LineCap.Round;
-                GraphicsPath checkmark = Helper.Checkmark(thumbRect);
-                e.Graphics.DrawPath(checkmarkPen, checkmark);
+                using (SolidBrush brush = new SolidBrush(CheckedForeground))
+                {
+                    e.Graphics.FillEllipse(brush, thumbRect);
+                }
+
+                using (Pen outlinePen = new Pen(CheckedOutlineColor, OutlineThickness))
+                {
+                    e.Graphics.DrawPath(outlinePen, roundBackground);
+                }
+            }
+            else
+            {
+                using (SolidBrush brush = new SolidBrush(UncheckedForeground))
+                {
+                    e.Graphics.FillEllipse(brush, thumbRect);
+                }
+
+                using (Pen outlinePen = new Pen(OutlineColor, OutlineThickness))
+                {
+                    e.Graphics.DrawPath(outlinePen, roundBackground);
+                }
+
+
+            }
+
+            thumbRect.Inflate(0.4f, 0.4f);
+
+            if (ShowSymbols)
+            {
+                if (Checked)
+                {
+                    Pen checkmarkPen = new Pen(Background, CheckmarkThickness);
+                    checkmarkPen.StartCap = LineCap.Round;
+                    checkmarkPen.EndCap = LineCap.Round;
+                    GraphicsPath checkmark = Helper.Checkmark(thumbRect, symbolsOffset);
+                    e.Graphics.DrawPath(checkmarkPen, checkmark);
+                }
+                else
+                {
+                    RectangleF tempRectF = thumbRect;
+                    tempRectF.Inflate(-(int)(Height / 6.2f), -(int)(Height / 6.2f));
+                    tempRectF.Offset(0, -2.2f);
+                    Pen checkmarkPen = new Pen(Background, CheckmarkThickness);
+                    checkmarkPen.StartCap = LineCap.Round;
+                    checkmarkPen.EndCap = LineCap.Round;
+                    GraphicsPath crossmark = Helper.Crossmark(tempRectF, symbolsOffset);
+                    e.Graphics.DrawPath(checkmarkPen, crossmark);
+                }
             }
         }
     }

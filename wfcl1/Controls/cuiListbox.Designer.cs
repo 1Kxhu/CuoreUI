@@ -18,6 +18,10 @@
         private void InitializeComponent()
         {
             this.SuspendLayout();
+            // 
+            // cuiListbox
+            // 
+            this.MouseLeave += new System.EventHandler(this.cuiListbox_MouseLeave);
             this.ResumeLayout(false);
 
         }

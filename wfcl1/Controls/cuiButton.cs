@@ -46,7 +46,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private Color privateNormalBackground = Color.MediumSlateBlue;
+        private Color privateNormalBackground = Color.Coral;
         public Color NormalBackground
         {
             get
@@ -60,7 +60,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private Color privateHoverBackground = Color.FromArgb(200, 123, 104, 238);
+        private Color privateHoverBackground = Color.FromArgb(200, 255, 127, 80);
         public Color HoverBackground
         {
             get
@@ -74,7 +74,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private Color privatePressedBackground = Color.MediumSlateBlue;
+        private Color privatePressedBackground = Color.Coral;
         public Color PressedBackground
         {
             get
@@ -88,7 +88,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private Color privateNormalOutline = Color.MediumSlateBlue;
+        private Color privateNormalOutline = Color.Coral;
         public Color NormalOutline
         {
             get
@@ -102,7 +102,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private Color privateHoverOutline = Color.MediumSlateBlue;
+        private Color privateHoverOutline = Color.Coral;
         public Color HoverOutline
         {
             get
@@ -116,7 +116,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private Color privatePressedOutline = Color.MediumSlateBlue;
+        private Color privatePressedOutline = Color.Coral;
         public Color PressedOutline
         {
             get
@@ -179,7 +179,7 @@ namespace CuoreUI.Controls
         }
 
 
-        private Color privateCheckedBackground = Color.MediumSlateBlue;
+        private Color privateCheckedBackground = Color.Coral;
         public Color CheckedBackground
         {
             get
@@ -193,7 +193,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private Color privateCheckedOutline = Color.MediumSlateBlue;
+        private Color privateCheckedOutline = Color.Coral;
         public Color CheckedOutline
         {
             get

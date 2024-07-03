@@ -2,15 +2,15 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using static CuoreUI.Drawing;
 
 namespace CuoreUI.Controls
 {
     [DefaultEvent("Click")]
     public partial class cuiSwitch : UserControl
     {
-        Timer timer = new Timer();
-
         public cuiSwitch()
         {
             InitializeComponent();
@@ -20,18 +20,102 @@ namespace CuoreUI.Controls
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
 
-            privateSmoothThumbX = thumbX;
-
-            timer.Interval = 10;
-            timer.Tick += (e, s) =>
+            if (DesignMode)
             {
-                privateSmoothThumbX = ((privateSmoothThumbX * 14) + thumbX) / 15;
+                privateBackground = BackColor;
+            }
+        }
+
+        private double elapsedTime = 0;
+
+        const int Duration = 350;
+        double xDistance = 2;
+        float startX = 0;
+
+        bool animationFinished = true;
+
+        public async Task AnimateThumbLocation()
+        {
+            if (animating)
+            {
+                animationsInQueue++;
+                return;
+            }
+            animating = true;
+
+            startX = thumbX;
+
+            if (Checked)
+            {
+                targetX = Width - 3.5f - (Height - 7);
+            }
+            else
+            {
+                targetX = OutlineThickness + 1;
+            }
+
+            xDistance = -(startX - targetX);
+
+            DateTime animationStartTime = DateTime.Now;
+            double durationRatio = Duration / 1000.0;
+
+            animationFinished = false;
+            elapsedTime = 0;
+
+            DateTime lastFrameTime = DateTime.Now;
+
+            EmergencySetLocation(Duration);
+
+            while (true)
+            {
+                DateTime rightnow = DateTime.Now;
+                double elapsedMilliseconds = (rightnow - lastFrameTime).TotalMilliseconds;
+                lastFrameTime = rightnow;
+
+                elapsedTime += (elapsedMilliseconds / Duration);
+
+                if (elapsedTime >= Duration || animationFinished || animationsInQueue > 0)
+                {
+                    if (animationsInQueue > 0)
+                    {
+                        animationsInQueue--;
+                        _ = AnimateThumbLocation();
+                    }
+
+                    thumbX = (int)targetX;
+                    animating = false;
+                    animationFinished = false;
+                    elapsedTime = 0;
+                    Refresh();
+                    return;
+                }
+
+                double quad = CuoreUI.Drawing.EasingFunctions.FromEasingType(EasingTypes.SextOut, elapsedTime, Duration / (double)1000) * durationRatio;
+                //MessageBox.Show($"quad: {quad}\n elapsedTime: {elapsedTime}\n durationRatio: {durationRatio}");
+                thumbX = (int)(startX + (int)(xDistance * quad));
                 Refresh();
-            };
-            timer.Start();
+
+                await Task.Delay(1000 / Drawing.GetHighestRefreshRate());
+
+                if (!Checked)
+                {
+                    targetX = OutlineThickness * 2;
+                }
+            }
+        }
+
+        int animationsInQueue = 0;
+
+        private async void EmergencySetLocation(int duration)
+        {
+            await Task.Delay(duration);
+            thumbX = (int)targetX;
+            animationFinished = true;
+            Refresh();
         }
 
         private bool privateChecked = false;
+        [Description("Whether the switch is on or off.")]
         public bool Checked
         {
             get
@@ -40,12 +124,18 @@ namespace CuoreUI.Controls
             }
             set
             {
-                privateChecked = value;
+                if (!animating)
+                {
+                    privateChecked = value;
+                    CheckedChanged?.Invoke(this, EventArgs.Empty);
+                    _ = AnimateThumbLocation();
+                }
                 Invalidate();
             }
         }
 
         private Color privateBackground = Color.Black;
+        [Description("The rounded background for the switch.")]
         public Color Background
         {
             get
@@ -59,7 +149,8 @@ namespace CuoreUI.Controls
             }
         }
 
-        private Color privateCheckedForeground = Color.MediumSlateBlue;
+        private Color privateCheckedForeground = Color.Coral;
+        [Description("The checked foreground.")]
         public Color CheckedForeground
         {
             get
@@ -74,6 +165,7 @@ namespace CuoreUI.Controls
         }
 
         private Color privateUncheckedForeground = Color.FromArgb(34, 34, 34);
+        [Description("The unchecked foreground.")]
         public Color UncheckedForeground
         {
             get
@@ -89,13 +181,45 @@ namespace CuoreUI.Controls
 
         public bool OutlineStyle { get; set; } = true;
         public Color OutlineColor { get; set; } = Color.FromArgb(34, 34, 34);
-        public float OutlineThickness { get; set; } = 1;
+        public Color CheckedOutlineColor { get; set; } = Color.Coral;
+        public float OutlineThickness { get; set; } = 1.6f;
 
-        private int privateSmoothThumbX;
-        private int thumbX;
+        private int thumbX = 2;
+
+        private bool animating = false;
+
+        float targetX = 2;
+        RectangleF thumbRect;
+
+        private bool privateShowSymbols = true;
+        public bool ShowSymbols
+        {
+            get
+            {
+                return privateShowSymbols;
+            }
+            set
+            {
+                privateShowSymbols = value;
+                Invalidate();
+            }
+        }
+
+        public event EventHandler CheckedChanged;
 
         protected override void OnPaint(PaintEventArgs e)
         {
+            if (animating == false)
+            {
+                if (Checked)
+                {
+                    thumbX = (int)(Width - 3.5f - (Height - 7));
+                }
+                else
+                {
+                    thumbX = (int)(OutlineThickness * 2);
+                }
+            }
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
             int Rounding;
@@ -107,7 +231,14 @@ namespace CuoreUI.Controls
             {
                 Rounding = 1;
             }
-            GraphicsPath roundBackground = Helper.RoundRect(ClientRectangle, Rounding);
+
+            Rectangle modifiedCR = ClientRectangle;
+            modifiedCR.Inflate(-1, -1);
+
+            modifiedCR.Inflate(-(int)OutlineThickness, -(int)OutlineThickness);
+            int temporaryRounding = Rounding - (int)OutlineThickness;
+
+            GraphicsPath roundBackground = Helper.RoundRect(modifiedCR, temporaryRounding);
 
             using (SolidBrush brush = new SolidBrush(Background))
             {
@@ -115,29 +246,69 @@ namespace CuoreUI.Controls
             }
 
             int thumbDim = Height - 7;
-            RectangleF thumbRect = new RectangleF(thumbX, 3, thumbDim, thumbDim);
+            thumbRect = new RectangleF(thumbX, 3, thumbDim, thumbDim);
+            thumbRect.Offset(0.5f, 0.5f);
+            thumbRect.Inflate(-(int)(OutlineThickness), -(int)(OutlineThickness));
 
-            if (Checked)
+            Rectangle temporaryThumbRect = thumbRectangleInt;
+            temporaryThumbRect.Offset(1, 0);
+
+            temporaryThumbRect.Height = temporaryThumbRect.Width;
+
+            using (Pen graphicsPen = new Pen(Background, Height / 10))
             {
-                thumbRect.X = Width - 5 - thumbDim;
-                using (SolidBrush brush = new SolidBrush(CheckedForeground))
+                graphicsPen.StartCap = LineCap.Round;
+                graphicsPen.EndCap = LineCap.Round;
+
+                if (Checked)
                 {
-                    e.Graphics.FillEllipse(brush, thumbRect);
+                    using (SolidBrush brush = new SolidBrush(CheckedForeground))
+                    {
+                        e.Graphics.FillEllipse(brush, thumbRect);
+                    }
+
+                    using (Pen outlinePen = new Pen(CheckedOutlineColor, OutlineThickness))
+                    {
+                        e.Graphics.DrawPath(outlinePen, roundBackground);
+                    }
+                }
+                else
+                {
+                    using (SolidBrush brush = new SolidBrush(UncheckedForeground))
+                    {
+                        e.Graphics.FillEllipse(brush, thumbRect);
+                    }
+
+                    using (Pen outlinePen = new Pen(OutlineColor, OutlineThickness))
+                    {
+                        e.Graphics.DrawPath(outlinePen, roundBackground);
+                    }
+                }
+
+                if (ShowSymbols)
+                {
+                    if (Checked)
+                    {
+                        temporaryThumbRect.Offset(0, 1);
+                        e.Graphics.DrawPath(graphicsPen, Helper.Checkmark(temporaryThumbRect));
+                    }
+                    else
+                    {
+                        temporaryThumbRect.Inflate(-(int)(Height / 6.2f), -(int)(Height / 6.2f));
+
+                        e.Graphics.DrawPath(graphicsPen, Helper.Crossmark(temporaryThumbRect));
+                    }
                 }
             }
-            else
-            {
-                using (SolidBrush brush = new SolidBrush(UncheckedForeground))
-                {
-                    e.Graphics.FillEllipse(brush, thumbRect);
-                }
-            }
 
-            using (Pen outlinePen = new Pen(OutlineColor, OutlineThickness))
-            {
-                e.Graphics.DrawPath(outlinePen, roundBackground);
-            }
+        }
 
+        Rectangle thumbRectangleInt
+        {
+            get
+            {
+                return new Rectangle((int)thumbRect.X, (int)thumbRect.Y, (int)thumbRect.Width, (int)thumbRect.Height);
+            }
         }
 
         protected override void OnSizeChanged(EventArgs e)
@@ -153,7 +324,15 @@ namespace CuoreUI.Controls
 
         protected override void OnMouseClick(MouseEventArgs e)
         {
-            Checked = !Checked;
+            if (animating == false)
+            {
+                Checked = !Checked;
+            }
+        }
+
+        private void cuiSwitch_Load(object sender, EventArgs e)
+        {
+            Invalidate();
         }
     }
 }

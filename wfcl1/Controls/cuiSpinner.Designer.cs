@@ -18,10 +18,12 @@
         private void InitializeComponent()
         {
             this.SuspendLayout();
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            // 
+            // cuiSpinner
+            // 
             this.Name = "cuiSpinner";
             this.Size = new System.Drawing.Size(60, 60);
+            this.Load += new System.EventHandler(this.cuiSpinner_Load);
             this.ResumeLayout(false);
 
         }

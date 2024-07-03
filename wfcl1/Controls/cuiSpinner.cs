@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CuoreUI.Controls
 {
     public partial class cuiSpinner : UserControl
     {
-        Timer updateTimer = new Timer();
-        Timer rotationTimer = new Timer();
+        Timer designerExclusiveRotationTimer = new Timer();
 
         private float privateRotateSpeed = 2;
         public float RotateSpeed
@@ -25,42 +25,57 @@ namespace CuoreUI.Controls
 
         public bool RotateEnabled = true;
 
-        private float FloatLimitHalf = float.MaxValue / 2;
-
         public cuiSpinner()
         {
             InitializeComponent();
             DoubleBuffered = true;
+            SetStyle(ControlStyles.UserPaint, true);
+            SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
 
-            privateSmoothRotation = RotateSpeed;
             Rotation = 0;
-
-            updateTimer.Interval = 1000 / Helper.Win32.GetRefreshRate();
-            updateTimer.Tick += (obj, args) =>
-            {
-                Invalidate();
-            };
-
-            updateTimer.Start();
-
-            rotationTimer.Interval = 4;
-            rotationTimer.Tick += (obj, args) =>
-            {
-                if (Rotation >= FloatLimitHalf)
-                {
-                    Rotation = 0;
-                }
-                if (RotateEnabled)
-                {
-                    Rotation += RotateSpeed;
-                }
-            };
-
-            rotationTimer.Start();
         }
 
-        private Color privateArcColor = Color.MediumSlateBlue;
+        bool designerRotating = false;
+
+        private async void DesignerRotationLogic()
+        {
+            if (designerRotating == false)
+            {
+                designerRotating = true;
+                if (DesignMode)
+                {
+                    while (true)
+                    {
+                        if (!DesignMode)
+                        {
+                            break;
+                        }
+
+                        await universalRotateLogic();
+                    }
+                }
+            }
+            designerRotating = false;
+        }
+
+        async Task universalRotateLogic()
+        {
+            Rotation += (RotateSpeed / 2) * Drawing.TimeDelta;
+
+            if (Rotation > 359)
+            {
+                Rotation -= 360;
+            }
+            if (Rotation < 359)
+            {
+                Rotation += 360;
+            }
+
+            await Task.Delay(1000 / Drawing.GetHighestRefreshRate());
+        }
+
+        private Color privateArcColor = Color.Coral;
         public Color ArcColor
         {
             get
@@ -97,29 +112,12 @@ namespace CuoreUI.Controls
             }
             set
             {
-                privateSmoothRotation = value;
+                if (value >= 360)
+                {
+                    value -= 360;
+                }
                 privateRotation = value;
-                Invalidate();
-            }
-        }
-
-        private float privateSmoothRotation = 0;
-        private float SmoothRotation
-        {
-            get
-            {
-                privateSmoothRotation = ((privateSmoothRotation * 14) + Rotation) / 15;
-                if (privateSmoothRotation > FloatLimitHalf)
-                {
-                    privateSmoothRotation = RotateSpeed;
-                    Rotation = RotateSpeed;
-                }
-
-                if (privateSmoothRotation > 360 && Rotation > 360)
-                {
-                    Rotation = 360 - privateSmoothRotation + RotateSpeed;
-                }
-                return privateSmoothRotation;
+                Refresh();
             }
         }
 
@@ -128,6 +126,25 @@ namespace CuoreUI.Controls
 
         protected override void OnPaint(PaintEventArgs e)
         {
+            if (!designerRotating && DesignMode)
+            {
+                DesignerRotationLogic();
+            }
+
+            if (Rotation > 720)
+            {
+                Rotation = 0;
+            }
+
+            if (DesignMode && designerExclusiveRotationTimer.Enabled == false)
+            {
+                designerExclusiveRotationTimer.Start();
+            }
+            else if (!DesignMode && designerExclusiveRotationTimer.Enabled == true)
+            {
+                designerExclusiveRotationTimer.Stop();
+            }
+
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
             float SpinnerThickness = ArcSize * 2f;
@@ -144,15 +161,21 @@ namespace CuoreUI.Controls
             Pen ArcPen = new Pen(ArcColor, SpinnerThickness);
             ArcPen.StartCap = System.Drawing.Drawing2D.LineCap.Round;
             ArcPen.EndCap = System.Drawing.Drawing2D.LineCap.Round;
-            e.Graphics.DrawArc(ArcPen, ClientConsideringArcSize, SmoothRotation, ArcDegrees);
+            e.Graphics.DrawArc(ArcPen, ClientConsideringArcSize, Rotation, ArcDegrees);
 
         }
 
-        protected override void OnLoad(EventArgs e)
+        private async void cuiSpinner_Load(object sender, EventArgs e)
         {
-            base.OnLoad(e);
             Rotation = 0;
-            privateSmoothRotation = 0;
+
+            if (!DesignMode)
+            {
+                while (true)
+                {
+                    await universalRotateLogic();
+                }
+            }
         }
     }
 }

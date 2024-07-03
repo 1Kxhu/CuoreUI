@@ -76,7 +76,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private Color privateSelectedTabBackColor = Color.MediumSlateBlue;
+        private Color privateSelectedTabBackColor = Color.Coral;
         public Color SelectedTabBackColor
         {
             get

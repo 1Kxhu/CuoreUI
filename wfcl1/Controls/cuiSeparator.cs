@@ -8,7 +8,7 @@ namespace CuoreUI.Controls
         public cuiSeparator()
         {
             InitializeComponent();
-            ForeColor = Color.FromArgb(222, 222, 222);
+            ForeColor = Color.FromArgb(34, 34, 34);
         }
 
         private int privateSeparatorMargin = 8;

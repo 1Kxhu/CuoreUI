@@ -407,31 +407,31 @@ namespace CuoreUI.Controls
         public Color ButtonNormalBackground
         {
             get; set;
-        } = Color.MediumSlateBlue;
+        } = Color.Coral;
 
         public Color ButtonHoverBackground
         {
             get; set;
-        } = Color.FromArgb(200, 123, 104, 238);
+        } = Color.FromArgb(200, 255, 127, 80);
 
         public Color ButtonPressedBackground
         {
             get; set;
-        } = Color.MediumSlateBlue;
+        } = Color.Coral;
 
         public Color ButtonNormalOutline
         {
             get; set;
-        } = Color.MediumSlateBlue;
+        } = Color.Coral;
 
         public Color ButtonHoverOutline
         {
             get; set;
-        } = Color.MediumSlateBlue;
+        } = Color.Coral;
 
         public Color ButtonPressedOutline
         {
             get; set;
-        } = Color.MediumSlateBlue;
+        } = Color.Coral;
     }
 }

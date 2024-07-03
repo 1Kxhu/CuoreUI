@@ -37,6 +37,12 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Components\cuiControlAnimator.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Components\cuiControlAnimator.Designer.cs">
+      <DependentUpon>cuiControlAnimator.cs</DependentUpon>
+    </Compile>
     <Compile Include="Components\cuiControlBlur.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -64,7 +70,7 @@
     <Compile Include="Components\cuiFormRounderV2Resources\RoundedForm.Designer.cs">
       <DependentUpon>RoundedForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Components\cuiFormRounderV2Resources\SharedVariables.cs" />
+    <Compile Include="Components\cuiFormRounderV2Resources\Stored.cs" />
     <Compile Include="Controls\cuiButton.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -106,6 +112,12 @@
     </Compile>
     <Compile Include="Controls\cuiSeparator.Designer.cs">
       <DependentUpon>cuiSeparator.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\cuiSlider.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\cuiSlider.Designer.cs">
+      <DependentUpon>cuiSlider.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\cuiSpinner.cs">
       <SubType>UserControl</SubType>
@@ -153,6 +165,8 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GaussianBlurTest.cs" />
+    <Compile Include="Drawing.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Controls\cuiBorder.cs">
       <SubType>Component</SubType>
@@ -223,6 +237,9 @@
     <EmbeddedResource Include="Controls\cuiSeparator.resx">
       <DependentUpon>cuiSeparator.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\cuiSlider.resx">
+      <DependentUpon>cuiSlider.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\cuiSpinner.resx">
       <DependentUpon>cuiSpinner.cs</DependentUpon>
     </EmbeddedResource>
@@ -244,9 +261,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Graphics\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Reference Include="Accord, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
       <HintPath>..\packages\Accord.3.8.0\lib\net462\Accord.dll</HintPath>

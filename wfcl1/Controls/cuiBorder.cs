@@ -13,7 +13,7 @@ namespace CuoreUI.Controls
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
         }
 
-        private Color privatePanelColor = Color.MediumSlateBlue;
+        private Color privatePanelColor = Color.Coral;
         public Color PanelColor
         {
             get
@@ -27,7 +27,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private Color privatePanelOutlineColor = Color.MediumSlateBlue;
+        private Color privatePanelOutlineColor = Color.Coral;
         public Color PanelOutlineColor
         {
             get

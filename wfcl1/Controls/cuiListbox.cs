@@ -24,6 +24,7 @@ namespace CuoreUI.Controls
             refreshTimer.Interval = 25;
             refreshTimer.Start();
             refreshTimer.Tick += RefreshTimer_Tick;
+            Font = new Font("Microsoft YaHei UI", 9, FontStyle.Bold);
         }
 
         private void RefreshTimer_Tick(object sender, EventArgs e)
@@ -94,7 +95,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private Color privateBackgroundColor = Color.FromArgb(222, 222, 222);
+        private Color privateBackgroundColor = Color.FromArgb(34, 34, 34);
         public Color BackgroundColor
         {
             get
@@ -104,6 +105,34 @@ namespace CuoreUI.Controls
             set
             {
                 privateBackgroundColor = value;
+                Invalidate();
+            }
+        }
+
+        private Color privateItemHoveredBackgroundColor = Color.FromArgb(46, 46, 46);
+        public Color ItemHoveredBackgroundColor
+        {
+            get
+            {
+                return privateItemHoveredBackgroundColor;
+            }
+            set
+            {
+                privateItemHoveredBackgroundColor = value;
+                Invalidate();
+            }
+        }
+
+        private Color privateItemHoveredForegroundColor = Color.Gray;
+        public Color ItemHoveredForegroundColor
+        {
+            get
+            {
+                return privateItemHoveredForegroundColor;
+            }
+            set
+            {
+                privateItemHoveredForegroundColor = value;
                 Invalidate();
             }
         }
@@ -122,7 +151,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private Color privateItemSelectedBackgroundColor = Color.FromArgb(50, 240, 117);
+        private Color privateItemSelectedBackgroundColor = Color.Coral;
         public Color ItemSelectedBackgroundColor
         {
             get
@@ -136,7 +165,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private Color privateSelectedForegroundColor = Color.Black;
+        private Color privateSelectedForegroundColor = Color.FromArgb(11, 11, 12);
         public Color SelectedForegroundColor
         {
             get
@@ -177,7 +206,7 @@ namespace CuoreUI.Controls
                 Rectangle itemRect = GetItemRectangle(i);
                 itemRect.Inflate(-4, -2);
                 itemRect.Offset(0, 2);
-                itemRect.Offset(0, -1);
+                //itemRect.Offset(0, -1);
 
                 int yCenterString = itemRect.Y + (ItemHeight / 2) - (Font.Height) + 4;
 
@@ -192,6 +221,19 @@ namespace CuoreUI.Controls
 
                     string itemText = Items[i].ToString();
                     using (Brush textBrush = new SolidBrush(SelectedForegroundColor))
+                    {
+                        g.DrawString(itemText, Font, textBrush, itemRect.X + 6, yCenterString);
+                    }
+                }
+                else if (HoveredIndex == i)
+                {
+                    using (Brush itemBrush = new SolidBrush(ItemHoveredBackgroundColor))
+                    {
+                        g.FillPath(itemBrush, path);
+                    }
+
+                    string itemText = Items[i].ToString();
+                    using (Brush textBrush = new SolidBrush(ItemHoveredForegroundColor))
                     {
                         g.DrawString(itemText, Font, textBrush, itemRect.X + 6, yCenterString);
                     }
@@ -213,13 +255,22 @@ namespace CuoreUI.Controls
             base.OnPaint(e);
         }
 
+        private int privateHoveredIndex = -1;
+        public int HoveredIndex
+        {
+            get
+            {
+                return privateHoveredIndex;
+            }
+        }
+
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            int clickedIndex = IndexFromPoint(e.Location);
+            int temporaryHoveredIndex = IndexFromPoint(e.Location);
 
-            if (clickedIndex >= 0 && clickedIndex < Items.Count)
+            if (temporaryHoveredIndex >= 0 && temporaryHoveredIndex < Items.Count)
             {
-                SelectedIndex = clickedIndex;
+                SelectedIndex = temporaryHoveredIndex;
                 SuspendLayout();
                 Refresh();
                 ResumeLayout(true);
@@ -230,6 +281,7 @@ namespace CuoreUI.Controls
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
+            privateHoveredIndex = IndexFromPoint(e.Location);
             if (e.Button == MouseButtons.Left)
             {
                 OnMouseDown(e);
@@ -261,5 +313,12 @@ namespace CuoreUI.Controls
             }
         }
 
+        private void cuiListbox_MouseLeave(object sender, EventArgs e)
+        {
+            if (ClientRectangle.Contains(Cursor.Position) == false)
+            {
+                privateHoveredIndex = -1;
+            }
+        }
     }
 }

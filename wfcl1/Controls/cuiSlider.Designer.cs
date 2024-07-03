@@ -1,9 +1,16 @@
 ﻿namespace CuoreUI.Controls
 {
-    partial class cuiCheckbox
+    partial class cuiSlider
     {
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -13,21 +20,23 @@
             base.Dispose(disposing);
         }
 
-        #region Kod wygenerowany przez Projektanta składników
+        #region Component Designer generated code
 
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
         private void InitializeComponent()
         {
             this.SuspendLayout();
             // 
-            // cuiCheckbox
+            // cuiSlider
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Background = System.Drawing.SystemColors.Control;
-            this.Name = "cuiCheckbox";
-            this.Size = new System.Drawing.Size(28, 28);
+            this.Name = "cuiSlider";
+            this.Size = new System.Drawing.Size(228, 24);
             this.ResumeLayout(false);
-
         }
 
         #endregion

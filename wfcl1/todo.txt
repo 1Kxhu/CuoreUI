@@ -1,4 +1,2 @@
 ﻿colorpicker
 datepicker
-window animations
-some kind of helper for animations (quad, expo, back)

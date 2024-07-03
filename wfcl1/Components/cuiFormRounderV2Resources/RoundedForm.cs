@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
-using static CuoreUI.Helper;
 using static CuoreUI.Helper.Win32;
 
 namespace CuoreUI.Components.cuiFormRounderV2Resources
@@ -11,13 +10,12 @@ namespace CuoreUI.Components.cuiFormRounderV2Resources
     {
         private Color privateBackgroundColor = Color.White;
         private Color privateBorderColor = Color.White;
+        private Bitmap backImage;
+        private Graphics backGraphics;
 
         public Color BackgroundColor
         {
-            get
-            {
-                return privateBackgroundColor;
-            }
+            get => privateBackgroundColor;
             set
             {
                 privateBackgroundColor = value;
@@ -27,10 +25,7 @@ namespace CuoreUI.Components.cuiFormRounderV2Resources
 
         public Color BorderColor
         {
-            get
-            {
-                return privateBorderColor;
-            }
+            get => privateBorderColor;
             set
             {
                 privateBorderColor = value;
@@ -38,104 +33,87 @@ namespace CuoreUI.Components.cuiFormRounderV2Resources
             }
         }
 
-        private int privateRounding = 8;
-        public int Rounding
-        {
-            get
-            {
-                return privateRounding;
-            }
-            set
-            {
-                privateRounding = value;
-                Invalidate();
-            }
-        }
-
-        public RoundedForm(Color init_backgroundColor, Color init_borderColor)
-        {
-            InitializeComponent();
-            SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
-            BackgroundColor = init_backgroundColor;
-            BorderColor = init_borderColor;
-        }
-
-        public RoundedForm(Color init_backgroundColor, Color init_borderColor, bool show)
+        public RoundedForm(Color init_backgroundColor, Color init_borderColor, bool show = true)
         {
             Visible = show;
             InitializeComponent();
-            SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
+            SetStyles();
             BackgroundColor = init_backgroundColor;
             BorderColor = init_borderColor;
-            
         }
 
-        private Bitmap backImage; // Declare a member variable to hold the back image
-        private Graphics backGraphics; // Declare a member variable to hold the graphics object
-
-        private void DrawForm(object pSender, EventArgs pE)
+        private void SetStyles()
         {
+            SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
+            DoubleBuffered = true;
+            this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
+            this.UpdateStyles();
+        }
+
+        private void DrawForm(object sender, EventArgs e)
+        {
+            SuspendLayout();
             try
             {
-
-                if (this != null)
+                if (backImage == null || backImage.Size != Size)
                 {
-
-                    if (backImage == null || backImage.Size != Size)
-                    {
-                        backImage?.Dispose();
-                        backImage = new Bitmap(Width, Height);
-                        backGraphics?.Dispose();
-                        backGraphics = Graphics.FromImage(backImage);
-                        backGraphics.SmoothingMode = SmoothingMode.None;
-                    }
-                    else
-                    {
-                        backGraphics.Clear(Color.Transparent);
-                    }
-
-                    Rectangle gradientRectangle = new Rectangle(0, 0, Width - 1, Height - 1);
-                    GraphicsPath roundedRectangle = Helper.RoundRect(gradientRectangle, Rounding);
-
-                    using (SolidBrush brush = new SolidBrush(BackgroundColor))
-                    using (Pen pen = new Pen(BorderColor))
-                    {
-                        backGraphics.SmoothingMode = SmoothingMode.AntiAlias;
-                        backGraphics.FillPath(brush, roundedRectangle);
-                        backGraphics.DrawPath(pen, roundedRectangle);
-                        backGraphics.SmoothingMode = SmoothingMode.None;
-                    }
-
-                    if (this != null && backImage != null && backGraphics != null)
-                    {
-                        PerPixelAlphaBlend.SetBitmap(backImage, Left, Top, Handle);
-                    }
+                    backImage?.Dispose();
+                    backImage = new Bitmap(Width, Height);
+                    backGraphics?.Dispose();
+                    backGraphics = Graphics.FromImage(backImage);
+                    backGraphics.SmoothingMode = SmoothingMode.None;
                 }
+                else
+                {
+                    backGraphics.Clear(Color.Transparent);
+                }
+
+                Rectangle gradientRectangle = new Rectangle(0, 0, Width - 1, Height - 1);
+                GraphicsPath roundedRectangle = Helper.RoundRect(gradientRectangle, Stored.rounding);
+
+                Rectangle subtractRectangle = gradientRectangle;
+                subtractRectangle.Offset(1, 1);
+                subtractRectangle.Inflate(-1, -1);
+
+                Rectangle fillinoutlineRectangle = subtractRectangle;
+                fillinoutlineRectangle.Offset(-1, -1);
+
+                GraphicsPath subtractPath = Helper.RoundRect(subtractRectangle, Stored.rounding);
+                GraphicsPath fillinoutlinePath = Helper.RoundRect(fillinoutlineRectangle, Stored.rounding);
+
+                using (SolidBrush brush = new SolidBrush(BackgroundColor))
+                using (Pen pen = new Pen(BorderColor))
+                {
+                    backGraphics.SmoothingMode = SmoothingMode.AntiAlias;
+                    backGraphics.FillPath(brush, roundedRectangle);
+                    backGraphics.DrawPath(pen, roundedRectangle);
+                    backGraphics.DrawPath(new Pen(BackgroundColor, 1.6f), fillinoutlinePath);
+                    backGraphics.SmoothingMode = SmoothingMode.None;
+                }
+
+                PerPixelAlphaBlend.SetBitmap(backImage, Left, Top, Handle);
             }
-            catch
+            catch (Exception ex)
             {
-                // refer to cuiFormRounder why I'm doing this
+                // Handle exceptions as needed
+                Console.WriteLine("Exception in DrawForm: " + ex.Message);
+            }
+            finally
+            {
+                ResumeLayout();
             }
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            try
+            if (!DesignMode)
             {
-
-                if (this != null && !DesignMode)
-                {
-                    var cp = NativeMethods.GetWindowLong(Handle, NativeMethods.GWL_EXSTYLE);
-                    cp |= NativeMethods.WS_EX_LAYERED;
-                    NativeMethods.SetWindowLong(Handle, NativeMethods.GWL_EXSTYLE, cp);
-                }
-                DrawForm(this, EventArgs.Empty);
+                var cp = NativeMethods.GetWindowLong(Handle, NativeMethods.GWL_EXSTYLE);
+                cp |= NativeMethods.WS_EX_LAYERED;
+                NativeMethods.SetWindowLong(Handle, NativeMethods.GWL_EXSTYLE, cp);
             }
-            catch
-            {
-
-            }
+            DrawForm(this, EventArgs.Empty);
         }
     }
 }

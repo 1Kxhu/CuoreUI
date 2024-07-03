@@ -1,12 +1,5 @@
-﻿using Accord.Imaging;
-using System;
-using System.Collections.Generic;
+﻿using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Drawing;
-using System.Linq;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CuoreUI.Controls
@@ -22,7 +15,7 @@ namespace CuoreUI.Controls
 
         private int privateStarCount = 5;
         private int privateRating = 2;
-        private Color privateStarColor = Color.MediumSlateBlue;
+        private Color privateStarColor = Color.Coral;
         private int privateStarBorderSize = 1;
 
         public int StarCount
@@ -124,7 +117,7 @@ namespace CuoreUI.Controls
                     e.Graphics.FillRectangle(new SolidBrush(BackColor), starRect);
                 }
 
-                using (Pen starBorderPen = new Pen(StarColor, (float)StarBorderSize / 2f))
+                using (Pen starBorderPen = new Pen(StarColor, StarBorderSize / 2f))
                 {
                     e.Graphics.DrawPath(starBorderPen, starPath);
                 }
@@ -158,7 +151,7 @@ namespace CuoreUI.Controls
                 }
                 else
                 {
-                    int starClicked = (mouseX - spacing) / ((int)starWidth + spacing);
+                    int starClicked = (mouseX - spacing) / (starWidth + spacing);
                     float remainder = (mouseX - spacing) % (starWidth + spacing);
 
                     if (remainder > starWidth / 2)

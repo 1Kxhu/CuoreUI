@@ -82,7 +82,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private Color privateProgressColor = Color.MediumSlateBlue;
+        private Color privateProgressColor = Color.Coral;
         public Color ProgressColor
         {
             get

@@ -15,7 +15,7 @@ namespace CuoreUI.Components
         public ComboBoxDropDownRounder()
         {
             if (DesignMode)
-            throw new Exception("Not meant for other use than cuiComboBox");
+                throw new Exception("Not meant for other use than cuiComboBox");
         }
 
         public Form GetRoundedForm()
