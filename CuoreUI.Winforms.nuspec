@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>CuoreUI.Winforms</id>
-    <version>2024.07</version>
+    <version>2024.7.1</version>
     <authors>itzkxhu</authors>
     <description>Modern Winforms Library - the Guna/Bunifu Killer.</description>
   </metadata>
