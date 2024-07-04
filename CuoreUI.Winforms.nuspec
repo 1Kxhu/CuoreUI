@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>CuoreUI.Winforms</id>
+    <version>2024.07</version>
+    <authors>itzkxhu</authors>
+    <description>Modern Winforms Library - the Guna/Bunifu Killer.</description>
+  </metadata>
+  <files>
+    <file src="wfcl1\bin\Release\CuoreUI.dll" target="lib\netstandard2.0" />
+  </files>
+</package>

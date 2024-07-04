@@ -34,7 +34,7 @@ namespace CuoreUI.Controls
                 {
                     privateValue = (int)value;
 
-                    float tempX = value / (float)(MaxValue - MinValue) * Width;
+                    float tempX = (value / (float)(MaxValue - MinValue) * Width) * (float)1;
                     tempX = tempX - (Height / 2 + OutlineThickness * 2);
                     tempX = Math.Max(0, tempX);
                     tempX = Math.Min(tempX, Width - Height);
@@ -182,17 +182,17 @@ namespace CuoreUI.Controls
             base.OnMouseMove(e);
             if (e.Button == MouseButtons.Left)
             {
-                if (e.X >= Width)
+                if (e.X >= Width - (OutlineThickness*5) - (Height / 10))
                 {
                     Value = MaxValue;
                 }
-                else if (e.X <= 0)
+                else if (e.X <= OutlineThickness)
                 {
                     Value = MinValue;
                 }
                 else
                 {
-                    Value = (float)(e.X - ((OutlineThickness - (Height / 10)) * 4)) / (Width - ((OutlineThickness - (Height / 10)) * 4)) * (MaxValue - MinValue);
+                    Value = ((float)(e.X - ((OutlineThickness - (Height / 10)))) / (Width - ((OutlineThickness - (Height / 10)))) * (MaxValue - MinValue));
                 }
             }
         }
