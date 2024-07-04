@@ -3,13 +3,12 @@ NOT READY FOR PRODUCTION YET
 
 Licensed under the [Unlicense](https://github.com/1Kxhu/CuoreUI?tab=Unlicense-1-ov-file#)
 # What is CuoreUI?
-A C# .NET Winforms UI Library with modern-looking control.
+A C# .NET Winforms UI Library with modern-looking controls, components and forms.
 
 # Why should you use CuoreUI?
 Have you ever used an UI Library only to find out you need a license, it is unpolished, or it was abandoned?
-Well, this is none of that. I plan to update this Library as long as I can, I will update it until I physically can't.
-I add unique elements such as "cuiFormRounder", which is the first component I know of that smoothly rounds up the target form with low cpu/ram usage.
-There's also other awesome stuff like the "cuiControlBlur", which blurs controls, or a literal SVG Renderer all In-Winforms!
+Well, this is none of that. I plan to update this Library as long as I can.
+I add unique stuff like a form rounder with smooth borders, real-time blurring of controls, smooth refresh rate independent animations
 
 # How to download and use CuoreUI?
 Releases may be outdated until the end of beta.
