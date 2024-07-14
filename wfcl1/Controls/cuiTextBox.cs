@@ -1,13 +1,16 @@
 ﻿using CuoreUI;
 using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using CuoreUI.Controls.Forms;
 
+[DefaultEvent("ContentChanged")]
 public class cuiTextBox : UserControl
 {
-    private int borderRadius = 10;
-    public int BorderRadius
+    private Padding borderRadius = new Padding(6);
+    public Padding BorderRadius
     {
         get
         {
@@ -15,11 +18,8 @@ public class cuiTextBox : UserControl
         }
         set
         {
-            if (value >= 0)
-            {
-                borderRadius = value;
-                Invalidate();
-            }
+            borderRadius = value;
+            Invalidate();
         }
     }
 
@@ -42,6 +42,9 @@ public class cuiTextBox : UserControl
     public cuiTextBox()
     {
         DoubleBuffered = true;
+        Size = new Size(200, 34);
+        Cursor = Cursors.IBeam;
+        ForeColor = SystemColors.ButtonFace;
         SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
         SetStyle(ControlStyles.UserPaint, true);
         BorderStyle = BorderStyle.None;
@@ -62,7 +65,10 @@ public class cuiTextBox : UserControl
         caretBlinkTimer.Start();
     }
 
+    public event EventHandler ContentChanged;
+
     private Color privateBackground = Color.FromArgb(50, 34, 34, 34);
+    [Description("Only used when DesignStyle is set to Full")]
     public Color Background
     {
         get
@@ -92,6 +98,7 @@ public class cuiTextBox : UserControl
     }
 
     private float privateBorderSize = 1.6f;
+    [Description("Only used when DesignStyle is set to Full")]
     public float BorderSize
     {
         get
@@ -119,8 +126,37 @@ public class cuiTextBox : UserControl
         }
     }
 
+    private string privatePlaceholder = "I am a placeholder.";
+    public string Placeholder
+    {
+        get
+        {
+            return privatePlaceholder;
+        }
+        set
+        {
+            privatePlaceholder = value;
+            Invalidate();
+        }
+    }
+
+
+    private Color privatePlaceholderColor = Color.FromArgb(100, 100, 100);
+    public Color PlaceholderColor
+    {
+        get
+        {
+            return privatePlaceholderColor;
+        }
+        set
+        {
+            privatePlaceholderColor = value;
+            Invalidate();
+        }
+    }
 
     private Color privateFocusedBackground = Color.FromArgb(100, 34, 34, 34);
+    [Description("Only used when DesignStyle is set to Full")]
     public Color FocusedBackground
     {
         get
@@ -130,6 +166,20 @@ public class cuiTextBox : UserControl
         set
         {
             privateFocusedBackground = value;
+            Invalidate();
+        }
+    }
+
+    private float privatePartialThickness = 2;
+    public float PartialThickness
+    {
+        get
+        {
+            return privatePartialThickness;
+        }
+        set
+        {
+            privatePartialThickness = value;
             Invalidate();
         }
     }
@@ -146,19 +196,43 @@ public class cuiTextBox : UserControl
         modifiedCR.Inflate(-1, -1);
         GraphicsPath path = Helper.RoundRect(modifiedCR, borderRadius);
 
-        if (Focused)
+        if (DesignStyle == Styles.Full)
         {
-            e.Graphics.FillPath(new SolidBrush(FocusedBackground), path);
-            e.Graphics.DrawPath(new Pen(FocusedBorder, BorderSize), path);
+            if (Focused)
+            {
+                e.Graphics.FillPath(new SolidBrush(FocusedBackground), path);
+                e.Graphics.DrawPath(new Pen(FocusedBorder, BorderSize), path);
+            }
+            else
+            {
+                e.Graphics.FillPath(new SolidBrush(Background), path);
+                e.Graphics.DrawPath(new Pen(Border, BorderSize), path);
+            }
         }
-        else
+        else if (DesignStyle == Styles.Partial)
         {
-            e.Graphics.FillPath(new SolidBrush(Background), path);
-            e.Graphics.DrawPath(new Pen(Border, BorderSize), path);
+            Matrix matrix = new Matrix();
+            matrix.Translate(0, modifiedCR.Height - PartialThickness);
+            path.Transform(matrix);
+            if (Focused)
+            {
+                e.Graphics.FillPath(new SolidBrush(FocusedBorder), path);
+            }
+            else
+            {
+                e.Graphics.FillPath(new SolidBrush(Border), path);
+            }
         }
 
         Point textLocation = new Point(Height / 8, (Height / 2) - (Font.Height / 2));
-        e.Graphics.DrawString(Content, Font, new SolidBrush(ForeColor), textLocation);
+        if (Content == string.Empty && Focused == false)
+        {
+            e.Graphics.DrawString(Placeholder, Font, new SolidBrush(PlaceholderColor), textLocation);
+        }
+        else
+        {
+            e.Graphics.DrawString(Content, Font, new SolidBrush(ForeColor), textLocation);
+        }
 
         if (showCaret)
         {
@@ -201,6 +275,25 @@ public class cuiTextBox : UserControl
         Refresh();
     }
 
+    public enum Styles
+    {
+        Full,
+        Partial
+    }
+
+    public Styles privateDesignStyle = Styles.Partial;
+    public Styles DesignStyle
+    {
+        get
+        {
+            return privateDesignStyle;
+        }
+        set
+        {
+            privateDesignStyle = value;
+            Refresh();
+        }
+    }
 
     protected override void OnKeyPress(KeyPressEventArgs e)
     {
@@ -211,6 +304,7 @@ public class cuiTextBox : UserControl
             if (Content.Length > 0)
             {
                 Content = Content.Remove(Content.Length - 1);
+                ContentChanged?.Invoke(this, new EventArgs());
             }
         }
         else if (e.KeyChar == (char)3 && ModifierKeys == Keys.Control)
@@ -226,6 +320,7 @@ public class cuiTextBox : UserControl
             {
                 Clipboard.SetText(Content);
                 Content = string.Empty + "\r";
+                ContentChanged?.Invoke(this, new EventArgs());
             }
         }
         else if (e.KeyChar == (char)22 && ModifierKeys == Keys.Control)
@@ -235,6 +330,7 @@ public class cuiTextBox : UserControl
                 string textBefore = Clipboard.GetText();
                 string sanitized = textBefore.Replace("\r", "").Replace("\n", "");
                 Content += sanitized;
+                ContentChanged?.Invoke(this, new EventArgs());
             }
         }
         else if (e.KeyChar == (char)Keys.Escape || e.KeyChar == (char)Keys.Enter)
@@ -253,9 +349,22 @@ public class cuiTextBox : UserControl
             if (ModifierKeys == Keys.None || ModifierKeys == Keys.Shift)
             {
                 Content += e.KeyChar;
+                ContentChanged?.Invoke(this, new EventArgs());
                 showCaret = true;
                 Refresh();
             }
         }
+    }
+
+    private void InitializeComponent()
+    {
+        this.SuspendLayout();
+        // 
+        // cuiTextBox
+        // 
+        this.Name = "cuiTextBox";
+        this.Size = new System.Drawing.Size(183, 33);
+        this.ResumeLayout(false);
+
     }
 }

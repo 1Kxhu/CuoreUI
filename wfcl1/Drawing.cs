@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace CuoreUI
@@ -24,19 +25,25 @@ namespace CuoreUI
             return Helper.GetHighestRefreshRate();
         }
 
-        private static DateTime lastUpdateTime = DateTime.Now;
-
-        public static float TimeDelta
+        public class TimeDeltaInstance
         {
-            get
-            {
-                DateTime currentTime = DateTime.Now;
-                double deltaTime = (currentTime - lastUpdateTime).TotalSeconds;
-                lastUpdateTime = currentTime;
+            private Stopwatch stopwatch = Stopwatch.StartNew();
+            private float previousElapsedMilliseconds = 0;
 
-                return (float)deltaTime * 100;
+            public float TimeDelta
+            {
+                get
+                {
+                    // Calculate elapsed time in milliseconds
+                    float currentElapsedMilliseconds = (float)stopwatch.Elapsed.TotalMilliseconds;
+                    float deltaTime = currentElapsedMilliseconds - previousElapsedMilliseconds;
+                    previousElapsedMilliseconds = currentElapsedMilliseconds;
+
+                    return deltaTime / 1000f; // Convert milliseconds to seconds
+                }
             }
         }
+
 
         private static void SetTimerRefreshRate()
         {

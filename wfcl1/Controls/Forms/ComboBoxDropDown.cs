@@ -162,7 +162,7 @@ namespace CuoreUI.Controls.Forms
             Width = userWidth - (comboBoxRounder1.Rounding * 2);
             comboBoxRounder1.BackColor = bg;
             comboBoxRounder1.OutlineColor = outline;
-            BackColor = bg;
+            BackColor = Color.FromArgb(255, bg.R, bg.G, bg.B);
             caller = userCaller;
             Items = userItems;
         }

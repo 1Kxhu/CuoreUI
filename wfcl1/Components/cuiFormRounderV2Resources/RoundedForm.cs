@@ -68,7 +68,7 @@ namespace CuoreUI.Components.cuiFormRounderV2Resources
                     backGraphics.Clear(Color.Transparent);
                 }
 
-                Rectangle gradientRectangle = new Rectangle(0, 0, Width - 1, Height - 1);
+                Rectangle gradientRectangle = new Rectangle(0, 0, Width - 2, Height - 2);
                 GraphicsPath roundedRectangle = Helper.RoundRect(gradientRectangle, Stored.rounding);
 
                 Rectangle subtractRectangle = gradientRectangle;
@@ -92,11 +92,6 @@ namespace CuoreUI.Components.cuiFormRounderV2Resources
                 }
 
                 PerPixelAlphaBlend.SetBitmap(backImage, Left, Top, Handle);
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions as needed
-                Console.WriteLine("Exception in DrawForm: " + ex.Message);
             }
             finally
             {

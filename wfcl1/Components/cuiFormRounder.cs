@@ -81,8 +81,13 @@ namespace CuoreUI.Components
                 }
                 else
                 {
-                    RoundedForm.Focus();
-                    TargetForm.Focus();
+                    if (TargetForm.WindowState == FormWindowState.Normal)
+                    {
+                        SetWindowPos(TargetForm.Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
+                        SetWindowPos(RoundedForm.Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
+
+                        SetWindowPos(RoundedForm.Handle, TargetForm.Handle, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
+                    }
                 }
             }
         }
@@ -129,6 +134,18 @@ namespace CuoreUI.Components
             }
         }
 
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+
+        private const uint SWP_NOSIZE = 0x0001;
+        private const uint SWP_NOMOVE = 0x0002;
+        private const uint SWP_NOACTIVATE = 0x0010;
+        private const uint SWP_NOZORDER = 0x0004;
+        private static readonly IntPtr HWND_TOP = new IntPtr(0);
+        private static readonly IntPtr HWND_BOTTOM = new IntPtr(1);
+        private static readonly IntPtr HWND_NOTOPMOST = new IntPtr(-2);
+
+
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
         private static extern IntPtr CreateRoundRectRgn(int nLeftRect, int nTopRect, int nRightRect, int nBottomRect, int nWidthEllipse, int nHeightEllipse);
 
@@ -155,6 +172,8 @@ namespace CuoreUI.Components
             TargetForm_LocationChanged(this, EventArgs.Empty);
             TargetForm_Resize(this, EventArgs.Empty);
 
+            TargetForm.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, TargetForm.Width, TargetForm.Height, (int)(Rounding * 2f), (int)(Rounding * 2f)));
+
             Timer miscTimer = new Timer { Interval = 1000 };
             miscTimer.Tick += (a1, a2) =>
             {
@@ -168,7 +187,6 @@ namespace CuoreUI.Components
                         return;
                     }
 
-                    TargetForm.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, TargetForm.Width, TargetForm.Height, (int)(Rounding * 2f), (int)(Rounding * 2f)));
                     FakeForm_Activated(sender, e);
                 }
             };
@@ -179,7 +197,7 @@ namespace CuoreUI.Components
         {
             if (RoundedForm != null && TargetForm != null)
             {
-                RoundedForm.Size = Size.Add(TargetForm.Size, new Size(2, 2));
+                RoundedForm.Size = Size.Add(TargetForm.Size, new Size(4, 4));
                 FakeForm.Size = TargetForm.Size;
             }
         }

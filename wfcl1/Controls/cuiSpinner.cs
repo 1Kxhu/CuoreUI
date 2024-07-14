@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static CuoreUI.Drawing;
 
 namespace CuoreUI.Controls
 {
@@ -59,9 +60,12 @@ namespace CuoreUI.Controls
             designerRotating = false;
         }
 
+        Drawing.TimeDeltaInstance tdi = new TimeDeltaInstance();
+
         async Task universalRotateLogic()
         {
-            Rotation += (RotateSpeed / 2) * Drawing.TimeDelta;
+            int refreshrate = Drawing.GetHighestRefreshRate();
+            Rotation += (RotateSpeed / 2) * tdi.TimeDelta;
 
             if (Rotation > 359)
             {
@@ -72,7 +76,8 @@ namespace CuoreUI.Controls
                 Rotation += 360;
             }
 
-            await Task.Delay(1000 / Drawing.GetHighestRefreshRate());
+            if (DesignMode)
+                await Task.Delay(1000 / refreshrate);
         }
 
         private Color privateArcColor = Color.Coral;
@@ -165,16 +170,16 @@ namespace CuoreUI.Controls
 
         }
 
-        private async void cuiSpinner_Load(object sender, EventArgs e)
+        private void cuiSpinner_Load(object sender, EventArgs e)
         {
             Rotation = 0;
 
             if (!DesignMode)
             {
-                while (true)
+                FrameDrawn += (f, s) =>
                 {
-                    await universalRotateLogic();
-                }
+                    _ = universalRotateLogic();
+                };
             }
         }
     }

@@ -77,6 +77,12 @@
     <Compile Include="Controls\cuiButton.Designer.cs">
       <DependentUpon>cuiButton.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\cuiButtonGroup.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\cuiButtonGroup.Designer.cs">
+      <DependentUpon>cuiButtonGroup.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\cuiCheckbox.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -248,6 +254,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\cuiTabControlExperimental.resx">
       <DependentUpon>cuiTabControlExperimental.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\cuiTextBox.resx">
+      <DependentUpon>cuiTextBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Forms\ComboBoxDropDown.resx">
       <DependentUpon>ComboBoxDropDown.cs</DependentUpon>

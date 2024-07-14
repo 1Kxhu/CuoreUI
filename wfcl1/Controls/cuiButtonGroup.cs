@@ -8,9 +8,9 @@ using System.Windows.Forms;
 namespace CuoreUI.Controls
 {
     [DefaultEvent("Click")]
-    public partial class cuiButton : UserControl
+    public partial class cuiButtonGroup : UserControl
     {
-        public cuiButton()
+        public cuiButtonGroup()
         {
             InitializeComponent();
             DoubleBuffered = true;
@@ -126,21 +126,6 @@ namespace CuoreUI.Controls
             set
             {
                 privatePressedOutline = value;
-                Invalidate();
-            }
-        }
-
-        private bool privateCheckButton = false;
-        public bool CheckButton
-        {
-
-            get
-            {
-                return privateCheckButton;
-            }
-            set
-            {
-                privateCheckButton = value;
                 Invalidate();
             }
         }
@@ -290,9 +275,11 @@ namespace CuoreUI.Controls
                     renderedOutlineColor = Color.Black;
                     break;
             }
-            if (Checked && CheckButton)
+            if (Checked)
             {
                 tint = CheckedImageTint;
+                renderedBackgroundColor = CheckedBackground;
+                renderedOutlineColor = CheckedOutline;
             }
             else if (state == 2)
             {
@@ -301,12 +288,6 @@ namespace CuoreUI.Controls
             else if (state == 3)
             {
                 tint = PressedImageTint;
-            }
-
-            if (CheckButton && Checked)
-            {
-                renderedBackgroundColor = CheckedBackground;
-                renderedOutlineColor = CheckedOutline;
             }
 
             privateBrush.Color = renderedBackgroundColor;
@@ -333,7 +314,7 @@ namespace CuoreUI.Controls
                 imageRectangle.X = (Width / 2) - (imageRectangle.Width / 2);
                 int TextOffsetFromImage = (int)e.Graphics.MeasureString(Content, Font, textRectangle.Width, stringFormat).Width;
                 imageRectangle.X -= TextOffsetFromImage / 2;
-                textRectangle.X += imageRectangle.Width/2;
+                textRectangle.X += imageRectangle.Width / 2;
             }
 
             textRectangle.Offset(privateTextOffset);
@@ -461,16 +442,45 @@ namespace CuoreUI.Controls
             }
         }
 
+        private int privateGroup = 0;
+
+        [Description("The group for this and other cuiButtonGroup controls to uncheck when clicked.")]
+        public int Group
+        {
+            get
+            {
+                return privateGroup;
+            }
+            set
+            {
+                privateGroup = value;
+                Invalidate();
+            }
+        }
+
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            state = 3;
+            Invalidate();
+        }
+
         protected override void OnMouseUp(MouseEventArgs e)
         {
             if (ClientRectangle.Contains(e.Location))
             {
                 if (state == 3)
                 {
-                    if (CheckButton)
+                    foreach (Control ctrl in Parent?.Controls)
                     {
-                        Checked = !Checked;
+                        if (ctrl is cuiButtonGroup cbg)
+                        {
+                            if (cbg.Group == this.Group && cbg != this)
+                            {
+                                cbg.Checked = false;
+                            }
+                        }
                     }
+                    Checked = true;
                 }
 
                 state = 2;
@@ -494,12 +504,5 @@ namespace CuoreUI.Controls
             state = 2;
             Invalidate();
         }
-
-        protected override void OnMouseDown(MouseEventArgs e)
-        {
-            state = 3;
-            Invalidate();
-        }
-
     }
 }
