@@ -151,7 +151,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private Color privateItemSelectedBackgroundColor = Color.Coral;
+        private Color privateItemSelectedBackgroundColor = CuoreUI.Drawing.PrimaryColor;
         public Color ItemSelectedBackgroundColor
         {
             get

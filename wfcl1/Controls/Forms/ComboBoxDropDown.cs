@@ -201,7 +201,7 @@ namespace CuoreUI.Controls.Forms
             }
         }
 
-        private Color privateNormalBackground = Color.Coral;
+        private Color privateNormalBackground = CuoreUI.Drawing.PrimaryColor;
         public Color NormalBackground
         {
             get
@@ -229,7 +229,7 @@ namespace CuoreUI.Controls.Forms
             }
         }
 
-        private Color privatePressedBackground = Color.Coral;
+        private Color privatePressedBackground = CuoreUI.Drawing.PrimaryColor;
         public Color PressedBackground
         {
             get
@@ -243,7 +243,7 @@ namespace CuoreUI.Controls.Forms
             }
         }
 
-        private Color privateNormalOutline = Color.Coral;
+        private Color privateNormalOutline = CuoreUI.Drawing.PrimaryColor;
         public Color NormalOutline
         {
             get
@@ -257,7 +257,7 @@ namespace CuoreUI.Controls.Forms
             }
         }
 
-        private Color privateHoverOutline = Color.Coral;
+        private Color privateHoverOutline = CuoreUI.Drawing.PrimaryColor;
         public Color HoverOutline
         {
             get
@@ -271,7 +271,7 @@ namespace CuoreUI.Controls.Forms
             }
         }
 
-        private Color privatePressedOutline = Color.Coral;
+        private Color privatePressedOutline = CuoreUI.Drawing.PrimaryColor;
         public Color PressedOutline
         {
             get

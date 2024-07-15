@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
-using CuoreUI.Controls.Forms;
 
 [DefaultEvent("ContentChanged")]
 public class cuiTextBox : UserControl
@@ -112,7 +111,7 @@ public class cuiTextBox : UserControl
         }
     }
 
-    private Color privateFocusedBorder = Color.FromArgb(46, 46, 46);
+    private Color privateFocusedBorder = CuoreUI.Drawing.PrimaryColor;
     public Color FocusedBorder
     {
         get

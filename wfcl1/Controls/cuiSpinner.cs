@@ -80,7 +80,7 @@ namespace CuoreUI.Controls
                 await Task.Delay(1000 / refreshrate);
         }
 
-        private Color privateArcColor = Color.Coral;
+        private Color privateArcColor = CuoreUI.Drawing.PrimaryColor;
         public Color ArcColor
         {
             get

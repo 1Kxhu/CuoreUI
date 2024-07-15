@@ -1,11 +1,21 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace CuoreUI
 {
     public static class Drawing
     {
+        public static readonly Color PrimaryColor = Color.Coral;
+        public static Color TranslucentPrimaryColor
+        {
+            get
+            {
+                return Color.FromArgb(200, PrimaryColor.R, PrimaryColor.G, PrimaryColor.B);
+            }
+        }
+
         private static Timer RefreshRateTimer;
         public static event EventHandler FrameDrawn;
 

@@ -113,6 +113,12 @@
     <Compile Include="Controls\cuiPictureBox.Designer.cs">
       <DependentUpon>cuiPictureBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\cuiScrollbar.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\cuiScrollbar.Designer.cs">
+      <DependentUpon>cuiScrollbar.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\cuiSeparator.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -239,6 +245,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\cuiPictureBox.resx">
       <DependentUpon>cuiPictureBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\cuiScrollbar.resx">
+      <DependentUpon>cuiScrollbar.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\cuiSeparator.resx">
       <DependentUpon>cuiSeparator.cs</DependentUpon>

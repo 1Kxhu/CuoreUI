@@ -67,7 +67,8 @@ namespace CuoreUI.Controls
             else
             {
                 int halfY = Height / 2;
-                lineRect = new RectangleF(SeparatorMargin, halfY, Width - (SeparatorMargin * 2), Thickness); ;
+                lineRect = new RectangleF(SeparatorMargin, halfY, Width - (SeparatorMargin * 2), Thickness);
+                ;
             }
 
             tempPath.AddRectangle(lineRect);

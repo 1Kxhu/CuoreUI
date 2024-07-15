@@ -72,7 +72,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private Color privateForeground = Color.Coral;
+        private Color privateForeground = CuoreUI.Drawing.PrimaryColor;
         public Color Foreground
         {
             get

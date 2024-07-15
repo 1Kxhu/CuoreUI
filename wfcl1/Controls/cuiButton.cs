@@ -46,7 +46,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private Color privateNormalBackground = Color.Coral;
+        private Color privateNormalBackground = CuoreUI.Drawing.PrimaryColor;
         public Color NormalBackground
         {
             get
@@ -74,7 +74,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private Color privatePressedBackground = Color.Coral;
+        private Color privatePressedBackground = CuoreUI.Drawing.PrimaryColor;
         public Color PressedBackground
         {
             get
@@ -88,7 +88,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private Color privateNormalOutline = Color.Coral;
+        private Color privateNormalOutline = CuoreUI.Drawing.PrimaryColor;
         public Color NormalOutline
         {
             get
@@ -102,7 +102,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private Color privateHoverOutline = Color.Coral;
+        private Color privateHoverOutline = CuoreUI.Drawing.PrimaryColor;
         public Color HoverOutline
         {
             get
@@ -116,7 +116,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private Color privatePressedOutline = Color.Coral;
+        private Color privatePressedOutline = CuoreUI.Drawing.PrimaryColor;
         public Color PressedOutline
         {
             get
@@ -179,7 +179,7 @@ namespace CuoreUI.Controls
         }
 
 
-        private Color privateCheckedBackground = Color.Coral;
+        private Color privateCheckedBackground = CuoreUI.Drawing.PrimaryColor;
         public Color CheckedBackground
         {
             get
@@ -193,7 +193,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private Color privateCheckedOutline = Color.Coral;
+        private Color privateCheckedOutline = CuoreUI.Drawing.PrimaryColor;
         public Color CheckedOutline
         {
             get
@@ -333,7 +333,7 @@ namespace CuoreUI.Controls
                 imageRectangle.X = (Width / 2) - (imageRectangle.Width / 2);
                 int TextOffsetFromImage = (int)e.Graphics.MeasureString(Content, Font, textRectangle.Width, stringFormat).Width;
                 imageRectangle.X -= TextOffsetFromImage / 2;
-                textRectangle.X += imageRectangle.Width/2;
+                textRectangle.X += imageRectangle.Width / 2;
             }
 
             textRectangle.Offset(privateTextOffset);

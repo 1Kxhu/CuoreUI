@@ -407,7 +407,7 @@ namespace CuoreUI.Controls
         public Color ButtonNormalBackground
         {
             get; set;
-        } = Color.Coral;
+        } = CuoreUI.Drawing.PrimaryColor;
 
         public Color ButtonHoverBackground
         {
@@ -417,21 +417,21 @@ namespace CuoreUI.Controls
         public Color ButtonPressedBackground
         {
             get; set;
-        } = Color.Coral;
+        } = CuoreUI.Drawing.PrimaryColor;
 
         public Color ButtonNormalOutline
         {
             get; set;
-        } = Color.Coral;
+        } = CuoreUI.Drawing.PrimaryColor;
 
         public Color ButtonHoverOutline
         {
             get; set;
-        } = Color.Coral;
+        } = CuoreUI.Drawing.PrimaryColor;
 
         public Color ButtonPressedOutline
         {
             get; set;
-        } = Color.Coral;
+        } = CuoreUI.Drawing.PrimaryColor;
     }
 }

@@ -451,6 +451,9 @@ namespace CuoreUI
 
         public static class Win32
         {
+            [DllImport("user32.dll")]
+            private static extern int SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
+
             [StructLayout(LayoutKind.Sequential)]
             public struct DEVMODE
             {

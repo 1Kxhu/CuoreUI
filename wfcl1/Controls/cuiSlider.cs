@@ -34,7 +34,7 @@ namespace CuoreUI.Controls
                 {
                     privateValue = (int)value;
 
-                    float tempX = (value / (float)(MaxValue - MinValue) * Width) * (float)1;
+                    float tempX = (value / (float)(MaxValue - MinValue) * Width) * 1;
                     tempX = tempX - (Height / 2 + OutlineThickness * 2);
                     tempX = Math.Max(0, tempX);
                     tempX = Math.Min(tempX, Width - Height);
@@ -122,7 +122,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private Color privateThumbColor = Color.Coral;
+        private Color privateThumbColor = CuoreUI.Drawing.PrimaryColor;
         public Color ThumbColor
         {
             get
@@ -159,16 +159,43 @@ namespace CuoreUI.Controls
             Rectangle modifiedCR = ClientRectangle;
             modifiedCR.Inflate(-1, -1);
 
-            GraphicsPath rounbackground = Helper.RoundRect(modifiedCR, (int)((Height / 2) - OutlineThickness));
-            e.Graphics.FillPath(new SolidBrush(BackgroundColor), rounbackground);
-            e.Graphics.DrawPath(new Pen(OutlineColor, OutlineThickness), rounbackground);
-
             float ratio = Height - (OutlineThickness * 2);
             RectangleF thumbRectangle = new RectangleF(thumbX + OutlineThickness, OutlineThickness, ratio, ratio);
             thumbRectangle.Inflate(-(Height / 10), -(Height / 10));
-            GraphicsPath thumbPath = Helper.RoundRect(thumbRectangle, (int)(thumbRectangle.Height / 2));
 
+            if (DesignStyle == Styles.Partial)
+            {
+                thumbRectangle.Inflate(-OutlineThickness, -OutlineThickness);
+            }
+
+            if (DesignStyle == Styles.Full)
+            {
+                GraphicsPath rounbackground = Helper.RoundRect(modifiedCR, (int)((Height / 2) - OutlineThickness));
+                e.Graphics.FillPath(new SolidBrush(BackgroundColor), rounbackground);
+                e.Graphics.DrawPath(new Pen(OutlineColor, OutlineThickness), rounbackground);
+            }
+            else if (DesignStyle == Styles.Partial)
+            {
+                Rectangle moddedCR = modifiedCR;
+                moddedCR.Height = (int)(OutlineThickness * 2);
+                moddedCR.Y = (Height / 2) - (int)OutlineThickness;
+
+                moddedCR.Inflate(-(int)(OutlineThickness * 2), 0);
+                moddedCR.Inflate(-(int)(thumbRectangle.Width / 2), 0);
+
+                GraphicsPath rounbackground = Helper.RoundRect(moddedCR, moddedCR.Height / 2);
+                e.Graphics.FillPath(new SolidBrush(OutlineColor), rounbackground);
+            }
+
+
+            GraphicsPath thumbPath = Helper.RoundRect(thumbRectangle, (int)(thumbRectangle.Height / 2));
             e.Graphics.FillPath(new SolidBrush(ThumbColor), thumbPath);
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            Value = Value;
+            base.OnResize(e);
         }
 
         protected override void OnClick(EventArgs e)
@@ -182,7 +209,7 @@ namespace CuoreUI.Controls
             base.OnMouseMove(e);
             if (e.Button == MouseButtons.Left)
             {
-                if (e.X >= Width - (OutlineThickness*5) - (Height / 10))
+                if (e.X >= Width - (OutlineThickness * 5) - (Height / 10))
                 {
                     Value = MaxValue;
                 }
@@ -194,6 +221,26 @@ namespace CuoreUI.Controls
                 {
                     Value = ((float)(e.X - ((OutlineThickness - (Height / 10)))) / (Width - ((OutlineThickness - (Height / 10)))) * (MaxValue - MinValue));
                 }
+
+            }
+        }
+        public enum Styles
+        {
+            Full,
+            Partial
+        }
+
+        public Styles privateDesignStyle = Styles.Partial;
+        public Styles DesignStyle
+        {
+            get
+            {
+                return privateDesignStyle;
+            }
+            set
+            {
+                privateDesignStyle = value;
+                Refresh();
             }
         }
     }

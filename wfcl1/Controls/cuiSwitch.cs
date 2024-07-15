@@ -149,7 +149,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private Color privateCheckedForeground = Color.Coral;
+        private Color privateCheckedForeground = CuoreUI.Drawing.PrimaryColor;
         [Description("The checked foreground.")]
         public Color CheckedForeground
         {
@@ -181,7 +181,7 @@ namespace CuoreUI.Controls
 
         public bool OutlineStyle { get; set; } = true;
         public Color OutlineColor { get; set; } = Color.FromArgb(34, 34, 34);
-        public Color CheckedOutlineColor { get; set; } = Color.Coral;
+        public Color CheckedOutlineColor { get; set; } = CuoreUI.Drawing.PrimaryColor;
         public float OutlineThickness { get; set; } = 1.6f;
 
         private int thumbX = 2;
