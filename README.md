@@ -11,11 +11,11 @@ Well, this is none of that. I plan to update this Library as long as I can.
 I add unique stuff like a form rounder with smooth borders, real-time blurring of controls, smooth refresh rate independent animations
 
 # How to download and use CuoreUI?
-Releases may be outdated until the end of beta.
-The latest beta releases can be [downloaded here](https://github.com/1Kxhu/CuoreUI/releases) at the releases section.
-While this library looks good, it's still not production ready. There are many controls I want to try to add so stay tuned.
+All latest releases can be [downloaded on nuget](https://www.nuget.org/packages/CuoreUI.Winforms/).
+The older releases prior to nuget can be [downloaded here](https://github.com/1Kxhu/CuoreUI/releases) at the releases section.
+There are many controls I want to try to add so stay tuned.
 
-# Want to leave feedback?
+# Want to leave feedback / Something's wrong?
 a) Text me on discord (name: itzkxhu, id: 971053791480791121)
 
 b) Open a new discussion (https://github.com/1Kxhu/CuoreUI/discussions)
