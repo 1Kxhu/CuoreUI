@@ -140,10 +140,7 @@ namespace CuoreUI.Components
         private const uint SWP_NOSIZE = 0x0001;
         private const uint SWP_NOMOVE = 0x0002;
         private const uint SWP_NOACTIVATE = 0x0010;
-        private const uint SWP_NOZORDER = 0x0004;
         private static readonly IntPtr HWND_TOP = new IntPtr(0);
-        private static readonly IntPtr HWND_BOTTOM = new IntPtr(1);
-        private static readonly IntPtr HWND_NOTOPMOST = new IntPtr(-2);
 
 
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]

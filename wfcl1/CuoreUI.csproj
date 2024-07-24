@@ -1,350 +1,131 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Costura.Fody.5.7.0\build\Costura.Fody.props" Condition="Exists('..\packages\Costura.Fody.5.7.0\build\Costura.Fody.props')" />
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{667BBBB2-3C6B-47EF-8EAF-7BEEF3F87DB4}</ProjectGuid>
+   <TargetFrameworks>net472;net8.0-windows</TargetFrameworks>
     <OutputType>Library</OutputType>
-    <RootNamespace>CuoreUI</RootNamespace>
-    <AssemblyName>CuoreUI</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <DebugSymbols>true</DebugSymbols>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Components\cuiControlAnimator.cs">
+    <Compile Update="Components\cuiControlAnimator.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Components\cuiControlAnimator.Designer.cs">
-      <DependentUpon>cuiControlAnimator.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Components\cuiControlBlur.cs">
+    <Compile Update="Components\cuiControlBlur.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Components\cuiControlDrag.cs">
+    <Compile Update="Components\cuiControlDrag.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Components\cuiFormDrag.cs">
+    <Compile Update="Components\cuiFormDrag.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Components\cuiFormRounder.cs">
+    <Compile Update="Components\cuiFormRounder.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Components\cuiFormRounder.Designer.cs">
-      <DependentUpon>cuiFormRounder.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Components\cuiFormRounderV2Resources\FakeForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Components\cuiFormRounderV2Resources\FakeForm.Designer.cs">
-      <DependentUpon>FakeForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Components\cuiFormRounderV2Resources\RoundedForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Components\cuiFormRounderV2Resources\RoundedForm.Designer.cs">
-      <DependentUpon>RoundedForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Components\cuiFormRounderV2Resources\Stored.cs" />
-    <Compile Include="Controls\cuiButton.cs">
+    <Compile Update="Controls\cuiButton.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\cuiButton.Designer.cs">
-      <DependentUpon>cuiButton.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\cuiButtonGroup.cs">
+    <Compile Update="Controls\cuiButtonGroup.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\cuiButtonGroup.Designer.cs">
-      <DependentUpon>cuiButtonGroup.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\cuiCheckbox.cs">
+    <Compile Update="Controls\cuiCheckbox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\cuiCheckbox.Designer.cs">
-      <DependentUpon>cuiCheckbox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\cuiCircleProgressBar.cs">
+    <Compile Update="Controls\cuiCircleProgressBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\cuiCircleProgressBar.Designer.cs">
-      <DependentUpon>cuiCircleProgressBar.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\cuiComboBox.cs">
+    <Compile Update="Controls\cuiComboBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\cuiComboBox.Designer.cs">
-      <DependentUpon>cuiComboBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\cuiListbox.cs">
+    <Compile Update="Controls\cuiListbox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\cuiListbox.Designer.cs">
-      <DependentUpon>cuiListbox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\cuiPictureBox.cs">
+    <Compile Update="Controls\cuiPictureBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\cuiPictureBox.Designer.cs">
-      <DependentUpon>cuiPictureBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\cuiScrollbar.cs">
+    <Compile Update="Controls\cuiScrollbar.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\cuiScrollbar.Designer.cs">
-      <DependentUpon>cuiScrollbar.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\cuiSeparator.cs">
+    <Compile Update="Controls\cuiSeparator.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\cuiSeparator.Designer.cs">
-      <DependentUpon>cuiSeparator.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\cuiSlider.cs">
+    <Compile Update="Controls\cuiSlider.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\cuiSlider.Designer.cs">
-      <DependentUpon>cuiSlider.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\cuiSpinner.cs">
+    <Compile Update="Controls\cuiSpinner.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\cuiSpinner.Designer.cs">
-      <DependentUpon>cuiSpinner.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\cuiStarRating.cs">
+    <Compile Update="Controls\cuiStarRating.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\cuiSwitch.cs">
+    <Compile Update="Controls\cuiSwitch.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\cuiSwitch.Designer.cs">
-      <DependentUpon>cuiSwitch.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\cuiTabControl.cs">
+    <Compile Update="Controls\cuiTabControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\cuiTabControl.Designer.cs">
-      <DependentUpon>cuiTabControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\cuiTabControlExperimental.cs">
+    <Compile Update="Controls\cuiTabControlExperimental.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\cuiTabControlExperimental.Designer.cs">
-      <DependentUpon>cuiTabControlExperimental.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\cuiTextBox.cs">
+    <Compile Update="Controls\cuiTextBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\cuiSvgBox.cs">
+    <Compile Update="Controls\cuiSvgBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\cuiSvgBox.Designer.cs">
-      <DependentUpon>cuiSvgBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Forms\ComboBoxDropDown.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Controls\Forms\ComboBoxDropDown.Designer.cs">
-      <DependentUpon>ComboBoxDropDown.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Forms\ComboBoxDropDownRounder.cs">
+    <Compile Update="Controls\Forms\ComboBoxDropDownRounder.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GaussianBlurTest.cs" />
-    <Compile Include="Drawing.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Helper.cs" />
-    <Compile Include="Controls\cuiBorder.cs">
+    <Compile Update="Controls\cuiBorder.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\cuiBorder.Designer.cs">
-      <DependentUpon>cuiBorder.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\cuiLabel.cs">
+    <Compile Update="Controls\cuiLabel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\cuiLabel.Designer.cs">
-      <DependentUpon>cuiLabel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\cuiProgressBarHorizontal.cs">
+    <Compile Update="Controls\cuiProgressBarHorizontal.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\cuiProgressBarHorizontal.Designer.cs">
-      <DependentUpon>cuiProgressBarHorizontal.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\cuiProgressBarVertical.cs">
+    <Compile Update="Controls\cuiProgressBarVertical.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\cuiProgressBarVertical.Designer.cs">
-      <DependentUpon>cuiProgressBarVertical.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-    <Compile Include="TabControlStuff\cuiTabPage.cs">
+    <Compile Update="TabControlStuff\cuiTabPage.cs">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="TabControlStuff\cuiTabPage.Designer.cs">
-      <DependentUpon>cuiTabPage.cs</DependentUpon>
     </Compile>
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Components\cuiFormRounderV2Resources\FakeForm.resx">
-      <DependentUpon>FakeForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Components\cuiFormRounderV2Resources\RoundedForm.resx">
-      <DependentUpon>RoundedForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\cuiBorder.resx">
-      <DependentUpon>cuiBorder.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\cuiButton.resx">
-      <DependentUpon>cuiButton.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\cuiCheckbox.resx">
-      <DependentUpon>cuiCheckbox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\cuiComboBox.resx">
-      <DependentUpon>cuiComboBox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\cuiLabel.resx">
-      <DependentUpon>cuiLabel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\cuiListbox.resx">
-      <DependentUpon>cuiListbox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\cuiPictureBox.resx">
-      <DependentUpon>cuiPictureBox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\cuiScrollbar.resx">
-      <DependentUpon>cuiScrollbar.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\cuiSeparator.resx">
-      <DependentUpon>cuiSeparator.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\cuiSlider.resx">
-      <DependentUpon>cuiSlider.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\cuiSpinner.resx">
-      <DependentUpon>cuiSpinner.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\cuiSwitch.resx">
-      <DependentUpon>cuiSwitch.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\cuiTabControlExperimental.resx">
-      <DependentUpon>cuiTabControlExperimental.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\cuiTextBox.resx">
-      <DependentUpon>cuiTextBox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\Forms\ComboBoxDropDown.resx">
-      <DependentUpon>ComboBoxDropDown.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <Reference Include="Accord, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Accord.3.8.0\lib\net462\Accord.dll</HintPath>
-    </Reference>
-    <Reference Include="Accord.Imaging, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Accord.Imaging.3.8.0\lib\net462\Accord.Imaging.dll</HintPath>
-    </Reference>
-    <Reference Include="Accord.Math, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Accord.Math.3.8.0\lib\net462\Accord.Math.dll</HintPath>
-    </Reference>
-    <Reference Include="Accord.Math.Core, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Accord.Math.3.8.0\lib\net462\Accord.Math.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Accord.Statistics, Version=3.8.0.0, Culture=neutral, PublicKeyToken=fa1a88e29555ccf7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Accord.Statistics.3.8.0\lib\net462\Accord.Statistics.dll</HintPath>
-    </Reference>
-    <Reference Include="ExCSS, Version=4.2.3.0, Culture=neutral, PublicKeyToken=bdbe16be9b936b9a, processorArchitecture=MSIL">
-      <HintPath>..\packages\ExCSS.4.2.3\lib\netstandard2.0\ExCSS.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Web.WebView2.Core, Version=1.0.2535.41, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Web.WebView2.1.0.2535.41\lib\net462\Microsoft.Web.WebView2.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Web.WebView2.WinForms, Version=1.0.2535.41, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Web.WebView2.1.0.2535.41\lib\net462\Microsoft.Web.WebView2.WinForms.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Web.WebView2.Wpf, Version=1.0.2535.41, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Web.WebView2.1.0.2535.41\lib\net462\Microsoft.Web.WebView2.Wpf.dll</HintPath>
-    </Reference>
-    <Reference Include="Svg, Version=3.4.0.0, Culture=neutral, PublicKeyToken=12a0bac221edeae2, processorArchitecture=MSIL">
-      <HintPath>..\packages\Svg.3.4.7\lib\net472\Svg.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.CodeDom, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.CodeDom.8.0.0\lib\net462\System.CodeDom.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Management" />
-    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Text.RegularExpressions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Text.RegularExpressions.4.3.1\lib\net463\System.Text.RegularExpressions.dll</HintPath>
-      <Private>True</Private>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Web" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="todo.txt" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <PackageReference Include="Accord" Version="3.8.0" />
+    <PackageReference Include="Accord.Imaging" Version="3.8.0" />
+    <PackageReference Include="Accord.Math" Version="3.8.0" />
+    <PackageReference Include="Accord.Statistics" Version="3.8.0" />
+    <PackageReference Include="Costura.Fody" Version="5.7.0" />
+    <PackageReference Include="ExCSS" Version="4.2.3" />
+    <PackageReference Include="Fody" Version="6.5.5" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2535.41" />
+    <PackageReference Include="NuGet.Build.Tasks.Pack" Version="6.10.1" />
+    <PackageReference Include="Svg" Version="3.4.7" />
+    <PackageReference Include="System.Runtime.Handles" Version="4.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SystemWebAdapters" Version="1.3.0" />
+    <PackageReference Include="Microsoft.NETCore.Platforms" Version="8.0.0-preview.7.23375.6" />
+    <PackageReference Include="System.CodeDom" Version="8.0.0" />
+    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="8.0.1" />
+    <PackageReference Include="System.Management" Version="8.0.0" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Components\CuiFormRounderResources\CuiRoundForm.cs" />
+    <Compile Remove="Components\CuiFormRounderResources\CuiRoundForm.Designer.cs" />
+  </ItemGroup>
   <Target Name="Pack">
     <PropertyGroup>
       <OutputPath>bin\$(Configuration)</OutputPath>
@@ -357,8 +138,4 @@
     </ItemGroup>
     <Exec Command="$(NuGetPackExe) pack $(PackageId).nuspec" />
   </Target>
-  <Import Project="..\packages\Fody.6.5.5\build\Fody.targets" Condition="Exists('..\packages\Fody.6.5.5\build\Fody.targets')" />
-  <Import Project="..\packages\Costura.Fody.5.7.0\build\Costura.Fody.targets" Condition="Exists('..\packages\Costura.Fody.5.7.0\build\Costura.Fody.targets')" />
-  <Import Project="..\packages\Accord.3.8.0\build\Accord.targets" Condition="Exists('..\packages\Accord.3.8.0\build\Accord.targets')" />
-  <Import Project="..\packages\Microsoft.Web.WebView2.1.0.2535.41\build\Microsoft.Web.WebView2.targets" Condition="Exists('..\packages\Microsoft.Web.WebView2.1.0.2535.41\build\Microsoft.Web.WebView2.targets')" />
 </Project>

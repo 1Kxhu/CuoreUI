@@ -45,13 +45,13 @@ namespace CuoreUI.Controls
                     {
                         targetControl.Scroll -= TargetControl_Scroll;
                         targetControl.Resize -= TargetControl_Resize;
-                        if (messageFilter != null)
-                        {
-                            messageFilter.ReleaseHandle();
-                        }
+                        messageFilter?.ReleaseHandle();
                     }
 
-                    targetControl = value;
+                    if (value != Parent)
+                    {
+                        targetControl = value;
+                    }
 
                     if (targetControl != null)
                     {
@@ -99,7 +99,6 @@ namespace CuoreUI.Controls
         {
             if (targetControl != null)
             {
-                int min = targetControl.VerticalScroll.Minimum;
                 int max = targetControl.VerticalScroll.Maximum - targetControl.VerticalScroll.LargeChange + 1;
                 int value = targetControl.VerticalScroll.Value;
 

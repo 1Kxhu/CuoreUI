@@ -10,6 +10,14 @@ namespace CuoreUI.Controls
     [DefaultEvent("Click")]
     public partial class cuiButton : UserControl
     {
+
+        public static class States
+        {
+            public const int Normal = 1;
+            public const int Hovered = 2;
+            public const int Pressed = 3;
+
+        }
         public cuiButton()
         {
             InitializeComponent();
@@ -258,55 +266,39 @@ namespace CuoreUI.Controls
             Rectangle modifiedCR = ClientRectangle;
             modifiedCR.Inflate(-1, -1);
 
-            if (Rounding.Left == 0 & Rounding.Bottom == 0)
-            {
-                modifiedCR.Inflate(-1, 0);
-            }
-
             GraphicsPath roundBackground = Helper.RoundRect(modifiedCR, Rounding);
 
-            Color renderedBackgroundColor;
-            Color renderedOutlineColor;
-            Color tint = ImageTint;
-            switch (state)
-            {
-                case 2:
-                    renderedBackgroundColor = HoverBackground;
-                    renderedOutlineColor = HoverOutline;
-                    break;
-
-                case 3:
-                    renderedBackgroundColor = PressedBackground;
-                    renderedOutlineColor = PressedOutline;
-                    break;
-
-                case 1:
-                    renderedBackgroundColor = NormalBackground;
-                    renderedOutlineColor = NormalOutline;
-                    break;
-
-                default:
-                    renderedBackgroundColor = Color.Black;
-                    renderedOutlineColor = Color.Black;
-                    break;
-            }
-            if (Checked && CheckButton)
-            {
-                tint = CheckedImageTint;
-            }
-            else if (state == 2)
-            {
-                tint = HoveredImageTint;
-            }
-            else if (state == 3)
-            {
-                tint = PressedImageTint;
-            }
+            Color renderedBackgroundColor = Color.Empty;
+            Color renderedOutlineColor = Color.Empty;
+            Color renderedTint = ImageTint;
 
             if (CheckButton && Checked)
             {
                 renderedBackgroundColor = CheckedBackground;
                 renderedOutlineColor = CheckedOutline;
+                renderedTint = CheckedImageTint;
+            }
+            else
+            {
+                switch (state)
+                {
+                    case States.Normal:
+                        renderedBackgroundColor = NormalBackground;
+                        renderedOutlineColor = NormalOutline;
+                        break;
+
+                    case States.Hovered:
+                        renderedBackgroundColor = HoverBackground;
+                        renderedOutlineColor = HoverOutline;
+                        renderedTint = HoveredImageTint;
+                        break;
+
+                    case States.Pressed:
+                        renderedBackgroundColor = PressedBackground;
+                        renderedOutlineColor = PressedOutline;
+                        renderedTint = PressedImageTint;
+                        break;
+                }
             }
 
             privateBrush.Color = renderedBackgroundColor;
@@ -346,10 +338,10 @@ namespace CuoreUI.Controls
 
             if (privateImage != null)
             {
-                float tintR = tint.R / 255f;
-                float tintG = tint.G / 255f;
-                float tintB = tint.B / 255f;
-                float tintA = tint.A / 255f;
+                float tintR = renderedTint.R / 255f;
+                float tintG = renderedTint.G / 255f;
+                float tintB = renderedTint.B / 255f;
+                float tintA = renderedTint.A / 255f;
 
                 // Create a color matrix that will apply the tint color
                 ColorMatrix colorMatrix = new ColorMatrix(new float[][]

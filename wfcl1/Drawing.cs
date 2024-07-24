@@ -38,21 +38,22 @@ namespace CuoreUI
         public class TimeDeltaInstance
         {
             private Stopwatch stopwatch = Stopwatch.StartNew();
-            private float previousElapsedMilliseconds = 0;
+            private long lastElapsedTicks;
 
             public float TimeDelta
             {
                 get
                 {
-                    // Calculate elapsed time in milliseconds
-                    float currentElapsedMilliseconds = (float)stopwatch.Elapsed.TotalMilliseconds;
-                    float deltaTime = currentElapsedMilliseconds - previousElapsedMilliseconds;
-                    previousElapsedMilliseconds = currentElapsedMilliseconds;
+                    long currentElapsedTicks = stopwatch.ElapsedTicks;
+                    long deltaTicks = currentElapsedTicks - lastElapsedTicks;
+                    lastElapsedTicks = currentElapsedTicks;
 
-                    return deltaTime / 1000f; // Convert milliseconds to seconds
+                    float deltaSeconds = (float)deltaTicks / Stopwatch.Frequency;
+                    return deltaSeconds*100f;
                 }
             }
         }
+
 
 
         private static void SetTimerRefreshRate()

@@ -80,21 +80,21 @@ namespace CuoreUI.Controls
 
             Bitmap tintedBitmap = new Bitmap(privateContent.Width, privateContent.Height);
 
-            using (Graphics g = Graphics.FromImage(tintedBitmap))
+            using (Graphics graphics = Graphics.FromImage(tintedBitmap))
             {
-                g.SmoothingMode = SmoothingMode.AntiAlias;
-                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
                 float r = ImageTint.R / 255f;
-                float gVal = ImageTint.G / 255f;
+                float g = ImageTint.G / 255f;
                 float b = ImageTint.B / 255f;
                 float a = ImageTint.A / 255f;
 
                 ColorMatrix colorMatrix = new ColorMatrix(new float[][]
                 {
                     new float[] {r, 0, 0, 0, 0},
-                    new float[] {0, gVal, 0, 0, 0},
+                    new float[] {0, g, 0, 0, 0},
                     new float[] {0, 0, b, 0, 0},
                     new float[] {0, 0, 0, a, 0},
                     new float[] {0, 0, 0, 0, 1}
@@ -103,7 +103,7 @@ namespace CuoreUI.Controls
                 ImageAttributes imageAttributes = new ImageAttributes();
                 imageAttributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
 
-                g.DrawImage(privateContent, new Rectangle(0, 0, privateContent.Width, privateContent.Height),
+                graphics.DrawImage(privateContent, new Rectangle(0, 0, privateContent.Width, privateContent.Height),
                             0, 0, privateContent.Width, privateContent.Height,
                             GraphicsUnit.Pixel, imageAttributes);
             }

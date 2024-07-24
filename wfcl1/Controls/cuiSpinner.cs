@@ -66,7 +66,6 @@ namespace CuoreUI.Controls
         {
             int refreshrate = Drawing.GetHighestRefreshRate();
             Rotation += (RotateSpeed / 2) * tdi.TimeDelta;
-
             if (Rotation > 359)
             {
                 Rotation -= 360;
@@ -179,6 +178,7 @@ namespace CuoreUI.Controls
                 FrameDrawn += (f, s) =>
                 {
                     _ = universalRotateLogic();
+                    Invalidate();
                 };
             }
         }
