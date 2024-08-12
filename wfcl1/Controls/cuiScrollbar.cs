@@ -270,7 +270,7 @@ namespace CuoreUI.Controls
 
         private class ScrollMessageFilter : NativeWindow
         {
-            private cuiScrollbar scrollbar;
+            private readonly cuiScrollbar scrollbar;
 
             public ScrollMessageFilter(cuiScrollbar scrollbar)
             {
@@ -295,7 +295,6 @@ namespace CuoreUI.Controls
 
         protected override CreateParams CreateParams
         {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             get
             {
                 CreateParams createParams = base.CreateParams;

@@ -43,68 +43,37 @@ namespace CuoreUI
         {
             GraphicsPath path = new GraphicsPath();
 
-            // Top-left corner
-            if (borderRadius.Top > 0)
+            void AddArc(float x, float y, float diameter, float startAngle, float sweepAngle)
             {
-                int diameter1 = Convert.ToInt32(borderRadius.Top) * 2;
-                RectangleF arc1 = new RectangleF(rectangle.X, rectangle.Y, diameter1, diameter1);
-                path.AddArc(arc1, 180, 90);
-            }
-            else
-            {
-                float diameter1 = 0.000001f;
-                RectangleF arc1 = new RectangleF(rectangle.X, rectangle.Y, diameter1, diameter1);
-                path.AddArc(arc1, 180, 90);
-            }
-
-            // Top-right corner
-            if (borderRadius.Left > 0)
-            {
-                int diameter2 = Convert.ToInt32(borderRadius.Left) * 2;
-                RectangleF arc2 = new RectangleF(rectangle.Right - diameter2, rectangle.Y, diameter2, diameter2);
-                path.AddArc(arc2, 270, 90);
-            }
-            else
-            {
-                float diameter2 = 0.000001f;
-                RectangleF arc2 = new RectangleF(rectangle.Right - diameter2, rectangle.Y, diameter2, diameter2);
-                path.AddArc(arc2, 270, 90);
+                if (diameter > 0)
+                {
+                    RectangleF arc = new RectangleF(x, y, diameter, diameter);
+                    path.AddArc(arc, startAngle, sweepAngle);
+                }
+                else
+                {
+                    float small = 0.000001f;
+                    RectangleF arc = new RectangleF(x, y, small, small);
+                    path.AddArc(arc, startAngle, sweepAngle);
+                }
             }
 
-            // Bottom-right corner
-            if (borderRadius.Bottom > 0)
-            {
-                int diameter3 = Convert.ToInt32(borderRadius.Bottom) * 2;
-                RectangleF arc3 = new RectangleF(rectangle.Right - diameter3, rectangle.Bottom - diameter3, diameter3, diameter3);
-                path.AddArc(arc3, 0, 90);
-            }
-            else
-            {
-                float diameter3 = 0.000001f;
-                RectangleF arc3 = new RectangleF(rectangle.Right - diameter3, rectangle.Bottom - diameter3, diameter3, diameter3);
-                path.AddArc(arc3, 0, 90);
-            }
+            float topLeftDiameter = borderRadius.Top * 2;
+            AddArc(rectangle.X, rectangle.Y, topLeftDiameter, 180, 90);
 
-            // Bottom-left corner
-            if (borderRadius.Right > 0)
-            {
-                int diameter4 = Convert.ToInt32(borderRadius.Right) * 2;
-                RectangleF arc4 = new RectangleF(rectangle.X, rectangle.Bottom - diameter4, diameter4, diameter4);
-                path.AddArc(arc4, 90, 90);
-            }
-            else
-            {
-                float diameter4 = 0.000001f;
-                RectangleF arc4 = new RectangleF(rectangle.X, rectangle.Bottom - diameter4, diameter4, diameter4);
-                path.AddArc(arc4, 90, 90);
-            }
+            float topRightDiameter = borderRadius.Left * 2;
+            AddArc(rectangle.Right - topRightDiameter, rectangle.Y, topRightDiameter, 270, 90);
+
+            float bottomRightDiameter = borderRadius.Bottom * 2;
+            AddArc(rectangle.Right - bottomRightDiameter, rectangle.Bottom - bottomRightDiameter, bottomRightDiameter, 0, 90);
+
+            float bottomLeftDiameter = borderRadius.Right * 2;
+            AddArc(rectangle.X, rectangle.Bottom - bottomLeftDiameter, bottomLeftDiameter, 90, 90);
 
             path.CloseFigure();
 
             return path;
         }
-
-
 
         public static GraphicsPath Checkmark(Rectangle area)
         {

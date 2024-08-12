@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static CuoreUI.Drawing;
@@ -35,48 +36,26 @@ namespace CuoreUI.Controls
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
 
             Rotation = 0;
+
+            if (alreadySpinning == false)
+            {
+                FrameDrawn -= RotateOnFrameDrawn;
+                FrameDrawn += RotateOnFrameDrawn;
+                alreadySpinning = true;
+            }
         }
 
-        bool designerRotating = false;
+        bool alreadySpinning = false;
 
-        private async void DesignerRotationLogic()
+        private void RotateOnFrameDrawn(object sender, EventArgs e)
         {
-            if (designerRotating == false)
-            {
-                designerRotating = true;
-                if (DesignMode)
-                {
-                    while (true)
-                    {
-                        if (!DesignMode)
-                        {
-                            break;
-                        }
-
-                        await universalRotateLogic();
-                    }
-                }
-            }
-            designerRotating = false;
+            universalRotateLogic();
         }
 
         Drawing.TimeDeltaInstance tdi = new TimeDeltaInstance();
-
-        async Task universalRotateLogic()
+        void universalRotateLogic()
         {
-            int refreshrate = Drawing.GetHighestRefreshRate();
-            Rotation += (RotateSpeed / 2) * tdi.TimeDelta;
-            if (Rotation > 359)
-            {
-                Rotation -= 360;
-            }
-            if (Rotation < 359)
-            {
-                Rotation += 360;
-            }
-
-            if (DesignMode)
-                await Task.Delay(1000 / refreshrate);
+            Rotation += (((RotateSpeed / 2)) * tdi.TimeDelta) % 360;
         }
 
         private Color privateArcColor = CuoreUI.Drawing.PrimaryColor;
@@ -125,16 +104,23 @@ namespace CuoreUI.Controls
             }
         }
 
-        float ArcSize = 5;
+        private float privateArcSize = 5;
+        public float Thickness
+        {
+            get
+            {
+                return privateArcSize;
+            }
+            set
+            {
+                privateArcSize = value;
+                Invalidate();
+            }
+        }
         float ArcDegrees = 90;
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            if (!designerRotating && DesignMode)
-            {
-                DesignerRotationLogic();
-            }
-
             if (Rotation > 720)
             {
                 Rotation = 0;
@@ -151,36 +137,43 @@ namespace CuoreUI.Controls
 
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-            float SpinnerThickness = ArcSize * 2f;
+            float SpinnerThickness = Thickness * 2f;
 
             RectangleF ClientConsideringArcSize = ClientRectangle;
             ClientConsideringArcSize.Width = Math.Min(ClientConsideringArcSize.Width, ClientConsideringArcSize.Height);
-            ClientConsideringArcSize.Width = Math.Max(SpinnerThickness * 2 + (ArcSize * 2), ClientConsideringArcSize.Width);
+            ClientConsideringArcSize.Width = Math.Max(SpinnerThickness * 2 + (Thickness * 2), ClientConsideringArcSize.Width);
             ClientConsideringArcSize.Height = ClientConsideringArcSize.Width;
             ClientConsideringArcSize.Inflate(-SpinnerThickness, -SpinnerThickness);
 
-            Pen RingPen = new Pen(RingColor, SpinnerThickness);
-            e.Graphics.DrawArc(RingPen, ClientConsideringArcSize, 0, 360);
+            GraphicsPath ringPath = new GraphicsPath();
+            ringPath.AddArc(ClientConsideringArcSize, 0, 360);
 
-            Pen ArcPen = new Pen(ArcColor, SpinnerThickness);
-            ArcPen.StartCap = System.Drawing.Drawing2D.LineCap.Round;
-            ArcPen.EndCap = System.Drawing.Drawing2D.LineCap.Round;
-            e.Graphics.DrawArc(ArcPen, ClientConsideringArcSize, Rotation, ArcDegrees);
+            GraphicsPath arcPath = new GraphicsPath();
+            arcPath.AddArc(ClientConsideringArcSize, Rotation, ArcDegrees);
 
+            GraphicsPath combinedPath = new GraphicsPath();
+
+            combinedPath.AddPath(ringPath, false);
+            combinedPath.AddPath(arcPath, false);
+
+            using (Pen ringPen = new Pen(RingColor, SpinnerThickness))
+            {
+                e.Graphics.DrawPath(ringPen, ringPath);
+            }
+
+            using (Pen arcPen = new Pen(ArcColor, SpinnerThickness)
+            {
+                StartCap = LineCap.Round,
+                EndCap = LineCap.Round
+            })
+            {
+                e.Graphics.DrawPath(arcPen, arcPath);
+            }
         }
 
         private void cuiSpinner_Load(object sender, EventArgs e)
         {
             Rotation = 0;
-
-            if (!DesignMode)
-            {
-                FrameDrawn += (f, s) =>
-                {
-                    _ = universalRotateLogic();
-                    Invalidate();
-                };
-            }
         }
     }
 }

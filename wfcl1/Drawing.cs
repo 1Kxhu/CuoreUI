@@ -49,11 +49,10 @@ namespace CuoreUI
                     lastElapsedTicks = currentElapsedTicks;
 
                     float deltaSeconds = (float)deltaTicks / Stopwatch.Frequency;
-                    return deltaSeconds*100f;
+                    return deltaSeconds * 100f;
                 }
             }
-
-
+        }
 
         private static void SetTimerRefreshRate()
         {
@@ -65,6 +64,25 @@ namespace CuoreUI
                 {
                     FrameDrawn?.Invoke(null, EventArgs.Empty);
                 };
+            }
+        }
+
+        public static class ImageBlurs
+        {
+            public static class GaussianBlur
+            {
+                public unsafe static void Apply(ref Bitmap bitmap, float radius)
+                {
+                    Blurs.GaussianBlur.Apply(ref bitmap, radius);
+                }
+            }
+
+            public static class QuadraticBlur
+            {
+                public unsafe static void Apply(ref Bitmap bitmap, float radius)
+                {
+                    Blurs.QuadraticBlur.Apply(ref bitmap, radius);
+                }
             }
         }
 

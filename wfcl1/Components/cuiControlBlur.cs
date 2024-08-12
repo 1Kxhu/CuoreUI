@@ -92,7 +92,9 @@ namespace CuoreUI.Components
 
                     privateTargetControl.DrawToBitmap(cachedBitmap, new Rectangle(0, 0, privateTargetControl.Width, privateTargetControl.Height));
 
-                    GaussianBlur.Apply(ref cachedBitmap, BlurAmount);
+                    //GaussianBlur.Apply(ref cachedBitmap, BlurAmount);
+                    Drawing.ImageBlurs.QuadraticBlur.Apply(ref cachedBitmap, BlurAmount);
+
                 }
             }
 
@@ -101,7 +103,7 @@ namespace CuoreUI.Components
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
+            if (!disposing)
             {
                 cachedBitmap = null;
                 cachedBitmap?.Dispose();
