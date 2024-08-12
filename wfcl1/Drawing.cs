@@ -52,7 +52,6 @@ namespace CuoreUI
                     return deltaSeconds*100f;
                 }
             }
-        }
 
 
 
