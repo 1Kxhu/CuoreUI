@@ -14,7 +14,7 @@ namespace CuoreUI.Components
         {
         }
 
-        public Form RoundedForm
+        public RoundedForm RoundedForm
         {
             get; private set;
         }
@@ -70,7 +70,7 @@ namespace CuoreUI.Components
             }
         }
 
-        private void FakeForm_Activated(object sender, EventArgs e)
+        public void FakeForm_Activated(object sender, EventArgs e)
         {
             if (!DesignMode && TargetForm != null && RoundedForm != null)
             {
@@ -196,6 +196,8 @@ namespace CuoreUI.Components
             {
                 RoundedForm.Size = Size.Add(TargetForm.Size, new Size(4, 4));
                 FakeForm.Size = TargetForm.Size;
+                RoundedForm.InvalidateNextDrawCall = true;
+                TargetForm.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, TargetForm.Width, TargetForm.Height, (int)(Rounding * 2f), (int)(Rounding * 2f)));
             }
         }
     }

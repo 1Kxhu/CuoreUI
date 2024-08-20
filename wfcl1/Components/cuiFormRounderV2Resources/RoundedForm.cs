@@ -13,6 +13,23 @@ namespace CuoreUI.Components.cuiFormRounderV2Resources
         private Bitmap backImage;
         private Graphics backGraphics;
 
+        private bool privateInvalidateNextDrawCall = false;
+        public bool InvalidateNextDrawCall
+        {
+            get
+            {
+                return privateInvalidateNextDrawCall; 
+            }
+            set
+            {
+                if (value == true)
+                {
+                    DrawForm(null, EventArgs.Empty);
+                    privateInvalidateNextDrawCall = false;
+                }
+            }
+        }
+
         public Color BackgroundColor
         {
             get => privateBackgroundColor;
@@ -50,13 +67,14 @@ namespace CuoreUI.Components.cuiFormRounderV2Resources
             this.UpdateStyles();
         }
 
-        private void DrawForm(object sender, EventArgs e)
+        public void DrawForm(object sender, EventArgs e)
         {
             SuspendLayout();
             try
             {
-                if (backImage == null || backImage.Size != Size)
+                if (backImage == null || backImage.Size != Size || InvalidateNextDrawCall)
                 {
+                    InvalidateNextDrawCall = false;
                     backImage?.Dispose();
                     backImage = new Bitmap(Width, Height);
                     backGraphics?.Dispose();
@@ -109,6 +127,17 @@ namespace CuoreUI.Components.cuiFormRounderV2Resources
                 NativeMethods.SetWindowLong(Handle, NativeMethods.GWL_EXSTYLE, cp);
             }
             DrawForm(this, EventArgs.Empty);
+        }
+
+        private void RoundedForm_PaddingChanged(object sender, EventArgs e)
+        {
+            DrawForm(this, e);
+        }
+
+        protected override void OnPaddingChanged(EventArgs e)
+        {
+            base.OnPaddingChanged(e);
+            DrawForm(this, e);
         }
     }
 }

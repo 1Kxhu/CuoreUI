@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>CuoreUI.Winforms</id>
-    <version>2024.7.24</version>
+    <version>2024.8.12</version>
     <authors>itzkxhu</authors>
     <owners>itzkxhu</owners>
     <description>Modern Winforms Library - the Guna/Bunifu Killer.</description>
@@ -13,7 +13,6 @@
   </metadata>
   <files>
     <file src="wfcl1\bin\Release\net472\CuoreUI.dll" target="lib\netstandard2.0" />
-    <file src="wfcl1\bin\Release\net48\CuoreUI.dll" target="lib\netstandard2.0" />
     <file src="wfcl1\bin\Release\net8.0-windows\CuoreUI.dll" target="lib\net8.0" />
     <file src="icon.png" target="icon.png" />
   </files>
