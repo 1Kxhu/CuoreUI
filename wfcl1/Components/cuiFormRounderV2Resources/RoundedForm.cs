@@ -18,7 +18,7 @@ namespace CuoreUI.Components.cuiFormRounderV2Resources
         {
             get
             {
-                return privateInvalidateNextDrawCall; 
+                return privateInvalidateNextDrawCall;
             }
             set
             {
@@ -103,13 +103,21 @@ namespace CuoreUI.Components.cuiFormRounderV2Resources
                 using (Pen pen = new Pen(BorderColor))
                 {
                     backGraphics.SmoothingMode = SmoothingMode.AntiAlias;
+                    backGraphics.DrawPath(new Pen(BackgroundColor, 1.6f), fillinoutlinePath);
                     backGraphics.FillPath(brush, roundedRectangle);
                     backGraphics.DrawPath(pen, roundedRectangle);
-                    backGraphics.DrawPath(new Pen(BackgroundColor, 1.6f), fillinoutlinePath);
                     backGraphics.SmoothingMode = SmoothingMode.None;
                 }
 
-                PerPixelAlphaBlend.SetBitmap(backImage, Left, Top, Handle);
+                double normalisedOpacity = 1;
+
+                double.TryParse(Tag.ToString(), out normalisedOpacity);
+                normalisedOpacity *= 255;
+
+                byte opacity = Convert.ToByte(normalisedOpacity);
+
+                PerPixelAlphaBlend.SetBitmap(backImage, opacity, Left, Top, Handle);
+
             }
             finally
             {

@@ -88,7 +88,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private Color privateNormalOutline = CuoreUI.Drawing.PrimaryColor;
+        private Color privateNormalOutline = Color.Empty;
         public Color NormalOutline
         {
             get
@@ -102,7 +102,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private Color privateHoverOutline = CuoreUI.Drawing.PrimaryColor;
+        private Color privateHoverOutline = Color.Empty;
         public Color HoverOutline
         {
             get
@@ -116,7 +116,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private Color privatePressedOutline = CuoreUI.Drawing.PrimaryColor;
+        private Color privatePressedOutline = Color.Empty;
         public Color PressedOutline
         {
             get

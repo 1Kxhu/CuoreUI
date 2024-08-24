@@ -82,6 +82,7 @@ namespace CuoreUI.Controls
             Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             dragTimer.Tick += DragTimer_Tick;
             Size = new Size(24,24);
+            Cursor = Cursors.SizeNWSE;
         }
 
         private void DragTimer_Tick(object sender, EventArgs e)
@@ -109,7 +110,7 @@ namespace CuoreUI.Controls
 
                     if (CuiFormRounder != null)
                     {
-                        CuiFormRounder.RoundedForm.Padding = CuiFormRounder.RoundedForm.Padding;
+                        CuiFormRounder.roundedFormObj.Padding = CuiFormRounder.roundedFormObj.Padding;
                     }
                 }
             }
