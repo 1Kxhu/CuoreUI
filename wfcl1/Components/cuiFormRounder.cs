@@ -71,6 +71,11 @@ namespace CuoreUI.Components
 
         private void TargetForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (stop)
+            {
+                TargetForm.Dispose();
+            }
+
             if (!DesignMode && !e.Cancel)
             {
                 stop = true;
@@ -85,6 +90,7 @@ namespace CuoreUI.Components
                 FakeForm.Activated -= FakeForm_Activated;
 
                 TargetForm.Controls.Clear();
+                TargetForm.Close();
 
                 FakeForm.Dispose();
 
