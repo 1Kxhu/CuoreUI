@@ -1,4 +1,4 @@
-﻿namespace CuoreUI.Components.cuiFormRounderV2Resources
+﻿namespace CuoreUI.Components.Forms.cuiFormRounderV2Resources
 {
     public static class Stored
     {

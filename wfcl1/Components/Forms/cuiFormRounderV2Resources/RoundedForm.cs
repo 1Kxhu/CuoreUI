@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using CuoreUI.Components.Forms.cuiFormRounderV2Resources;
 using static CuoreUI.Helper.Win32;
 
 namespace CuoreUI.Components.cuiFormRounderV2Resources
@@ -69,6 +70,11 @@ namespace CuoreUI.Components.cuiFormRounderV2Resources
 
         public void DrawForm(object sender, EventArgs e)
         {
+            if (stop)
+            {
+                return;
+            }
+
             SuspendLayout();
             try
             {
@@ -146,6 +152,17 @@ namespace CuoreUI.Components.cuiFormRounderV2Resources
         {
             base.OnPaddingChanged(e);
             DrawForm(this, e);
+        }
+
+        private bool stop = false;
+
+        internal void Stop()
+        {
+            stop = true;
+            backImage?.Dispose();
+            backGraphics?.Dispose();
+
+            Dispose();
         }
     }
 }

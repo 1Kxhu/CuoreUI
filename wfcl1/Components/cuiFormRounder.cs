@@ -1,4 +1,5 @@
 ﻿using CuoreUI.Components.cuiFormRounderV2Resources;
+using CuoreUI.Components.Forms.cuiFormRounderV2Resources;
 using System;
 using System.ComponentModel;
 using System.Drawing;
@@ -15,7 +16,7 @@ namespace CuoreUI.Components
         }
 
         public RoundedForm roundedFormObj;
-        public Form FakeForm { get; } = new FakeForm();
+        public Form FakeForm { get; internal set; } = new FakeForm();
 
         private Form privateTargetForm;
         public Form TargetForm
@@ -42,6 +43,10 @@ namespace CuoreUI.Components
 
         private void TargetForm_BackColorChanged(object sender, EventArgs e)
         {
+            if (stop)
+            {
+                return;
+            }
             if (!DesignMode)
             {
                 FakeForm.BackColor = TargetForm.BackColor;
@@ -50,6 +55,10 @@ namespace CuoreUI.Components
 
         private void TargetForm_VisibleChanged(object sender, EventArgs e)
         {
+            if (stop)
+            {
+                return;
+            }
             if (!DesignMode)
             {
                 roundedFormObj.Visible = TargetForm.Visible;
@@ -58,19 +67,39 @@ namespace CuoreUI.Components
             }
         }
 
+        private bool stop = false;
+
         private void TargetForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (!DesignMode && !e.Cancel)
             {
-                roundedFormObj.Dispose();
+                stop = true;
+
+                TargetForm.Load -= TargetForm_Load;
+                TargetForm.Resize -= TargetForm_Resize;
+                TargetForm.LocationChanged -= TargetForm_LocationChanged;
+                TargetForm.TextChanged -= TargetForm_TextChanged;
+                TargetForm.FormClosing -= TargetForm_FormClosing;
+                TargetForm.VisibleChanged -= TargetForm_VisibleChanged;
+                TargetForm.BackColorChanged -= TargetForm_BackColorChanged;
+                FakeForm.Activated -= FakeForm_Activated;
+
+                TargetForm.Controls.Clear();
+
                 FakeForm.Dispose();
-                TargetForm.Dispose();
-                Environment.Exit(0);
+
+                roundedFormObj.Stop();
             }
         }
 
+
         public void FakeForm_Activated(object sender, EventArgs e)
         {
+            if (stop || TargetForm == null || TargetForm.IsDisposed)
+            {
+                return;
+            }
+
             if (!DesignMode && TargetForm != null && roundedFormObj != null)
             {
                 roundedFormObj.Tag = TargetForm.Opacity;
@@ -96,6 +125,10 @@ namespace CuoreUI.Components
 
         private void TargetForm_TextChanged(object sender, EventArgs e)
         {
+            if (stop)
+            {
+                return;
+            }
             FakeForm.Text = TargetForm.Text;
         }
 
@@ -112,12 +145,20 @@ namespace CuoreUI.Components
             {
                 privateRounding = value;
                 Stored.rounding = value;
+                if (stop)
+                {
+                    return;
+                }
                 roundedFormObj?.Invalidate();
             }
         }
 
         private void TargetForm_LocationChanged(object sender, EventArgs e)
         {
+            if (stop)
+            {
+                return;
+            }
             if (!DesignMode && roundedFormObj != null && TargetForm != null)
             {
                 roundedFormObj.Location = PointSubtract(TargetForm.Location, new Point(2, 2));
@@ -132,6 +173,10 @@ namespace CuoreUI.Components
             set
             {
                 privateOutlineColor = value;
+                if (stop)
+                {
+                    return;
+                }
                 roundedFormObj?.Invalidate();
             }
         }
@@ -176,7 +221,7 @@ namespace CuoreUI.Components
             Timer miscTimer = new Timer { Interval = 1000 };
             miscTimer.Tick += (a1, a2) =>
             {
-                if (!DesignMode)
+                if (!DesignMode && !stop && TargetForm != null)
                 {
                     if (TargetForm.WindowState == FormWindowState.Minimized)
                     {
@@ -193,8 +238,15 @@ namespace CuoreUI.Components
 
             Drawing.FrameDrawn += (e2, s2) =>
             {
-                roundedFormObj.Tag = TargetForm.Opacity;
-                roundedFormObj.InvalidateNextDrawCall = true;
+                if (roundedFormObj != null && stop == false)
+                {
+                    roundedFormObj.Tag = TargetForm.Opacity;
+                    roundedFormObj.InvalidateNextDrawCall = true;
+                }
+                else
+                {
+                    Dispose();
+                }
             };
         }
 

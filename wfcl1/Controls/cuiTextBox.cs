@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using static CuoreUI.Drawing;
 
 [DefaultEvent("ContentChanged")]
 public class cuiTextBox : UserControl
@@ -59,9 +60,17 @@ public class cuiTextBox : UserControl
             {
                 showCaret = false;
             }
-            Refresh();
         };
         caretBlinkTimer.Start();
+
+        FrameDrawn += (e, s) => 
+        {
+            if (!Focused)
+            {
+                showCaret = false;
+            }
+            Refresh();
+        };
     }
 
     public event EventHandler ContentChanged;
@@ -269,6 +278,8 @@ public class cuiTextBox : UserControl
             {
                 Content = string.Empty;
             }
+            Focus();
+            showCaret = true;
         }
 
         Refresh();

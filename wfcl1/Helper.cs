@@ -421,6 +421,34 @@ namespace CuoreUI
         public static class Win32
         {
             [DllImport("user32.dll")]
+            public static extern IntPtr GetDC(IntPtr hwnd);
+
+            [DllImport("user32.dll")]
+            public static extern int ReleaseDC(IntPtr hwnd, IntPtr hdc);
+
+            [DllImport("gdi32.dll")]
+            public static extern uint GetPixel(IntPtr hdc, int nXPos, int nYPos);
+
+            [DllImport("user32.dll")]
+            public static extern bool GetCursorPos(out POINT lpPoint);
+
+            [DllImport("user32.dll")]
+            public static extern short GetAsyncKeyState(int vKey);
+
+            public static bool isClickingLeftMouse()
+            {
+                return (GetAsyncKeyState(0x01) & 0x8000) != 0;
+            }
+
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct POINT
+            {
+                public int X;
+                public int Y;
+            }
+
+            [DllImport("user32.dll")]
             private static extern int SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
 
             [StructLayout(LayoutKind.Sequential)]
