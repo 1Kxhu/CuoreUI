@@ -55,10 +55,6 @@ namespace CuoreUI.Components
 
         private void TargetForm_VisibleChanged(object sender, EventArgs e)
         {
-            if (stop)
-            {
-                return;
-            }
             if (!DesignMode)
             {
                 roundedFormObj.Visible = TargetForm.Visible;
@@ -68,16 +64,13 @@ namespace CuoreUI.Components
         }
 
         private bool stop = false;
+        private bool sent = false;
 
         private void TargetForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (stop)
+            if (!sent)
             {
-                TargetForm.Dispose();
-            }
-
-            if (!DesignMode && !e.Cancel)
-            {
+                sent = true;
                 stop = true;
 
                 TargetForm.Load -= TargetForm_Load;
@@ -87,28 +80,37 @@ namespace CuoreUI.Components
                 TargetForm.FormClosing -= TargetForm_FormClosing;
                 TargetForm.VisibleChanged -= TargetForm_VisibleChanged;
                 TargetForm.BackColorChanged -= TargetForm_BackColorChanged;
-                FakeForm.Activated -= FakeForm_Activated;
 
                 TargetForm.Controls.Clear();
-                TargetForm.Close();
 
-                FakeForm.Dispose();
+                Helper.Win32.SendMessage(FakeForm.Handle, 0x0010, IntPtr.Zero, IntPtr.Zero);
+                Helper.Win32.SendMessage(TargetForm.Handle, 0x0010, IntPtr.Zero, IntPtr.Zero);
+                Helper.Win32.SendMessage(roundedFormObj.Handle, 0x0010, IntPtr.Zero, IntPtr.Zero);
 
-                roundedFormObj.Stop();
             }
         }
 
+        bool updated = true;
 
         public void FakeForm_Activated(object sender, EventArgs e)
         {
-            if (stop || TargetForm == null || TargetForm.IsDisposed)
+            if (stop || sent || TargetForm == null || TargetForm.IsDisposed)
             {
                 return;
             }
 
             if (!DesignMode && TargetForm != null && roundedFormObj != null)
             {
-                roundedFormObj.Tag = TargetForm.Opacity;
+                try
+                {
+                    roundedFormObj.Tag = TargetForm.Opacity;
+                }
+                catch
+                {
+                    // comboboxdropdown raises an exception here, but ofc we know its always 100% opacity
+                }
+
+                updated = false;
                 roundedFormObj.InvalidateNextDrawCall = true;
 
                 FakeForm.Icon = TargetForm.Icon;
@@ -118,12 +120,15 @@ namespace CuoreUI.Components
                 }
                 else
                 {
-                    if (TargetForm.WindowState == FormWindowState.Normal)
+                    if (!sent && !stop)
                     {
-                        SetWindowPos(TargetForm.Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
-                        SetWindowPos(roundedFormObj.Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
 
-                        SetWindowPos(roundedFormObj.Handle, TargetForm.Handle, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
+                        if (TargetForm.WindowState == FormWindowState.Normal && !updated)
+                        {
+                            SetWindowPos(roundedFormObj.Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
+                            SetWindowPos(TargetForm.Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
+                            updated = true;
+                        }
                     }
                 }
             }
@@ -237,7 +242,7 @@ namespace CuoreUI.Components
                         return;
                     }
 
-                    FakeForm_Activated(sender, e);
+                    //FakeForm_Activated(sender, e);
                 }
             };
             miscTimer.Start();
@@ -246,8 +251,16 @@ namespace CuoreUI.Components
             {
                 if (roundedFormObj != null && stop == false)
                 {
-                    roundedFormObj.Tag = TargetForm.Opacity;
-                    roundedFormObj.InvalidateNextDrawCall = true;
+                    try
+                    {
+
+                        roundedFormObj.Tag = TargetForm.Opacity;
+                        roundedFormObj.InvalidateNextDrawCall = true;
+                    }
+                    catch
+                    {
+                        // comboboxdropdown raises an exception here, but ofc we know its always 100% opacity
+                    }
                 }
                 else
                 {

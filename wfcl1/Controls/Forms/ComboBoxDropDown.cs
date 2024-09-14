@@ -8,6 +8,11 @@ namespace CuoreUI.Controls.Forms
     {
         public cuiComboBox caller;
 
+        internal void its12ampleasework()
+        {
+            cuiFormRounder1.FakeForm.ShowInTaskbar = false;
+        }
+
         private string[] privateItems = new string[0];
         public string[] Items
         {
@@ -46,12 +51,13 @@ namespace CuoreUI.Controls.Forms
 
                 cuiButton cuiButton = new cuiButton();
                 cuiButton.Name = item;
-                cuiButton.Width = Width;
+                cuiButton.Width = Width + 10;
                 cuiButton.Content = item;
                 cuiButton.Location = new Point(0, i * cuiButton.Height);
                 defaultHeight = cuiButton.Height;
                 defaultWidth = cuiButton.Width;
 
+                cuiFormRounder1.Rounding = Rounding.All;
 
                 if (i == firstItem)
                 {
@@ -147,7 +153,7 @@ namespace CuoreUI.Controls.Forms
 
         public void SetWidth(int userWidth)
         {
-            Width = userWidth - (comboBoxRounder1.Rounding * 2);
+            Width = userWidth - (cuiFormRounder1.Rounding * 2);
         }
 
         public ComboBoxDropDown(int x, int y)
@@ -156,12 +162,13 @@ namespace CuoreUI.Controls.Forms
             Location = new Point(x, y);
         }
 
-        public ComboBoxDropDown(string[] userItems, int userWidth, Color bg, Color outline, cuiComboBox userCaller)
+        public ComboBoxDropDown(string[] userItems, int userWidth, Color bg, Color outline, cuiComboBox userCaller, int roundingArg)
         {
             InitializeComponent();
-            Width = userWidth - (comboBoxRounder1.Rounding * 2);
-            comboBoxRounder1.BackColor = bg;
-            comboBoxRounder1.OutlineColor = outline;
+            Width = userWidth - (cuiFormRounder1.Rounding * 2);
+            Rounding = new Padding(roundingArg, roundingArg, roundingArg, roundingArg);
+            cuiFormRounder1.OutlineColor = outline;
+            cuiFormRounder1.Rounding = Rounding.All;
             BackColor = Color.FromArgb(255, bg.R, bg.G, bg.B);
             caller = userCaller;
             Items = userItems;

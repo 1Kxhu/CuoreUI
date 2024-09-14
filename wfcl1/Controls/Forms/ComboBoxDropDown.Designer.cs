@@ -28,15 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.comboBoxRounder1 = new CuoreUI.Components.ComboBoxDropDownRounder();
+            this.cuiFormRounder1 = new CuoreUI.Components.cuiFormRounder();
             this.SuspendLayout();
             // 
-            // comboBoxRounder1
+            // cuiFormRounder1
             // 
-            this.comboBoxRounder1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
-            this.comboBoxRounder1.OutlineColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.comboBoxRounder1.Rounding = 8;
-            this.comboBoxRounder1.TargetForm = this;
+            this.cuiFormRounder1.OutlineColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cuiFormRounder1.Rounding = 8;
+            this.cuiFormRounder1.TargetForm = this;
             // 
             // ComboBoxDropDown
             // 
@@ -56,6 +55,6 @@
 
         #endregion
 
-        public Components.ComboBoxDropDownRounder comboBoxRounder1;
+        public Components.cuiFormRounder cuiFormRounder1;
     }
 }

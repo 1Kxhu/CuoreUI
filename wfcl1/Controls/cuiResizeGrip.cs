@@ -31,19 +31,6 @@ namespace CuoreUI.Controls
             }
         }
 
-        cuiFormRounder privateCuiFormRounder;
-        public cuiFormRounder CuiFormRounder
-        {
-            get
-            {
-                return privateCuiFormRounder;
-            }
-            set
-            {
-                privateCuiFormRounder = value;
-            }
-        }
-
         private bool privateGripTexture = true;
         public bool GripTexture
         {
@@ -108,10 +95,7 @@ namespace CuoreUI.Controls
                     lastMousePoint = currentMousePoint;
                     TargetForm.Size = Size.Subtract(TargetForm.Size, (Size)mouseDelta);
 
-                    if (CuiFormRounder != null)
-                    {
-                        CuiFormRounder.roundedFormObj.Padding = CuiFormRounder.roundedFormObj.Padding;
-                    }
+            
                 }
             }
             catch (NullReferenceException)

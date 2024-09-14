@@ -1,2 +1,5 @@
-﻿colorpicker
-datepicker
+﻿less scuffed datepicker
+better textbox that actually supports selecting regions of text
+
+cleanup property names in all controls and make all of them share similar property names,
+like "Rounding" for every control instead of one having "borderRadius", second one having "radius" and so on..

@@ -67,9 +67,11 @@ namespace CuoreUI.Controls
             if (tempdropdown != null)
             {
                 Point LocationScreen = PointToScreen(Point.Empty);
-                int dropdownTop = LocationScreen.Y + Height + tempdropdown.comboBoxRounder1.Rounding;
-                int dropdownLeft = LocationScreen.X + tempdropdown.comboBoxRounder1.Rounding;
+                int dropdownTop = LocationScreen.Y + Height + tempdropdown.cuiFormRounder1.Rounding;
+                int dropdownLeft = LocationScreen.X + 3;
                 tempdropdown.Location = new Point(dropdownLeft, dropdownTop);
+
+                (tempdropdown as ComboBoxDropDown).its12ampleasework();
             }
         }
 
@@ -196,7 +198,7 @@ namespace CuoreUI.Controls
             Rectangle cr = ClientRectangle;
             cr.Inflate(-1, -1);
 
-            GraphicsPath roundBackground = Helper.RoundRect(cr, 8);
+            GraphicsPath roundBackground = Helper.RoundRect(cr, Rounding);
 
             using (SolidBrush brush = new SolidBrush(BackgroundColor))
             using (Pen pen = new Pen(OutlineColor, OutlineThickness))
@@ -299,7 +301,7 @@ namespace CuoreUI.Controls
                 return;
             }
 
-            ComboBoxDropDown DropDown = new ComboBoxDropDown(Items, Width, DropDownBackgroundColor, DropDownOutlineColor, this);
+            ComboBoxDropDown DropDown = new ComboBoxDropDown(Items, Width, DropDownBackgroundColor, DropDownOutlineColor, this, Rounding);
             DropDown.NormalBackground = ButtonNormalBackground;
             DropDown.HoverBackground = ButtonHoverBackground;
             DropDown.PressedBackground = ButtonPressedBackground;
@@ -308,8 +310,10 @@ namespace CuoreUI.Controls
             DropDown.HoverOutline = ButtonHoverOutline;
             DropDown.PressedOutline = ButtonPressedOutline;
 
-            DropDown.Rounding = new Padding(Rounding);
+            DropDown.Rounding = new Padding(Rounding, Rounding, Rounding, Rounding);
             DropDown.updateButtons();
+
+            DropDown.Invalidate();
 
             isBrowsingOptions = true;
             Refresh();
@@ -323,30 +327,34 @@ namespace CuoreUI.Controls
             clientrect = RectangleToScreen(clientrect);
 
 
-            DropDown.comboBoxRounder1.RoundedForm.Invalidate();
+            DropDown.cuiFormRounder1.roundedFormObj.Invalidate();
 
             Point LocationScreen = PointToScreen(Point.Empty);
-            int dropdownTop = LocationScreen.Y + Height + DropDown.comboBoxRounder1.Rounding;
-            int dropdownLeft = LocationScreen.X + DropDown.comboBoxRounder1.Rounding;
-            DropDown.Location = new Point(dropdownLeft, dropdownTop);
+            int dropdownTop = LocationScreen.Y + Height + 2;
+            int dropdownLeft = LocationScreen.X + DropDown.cuiFormRounder1.Rounding;
+            DropDown.Location = new Point(dropdownLeft - 1, dropdownTop - 1);
+            DropDown.Size = DropDown.Size + new Size(2, 2);
 
             tempdropdown = DropDown;
+            tempdropdown.Rounding = new Padding(Rounding, Rounding, Rounding, Rounding);
 
-            DropDown.Show();
-            DropDown.comboBoxRounder1.RoundedForm.Location = DropDown.Location;
-            DropDown.comboBoxRounder1.RoundedForm.Invalidate();
+            DropDown.cuiFormRounder1.roundedFormObj.Location = DropDown.Location;
+            DropDown.Width = Width - 4;
+            DropDown.cuiFormRounder1.roundedFormObj.Invalidate();
             DropDown.SelectedIndexChanged += IndexChanged;
 
-            DropDown.comboBoxRounder1.RoundedForm.Show();
+            DropDown.cuiFormRounder1.roundedFormObj.Show();
             DropDown.Show();
+
+            DropDown.cuiFormRounder1.TargetForm.Invalidate();
         }
         private void CloseDropDown(object sender, EventArgs e)
         {
             if (sender is ComboBoxDropDown dropdown)
             {
-                dropdown.comboBoxRounder1.GetRoundedForm().Close();
-                dropdown.comboBoxRounder1.TargetForm = null;
-                dropdown.comboBoxRounder1.Dispose();
+                dropdown.cuiFormRounder1.roundedFormObj.Close();
+                dropdown.cuiFormRounder1.TargetForm = null;
+                dropdown.cuiFormRounder1.Dispose();
                 dropdown.Dispose();
 
                 isBrowsingOptions = false;
@@ -371,20 +379,26 @@ namespace CuoreUI.Controls
             {
                 SelectedItem = dropdown.SelectedItem;
 
-                dropdown.comboBoxRounder1.GetRoundedForm().Close();
-                dropdown.comboBoxRounder1.TargetForm = null;
-                dropdown.comboBoxRounder1.Dispose();
+                dropdown.cuiFormRounder1.roundedFormObj.Close();
+                dropdown.cuiFormRounder1.TargetForm = null;
+                dropdown.cuiFormRounder1.Dispose();
                 dropdown.Dispose();
+
+                dropdown.Close();
 
                 isBrowsingOptions = false;
                 Refresh();
+
+                dropdown = null;
             }
             else if (tempdropdown != null)
             {
-                tempdropdown.comboBoxRounder1.GetRoundedForm().Close();
-                tempdropdown.comboBoxRounder1.TargetForm = null;
-                tempdropdown.comboBoxRounder1.Dispose();
+                tempdropdown.cuiFormRounder1.roundedFormObj.Close();
+                tempdropdown.cuiFormRounder1.TargetForm = null;
+                tempdropdown.cuiFormRounder1.Dispose();
                 tempdropdown.Dispose();
+
+                tempdropdown.Close();
 
                 isBrowsingOptions = false;
                 Refresh();
@@ -395,6 +409,8 @@ namespace CuoreUI.Controls
             {
                 throw new Exception($"Invalid sender\n{sender}");
             }
+
+
         }
 
         // dropdown buttons

@@ -162,7 +162,7 @@ public class cuiTextBox : UserControl
             Invalidate();
         }
     }
-
+    
     private Color privateFocusedBackground = Color.FromArgb(100, 34, 34, 34);
     [Description("Only used when DesignStyle is set to Full")]
     public Color FocusedBackground

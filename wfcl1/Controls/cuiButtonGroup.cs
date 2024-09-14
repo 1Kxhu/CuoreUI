@@ -470,15 +470,23 @@ namespace CuoreUI.Controls
             {
                 if (state == 3)
                 {
-                    foreach (Control ctrl in Parent?.Controls)
+                    try
                     {
-                        if (ctrl is cuiButtonGroup cbg)
+
+                        foreach (Control ctrl in Parent?.Controls)
                         {
-                            if (cbg.Group == this.Group && cbg != this)
+                            if (ctrl is cuiButtonGroup cbg)
                             {
-                                cbg.Checked = false;
+                                if (cbg.Group == this.Group && cbg != this)
+                                {
+                                    cbg.Checked = false;
+                                }
                             }
                         }
+                    }
+                    catch
+                    {
+                        // if anything went wrong here it's probably a null reference exception
                     }
                     Checked = true;
                 }
