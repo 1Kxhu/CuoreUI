@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -33,6 +34,14 @@ namespace CuoreUI.Components
             InitializeComponent();
         }
 
+        public bool isShowingDialog
+        {
+            get
+            {
+                return PickerForm != null && PickerForm.Visible;
+            }
+        }
+
         public cuiColorPicker(IContainer container)
         {
             container.Add(this);
@@ -47,7 +56,7 @@ namespace CuoreUI.Components
 
             bool canExitLoop = false;
 
-            PickerForm.FormClosing += (e, s) => 
+            PickerForm.FormClosing += (s, e) =>
             {
                 Color = PickerForm.ColorVal;
                 canExitLoop = true;
@@ -60,6 +69,5 @@ namespace CuoreUI.Components
 
             return PickerForm.DialogResult;
         }
-
     }
 }
