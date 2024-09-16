@@ -8,11 +8,6 @@ namespace CuoreUI.Controls.Forms
     {
         public cuiComboBox caller;
 
-        internal void its12ampleasework()
-        {
-            cuiFormRounder1.FakeForm.ShowInTaskbar = false;
-        }
-
         private string[] privateItems = new string[0];
         public string[] Items
         {
@@ -90,6 +85,8 @@ namespace CuoreUI.Controls.Forms
 
                     // Invoke the SelectedIndexChanged event
                     SelectedIndexChanged?.Invoke(this, EventArgs.Empty);
+
+                    Close();
                 };
 
                 options[i] = cuiButton;
@@ -160,6 +157,7 @@ namespace CuoreUI.Controls.Forms
         {
             InitializeComponent();
             Location = new Point(x, y);
+            ShowInTaskbar = false;
         }
 
         public ComboBoxDropDown(string[] userItems, int userWidth, Color bg, Color outline, cuiComboBox userCaller, int roundingArg)
@@ -172,11 +170,13 @@ namespace CuoreUI.Controls.Forms
             BackColor = Color.FromArgb(255, bg.R, bg.G, bg.B);
             caller = userCaller;
             Items = userItems;
+            ShowInTaskbar = false;
         }
 
         public ComboBoxDropDown()
         {
             InitializeComponent();
+            ShowInTaskbar = false;
         }
 
         public int SelectedIndex = 0;

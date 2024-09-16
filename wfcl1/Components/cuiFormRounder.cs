@@ -80,10 +80,11 @@ namespace CuoreUI.Components
 
         private void TargetForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (!sent)
+            stop = true;
+            if (!sent && TargetForm != null)
             {
+               
                 sent = true;
-                stop = true;
 
                 TargetForm.Load -= TargetForm_Load;
                 TargetForm.Resize -= TargetForm_Resize;
@@ -99,6 +100,8 @@ namespace CuoreUI.Components
                 Helper.Win32.SendMessage(TargetForm.Handle, 0x0010, IntPtr.Zero, IntPtr.Zero);
                 Helper.Win32.SendMessage(roundedFormObj.Handle, 0x0010, IntPtr.Zero, IntPtr.Zero);
 
+                (FakeForm as FakeForm).CloseFakeForm();
+
             }
         }
 
@@ -108,12 +111,12 @@ namespace CuoreUI.Components
 
         public void FakeForm_Activated(object sender, EventArgs e)
         {
-            if (stop || sent || TargetForm == null || TargetForm.IsDisposed )
+            if (stop || sent || TargetForm == null || TargetForm.IsDisposed)
             {
                 return;
             }
 
-     
+
 
             if (!DesignMode && TargetForm != null && roundedFormObj != null)
             {
@@ -147,7 +150,7 @@ namespace CuoreUI.Components
                             SetWindowPos(roundedFormObj.Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
                             SetWindowPos(TargetForm.Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
                             updated = true;
-                            
+
                         }
                     }
 
@@ -272,7 +275,7 @@ namespace CuoreUI.Components
                         roundedFormObj.WindowState = TargetForm.WindowState;
                         if (TargetForm.WindowState == FormWindowState.Normal)
                         {
-                           FakeForm.WindowState = FakeForm.WindowState;
+                            FakeForm.WindowState = FakeForm.WindowState;
                         }
 
                         lastState = TargetForm.WindowState;
@@ -326,7 +329,7 @@ namespace CuoreUI.Components
                         else
                         {
                             //roundedFormObj.Visible = true;
-                         
+
                         }
                     }
                     catch

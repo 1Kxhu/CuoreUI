@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace CuoreUI.Components.cuiFormRounderV2Resources
 {
@@ -7,8 +8,15 @@ namespace CuoreUI.Components.cuiFormRounderV2Resources
         public FakeForm()
         {
             InitializeComponent();
-            SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
-            SuspendLayout();
+            //SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
+        }
+
+        internal void CloseFakeForm()
+        {
+           
+            Close();
+            Dispose();
+          
         }
     }
 }

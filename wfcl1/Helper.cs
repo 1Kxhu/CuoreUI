@@ -451,6 +451,13 @@ namespace CuoreUI
             [DllImport("user32.dll")]
             public static extern int SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
 
+            [DllImport("user32.dll")]
+            public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+          
+
+            public const int WM_SYSCOMMAND = 0x0112;
+            public const int SC_CLOSE = 0xF060;
+
             [StructLayout(LayoutKind.Sequential)]
             public struct DEVMODE
             {

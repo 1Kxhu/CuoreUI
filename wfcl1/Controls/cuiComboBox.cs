@@ -70,8 +70,6 @@ namespace CuoreUI.Controls
                 int dropdownTop = LocationScreen.Y + Height + tempdropdown.cuiFormRounder1.Rounding;
                 int dropdownLeft = LocationScreen.X + 3;
                 tempdropdown.Location = new Point(dropdownLeft, dropdownTop);
-
-                (tempdropdown as ComboBoxDropDown).its12ampleasework();
             }
         }
 
@@ -80,7 +78,7 @@ namespace CuoreUI.Controls
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            if (DesignMode || tempdropdown is null)
+            if (DesignMode || tempdropdown == null)
             {
                 return;
             }
@@ -108,6 +106,7 @@ namespace CuoreUI.Controls
                 // Close if the countdown reaches the maximum value
                 timercountdown = 0;
                 IndexChanged(null, EventArgs.Empty);
+                CloseDropDown(tempdropdown, EventArgs.Empty);
             }
         }
 
@@ -301,6 +300,11 @@ namespace CuoreUI.Controls
                 return;
             }
 
+            if (tempdropdown != null)
+            {
+                tempdropdown.Close();
+            }
+
             ComboBoxDropDown DropDown = new ComboBoxDropDown(Items, Width, DropDownBackgroundColor, DropDownOutlineColor, this, Rounding);
             DropDown.NormalBackground = ButtonNormalBackground;
             DropDown.HoverBackground = ButtonHoverBackground;
@@ -350,12 +354,13 @@ namespace CuoreUI.Controls
         }
         private void CloseDropDown(object sender, EventArgs e)
         {
+            if (tempdropdown != null)
+            {
+                tempdropdown.Close();
+            }
             if (sender is ComboBoxDropDown dropdown)
             {
-                dropdown.cuiFormRounder1.roundedFormObj.Close();
-                dropdown.cuiFormRounder1.TargetForm = null;
-                dropdown.cuiFormRounder1.Dispose();
-                dropdown.Dispose();
+                dropdown.Close();
 
                 isBrowsingOptions = false;
                 Refresh();
@@ -375,16 +380,16 @@ namespace CuoreUI.Controls
 
         private void IndexChanged(object sender, EventArgs e)
         {
+            if (tempdropdown != null)
+            {
+                tempdropdown.Close();
+            }
             if (sender is ComboBoxDropDown dropdown)
             {
                 SelectedItem = dropdown.SelectedItem;
 
-                dropdown.cuiFormRounder1.roundedFormObj.Close();
-                dropdown.cuiFormRounder1.TargetForm = null;
-                dropdown.cuiFormRounder1.Dispose();
-                dropdown.Dispose();
-
                 dropdown.Close();
+                tempdropdown.Close();
 
                 isBrowsingOptions = false;
                 Refresh();
