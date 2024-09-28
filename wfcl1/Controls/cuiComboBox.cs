@@ -67,14 +67,14 @@ namespace CuoreUI.Controls
             if (tempdropdown != null)
             {
                 Point LocationScreen = PointToScreen(Point.Empty);
-                int dropdownTop = LocationScreen.Y + Height + tempdropdown.cuiFormRounder1.Rounding;
+                int dropdownTop = LocationScreen.Y + Height + 3;
                 int dropdownLeft = LocationScreen.X + 3;
                 tempdropdown.Location = new Point(dropdownLeft, dropdownTop);
             }
         }
 
-        int timercountdown = 0;
-        int maxcountdown = 15;
+        int timerCountdown = 0;
+        int maxCountdown = 15;
 
         private void Timer_Tick(object sender, EventArgs e)
         {
@@ -93,18 +93,18 @@ namespace CuoreUI.Controls
             if (cursorInRectangle)
             {
                 // Reset the countdown if the cursor is inside the rectangle
-                timercountdown = 0;
+                timerCountdown = 0;
             }
             else
             {
                 // Increment the countdown if the cursor is outside the rectangle
-                timercountdown++;
+                timerCountdown++;
             }
 
-            if (timercountdown >= maxcountdown)
+            if (timerCountdown >= maxCountdown)
             {
                 // Close if the countdown reaches the maximum value
-                timercountdown = 0;
+                timerCountdown = 0;
                 IndexChanged(null, EventArgs.Empty);
                 CloseDropDown(tempdropdown, EventArgs.Empty);
             }
@@ -243,14 +243,14 @@ namespace CuoreUI.Controls
                 expandRect.Width -= 2;
                 expandAvailable = Helper.LeftArrowtest(expandRect);
             }
-            e.Graphics.FillPath(new SolidBrush(ExpandColor), expandAvailable);
+            e.Graphics.FillPath(new SolidBrush(ExpandArrowColor), expandAvailable);
             //e.Graphics.DrawRectangle(new Pen(Color.Red), expandRect);
             //e.Graphics.DrawRectangle(new Pen(Color.Green), ClientRectangle);
 
         }
 
         private Color privateExpandColor = Color.White;
-        public Color ExpandColor
+        public Color ExpandArrowColor
         {
             get
             {

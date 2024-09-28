@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
-using CuoreUI.Components.Forms.cuiFormRounderV2Resources;
 using static CuoreUI.Helper.Win32;
 
 namespace CuoreUI.Components.cuiFormRounderV2Resources
@@ -51,13 +50,16 @@ namespace CuoreUI.Components.cuiFormRounderV2Resources
             }
         }
 
-        public RoundedForm(Color init_backgroundColor, Color init_borderColor, bool show = true)
+        public int Rounding = 8;
+
+        public RoundedForm(Color init_backgroundColor, Color init_borderColor, ref int RoundValue, bool show = true)
         {
             Visible = show;
             InitializeComponent();
             SetStyles();
             BackgroundColor = init_backgroundColor;
             BorderColor = init_borderColor;
+            Rounding = RoundValue;
         }
 
         private void SetStyles()
@@ -68,6 +70,16 @@ namespace CuoreUI.Components.cuiFormRounderV2Resources
             this.UpdateStyles();
         }
 
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                // turn on WS_EX_TOOLWINDOW style bit
+                cp.ExStyle |= 0x80;
+                return cp;
+            }
+        }
         public void DrawForm(object sender, EventArgs e)
         {
             if (stop)
@@ -93,7 +105,7 @@ namespace CuoreUI.Components.cuiFormRounderV2Resources
                 }
 
                 Rectangle gradientRectangle = new Rectangle(0, 0, Width - 2, Height - 2);
-                GraphicsPath roundedRectangle = Helper.RoundRect(gradientRectangle, Stored.rounding);
+                GraphicsPath roundedRectangle = Helper.RoundRect(gradientRectangle, Rounding);
 
                 Rectangle subtractRectangle = gradientRectangle;
                 subtractRectangle.Offset(1, 1);
@@ -102,8 +114,8 @@ namespace CuoreUI.Components.cuiFormRounderV2Resources
                 Rectangle fillinoutlineRectangle = subtractRectangle;
                 fillinoutlineRectangle.Offset(-1, -1);
 
-                GraphicsPath subtractPath = Helper.RoundRect(subtractRectangle, Stored.rounding);
-                GraphicsPath fillinoutlinePath = Helper.RoundRect(fillinoutlineRectangle, Stored.rounding);
+                GraphicsPath subtractPath = Helper.RoundRect(subtractRectangle, Rounding);
+                GraphicsPath fillinoutlinePath = Helper.RoundRect(fillinoutlineRectangle, Rounding);
 
                 using (SolidBrush brush = new SolidBrush(BackgroundColor))
                 using (Pen pen = new Pen(BorderColor))

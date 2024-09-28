@@ -1,5 +1,4 @@
 ﻿using CuoreUI.Components.cuiFormRounderV2Resources;
-using CuoreUI.Components.Forms.cuiFormRounderV2Resources;
 using System;
 using System.ComponentModel;
 using System.Drawing;
@@ -42,20 +41,20 @@ namespace CuoreUI.Components
             }
         }
 
-        bool activating = false;
+        bool targetFormActivating = false;
 
         private void TargetForm_Activated(object sender, EventArgs e)
         {
-            if (!activating)
+            if (!targetFormActivating)
             {
-                activating = true;
+                targetFormActivating = true;
                 FakeForm_Activated(sender, e);
             }
         }
 
         private void TargetForm_BackColorChanged(object sender, EventArgs e)
         {
-            if (stop)
+            if (shouldCloseDown)
             {
                 return;
             }
@@ -75,17 +74,19 @@ namespace CuoreUI.Components
             }
         }
 
-        private bool stop = false;
-        private bool sent = false;
+        private bool shouldCloseDown = false;
+        private bool wasFormClosingCalled = false;
 
         private void TargetForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            stop = true;
-            if (!sent && TargetForm != null)
+            // causes the other parts of this code to not run
+            // that stops any exceptions in the code trying to access disposed or null stuff 
+            shouldCloseDown = true;
+            if (!wasFormClosingCalled && TargetForm != null)
             {
-               
-                sent = true;
+                wasFormClosingCalled = true;
 
+                // unattach events
                 TargetForm.Load -= TargetForm_Load;
                 TargetForm.Resize -= TargetForm_Resize;
                 TargetForm.LocationChanged -= TargetForm_LocationChanged;
@@ -94,45 +95,43 @@ namespace CuoreUI.Components
                 TargetForm.VisibleChanged -= TargetForm_VisibleChanged;
                 TargetForm.BackColorChanged -= TargetForm_BackColorChanged;
 
+                // clean controls from targetform
                 TargetForm.Controls.Clear();
 
+                // send close message to all forms
                 Helper.Win32.SendMessage(FakeForm.Handle, 0x0010, IntPtr.Zero, IntPtr.Zero);
                 Helper.Win32.SendMessage(TargetForm.Handle, 0x0010, IntPtr.Zero, IntPtr.Zero);
                 Helper.Win32.SendMessage(roundedFormObj.Handle, 0x0010, IntPtr.Zero, IntPtr.Zero);
 
                 (FakeForm as FakeForm).CloseFakeForm();
-
             }
         }
 
         bool updated = true;
-        bool activatenextframe = true;
-
 
         public void FakeForm_Activated(object sender, EventArgs e)
         {
-            if (stop || sent || TargetForm == null || TargetForm.IsDisposed)
+            if (shouldCloseDown || wasFormClosingCalled || TargetForm == null || TargetForm.IsDisposed)
             {
                 return;
             }
-
-
 
             if (!DesignMode && TargetForm != null && roundedFormObj != null)
             {
                 try
                 {
+                    // may crash if roundedFormObject is disposed or null
                     roundedFormObj.Tag = TargetForm.Opacity;
                 }
                 catch
                 {
-                    // comboboxdropdown raises an exception here, but ofc we know its always 100% opacity
+                    // ComboBoxDropDown raises an exception here
+                    // but we can just not care about this, since it's opacity is ALWAYS 100%
                 }
 
                 updated = false;
                 roundedFormObj.InvalidateNextDrawCall = true;
 
-                FakeForm.Icon = TargetForm.Icon;
                 if (roundedFormObj.WindowState == FormWindowState.Minimized)
                 {
                     TargetForm.WindowState = FormWindowState.Normal;
@@ -140,12 +139,11 @@ namespace CuoreUI.Components
                 else
                 {
                     TargetForm.BringToFront();
-                    if (!sent && !stop)
+                    if (!wasFormClosingCalled && !shouldCloseDown)
                     {
 
                         if (TargetForm.WindowState == FormWindowState.Normal)
                         {
-                            //roundedFormObj.BringToFront();
                             TargetForm.BringToFront();
                             SetWindowPos(roundedFormObj.Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
                             SetWindowPos(TargetForm.Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
@@ -155,17 +153,15 @@ namespace CuoreUI.Components
                     }
 
                     TargetForm.BringToFront();
-
-                    shouldshownextframe = false;
                 }
             }
 
-            activating = false;
+            targetFormActivating = false;
         }
 
         private void TargetForm_TextChanged(object sender, EventArgs e)
         {
-            if (stop)
+            if (shouldCloseDown)
             {
                 return;
             }
@@ -184,21 +180,26 @@ namespace CuoreUI.Components
             set
             {
                 privateRounding = value;
-                Stored.rounding = value;
-                if (stop)
+                if (shouldCloseDown)
                 {
                     return;
                 }
-                roundedFormObj?.Invalidate();
+                if (roundedFormObj != null)
+                {
+                    roundedFormObj.Rounding = value;
+                    roundedFormObj?.Invalidate();
+                }
             }
         }
 
         private void TargetForm_LocationChanged(object sender, EventArgs e)
         {
-            if (stop)
+            if (shouldCloseDown)
             {
                 return;
             }
+
+            // update Location with a 2,2 offset caused by RoundedForm in mind
             if (!DesignMode && roundedFormObj != null && TargetForm != null)
             {
                 roundedFormObj.Location = PointSubtract(TargetForm.Location, new Point(2, 2));
@@ -213,7 +214,7 @@ namespace CuoreUI.Components
             set
             {
                 privateOutlineColor = value;
-                if (stop)
+                if (shouldCloseDown)
                 {
                     return;
                 }
@@ -233,73 +234,63 @@ namespace CuoreUI.Components
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
         private static extern IntPtr CreateRoundRectRgn(int nLeftRect, int nTopRect, int nRightRect, int nBottomRect, int nWidthEllipse, int nHeightEllipse);
 
-        bool shouldshownextframe = false;
-
         private void TargetForm_Load(object sender, EventArgs e)
         {
+            // initialize rounding
             FakeForm_Activated(sender, e);
 
-            TargetForm.Opacity = 0;
-            TargetForm.ShowInTaskbar = false;
             TargetForm.FormBorderStyle = FormBorderStyle.None;
-
-            FakeForm.ShowInTaskbar = true;
             FakeForm.Opacity = 0;
 
-            roundedFormObj = new RoundedForm(TargetForm.BackColor, OutlineColor);
+            roundedFormObj = new RoundedForm(TargetForm.BackColor, OutlineColor, ref privateRounding);
             TargetForm.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, TargetForm.Width, TargetForm.Height, (int)(Rounding * 2f), (int)(Rounding * 2f)));
 
             roundedFormObj.Show();
             FakeForm.Show();
 
-            TargetForm.Opacity = 1;
-
             roundedFormObj.Activated += FakeForm_Activated;
             TargetForm_LocationChanged(this, EventArgs.Empty);
             TargetForm_Resize(this, EventArgs.Empty);
 
-            TargetForm.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, TargetForm.Width, TargetForm.Height, (int)(Rounding * 2f), (int)(Rounding * 2f)));
-
+            // this may be a bad approach, but i will leave it like so, because it WORKS
             Timer miscTimer = new Timer { Interval = 1000 };
             miscTimer.Tick += (a1, a2) =>
             {
-                if (!DesignMode && !stop && TargetForm != null)
+                if (!DesignMode && !shouldCloseDown && TargetForm != null)
                 {
+                    // if windowstate has changed, update the region and other forms' windowstates
                     if (TargetForm.WindowState != lastState)
                     {
-                        if (TargetForm.WindowState == FormWindowState.Minimized)
+                        if (TargetForm.WindowState == FormWindowState.Maximized)
                         {
-                            //FakeForm.WindowState = TargetForm.WindowState;
+                            TargetForm.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, TargetForm.Width, TargetForm.Height, 0, 0));
                         }
-
-                        roundedFormObj.WindowState = TargetForm.WindowState;
-                        if (TargetForm.WindowState == FormWindowState.Normal)
+                        else if (TargetForm.WindowState == FormWindowState.Normal)
                         {
+                            TargetForm.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, TargetForm.Width, TargetForm.Height, (int)(Rounding * 2f), (int)(Rounding * 2f)));
+                            roundedFormObj.WindowState = TargetForm.WindowState;
                             FakeForm.WindowState = FakeForm.WindowState;
                         }
 
                         lastState = TargetForm.WindowState;
                     }
-
-                    //FakeForm_Activated(sender, e);
                 }
             };
             miscTimer.Start();
 
+            // Drawing.FrameDrawn is called every 1000/hz milliseconds
+            // where hz stands for the maximum refresh rate recorded from all display devices
             Drawing.FrameDrawn += (e2, s2) =>
             {
-                if (roundedFormObj != null && stop == false)
+                if (roundedFormObj != null && shouldCloseDown == false)
                 {
                     try
                     {
-                        roundedFormObj.Tag = TargetForm.Opacity;
-                        roundedFormObj.InvalidateNextDrawCall = true;
-
+                        // if windowstate has changed we want to update it for other forms too
                         if (TargetForm.WindowState != lastState)
                         {
                             if (TargetForm.WindowState == FormWindowState.Normal)
                             {
-
                                 TargetForm.WindowState = FakeForm.WindowState;
                             }
 
@@ -322,23 +313,20 @@ namespace CuoreUI.Components
                             lastState = TargetForm.WindowState;
                         }
 
-                        if (TargetForm.WindowState == FormWindowState.Minimized)
-                        {
-                            //roundedFormObj.Visible = false;
-                        }
-                        else
-                        {
-                            //roundedFormObj.Visible = true;
-
-                        }
+                        // this is the part that MAY raise an exception from ComboBoxDropDown
+                        roundedFormObj.Tag = TargetForm.Opacity;
+                        roundedFormObj.InvalidateNextDrawCall = true;
                     }
                     catch
                     {
-                        // comboboxdropdown raises an exception here, but ofc we know its always 100% opacity
+                        // ComboBoxDropDown raises an exception here
+                        // but we can just not care about this, since it's opacity is ALWAYS 100%
                     }
                 }
                 else
                 {
+                    // either roundedFormObj is null or "stop" is true
+                    // stop is true when the form had announced it wants to close (see TargetForm_FormClosing)
                     Dispose();
                 }
             };
@@ -348,27 +336,25 @@ namespace CuoreUI.Components
 
         private void TargetForm_Resize(object sender, EventArgs e)
         {
-
             if (roundedFormObj != null && TargetForm != null)
             {
+                // If windowstate has changed, set said windowstate value to all the other forms
                 if (TargetForm.WindowState != lastState)
                 {
                     lastState = TargetForm.WindowState;
 
-                    //if (TargetForm.WindowState == FormWindowState.Normal)
-                    {
-                        FakeForm.WindowState = TargetForm.WindowState;
-                        roundedFormObj.WindowState = TargetForm.WindowState;
-                        shouldshownextframe = true;
-                    }
+                    FakeForm.WindowState = TargetForm.WindowState;
+                    roundedFormObj.WindowState = TargetForm.WindowState;
                 }
 
+                // Related to how RoundedForm is drawn
+                // Updates rounding if needed, too
                 roundedFormObj.Size = Size.Add(TargetForm.Size, new Size(4, 4));
                 FakeForm.Size = TargetForm.Size;
                 roundedFormObj.InvalidateNextDrawCall = true;
                 TargetForm.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, TargetForm.Width, TargetForm.Height, (int)(Rounding * 2f), (int)(Rounding * 2f)));
 
-                activating = false;
+                targetFormActivating = false;
             }
         }
     }

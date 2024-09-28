@@ -179,10 +179,66 @@ namespace CuoreUI.Controls
             }
         }
 
-        public bool OutlineStyle { get; set; } = true;
-        public Color OutlineColor { get; set; } = Color.FromArgb(34, 34, 34);
-        public Color CheckedOutlineColor { get; set; } = CuoreUI.Drawing.PrimaryColor;
-        public float OutlineThickness { get; set; } = 1.6f;
+        private bool privateOutlineStyle = true;
+        [Description("The style of the outline.")]
+        public bool OutlineStyle
+        {
+            get
+            {
+                return privateOutlineStyle;
+            }
+            set
+            {
+                privateOutlineStyle = value;
+                Invalidate();
+            }
+        }
+
+        private Color privateOutlineColor = Color.FromArgb(34, 34, 34);
+        [Description("The color of the outline.")]
+        public Color OutlineColor
+        {
+            get
+            {
+                return privateOutlineColor;
+            }
+            set
+            {
+                privateOutlineColor = value;
+                Invalidate();
+            }
+        }
+
+        private Color privateCheckedOutlineColor = CuoreUI.Drawing.PrimaryColor;
+        [Description("The color of the checked outline.")]
+        public Color CheckedOutlineColor
+        {
+            get
+            {
+                return privateCheckedOutlineColor;
+            }
+            set
+            {
+                privateCheckedOutlineColor = value;
+                Invalidate();
+            }
+        }
+
+        private float privateOutlineThickness = 1.6f;
+        [Description("The thickness of the outline.")]
+        public float OutlineThickness
+        {
+            get
+            {
+                return privateOutlineThickness;
+            }
+            set
+            {
+                privateOutlineThickness = value;
+                Invalidate();
+            }
+        }
+
 
         private int thumbX = 2;
 

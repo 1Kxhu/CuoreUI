@@ -38,6 +38,7 @@
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "FakeForm";
+            this.ShowInTaskbar = false;
             this.Text = "FakeForm";
             this.TransparencyKey = System.Drawing.SystemColors.Control;
             this.ResumeLayout(false);

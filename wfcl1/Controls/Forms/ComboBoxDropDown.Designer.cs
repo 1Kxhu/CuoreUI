@@ -44,6 +44,7 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(10)))), ((int)(((byte)(10)))), ((int)(((byte)(10)))));
             this.ClientSize = new System.Drawing.Size(0, 0);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Location = new System.Drawing.Point(-1000, -1000);
             this.Name = "ComboBoxDropDown";
             this.Text = "ComboBoxDropDown";
             this.TopMost = true;

@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
@@ -35,6 +36,20 @@ namespace CuoreUI.Controls
 
         }
 
+        private int privateRounding = 8;
+        public int Rounding
+        {
+            get
+            {
+                return privateRounding;
+            }
+            set
+            {
+                privateRounding = value;
+                Invalidate();
+            }
+        }
+
         public Point symbolsOffset = new Point(0, 1);
 
         protected override void OnPaint(PaintEventArgs e)
@@ -42,10 +57,12 @@ namespace CuoreUI.Controls
             symbolsOffset = new Point(0, 1);
 
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            int RoundingNormalized = Math.Min(Rounding, (int)((Height/2)-1));
 
             RectangleF squareClientRectangle = new RectangleF(OutlineThickness + 0.6f, OutlineThickness + 0.6f, Height - (OutlineThickness * 2) - 1.2f, Height - (OutlineThickness * 2) - 1.2f);
 
-            GraphicsPath roundBackground = Helper.RoundRect(squareClientRectangle, (int)((Height / 2) - OutlineThickness - 0.6f));
+            GraphicsPath roundBackgroundInside = Helper.RoundRect(squareClientRectangle, (int)(RoundingNormalized - OutlineThickness - 0.6f));
+            GraphicsPath roundBackground = Helper.RoundRect(squareClientRectangle, (int)(RoundingNormalized));
 
             using (SolidBrush brush = new SolidBrush(Background))
             {
@@ -60,7 +77,7 @@ namespace CuoreUI.Controls
             {
                 using (SolidBrush brush = new SolidBrush(CheckedForeground))
                 {
-                    e.Graphics.FillEllipse(brush, thumbRect);
+                    e.Graphics.FillPath(brush, roundBackgroundInside);
                 }
 
                 using (Pen outlinePen = new Pen(CheckedOutlineColor, OutlineThickness))
@@ -72,7 +89,7 @@ namespace CuoreUI.Controls
             {
                 using (SolidBrush brush = new SolidBrush(UncheckedForeground))
                 {
-                    e.Graphics.FillEllipse(brush, thumbRect);
+                    e.Graphics.FillPath(brush, roundBackgroundInside);
                 }
 
                 using (Pen outlinePen = new Pen(OutlineColor, OutlineThickness))
