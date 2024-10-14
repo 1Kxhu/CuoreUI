@@ -1,0 +1,394 @@
+@font-face {
+    font-family: 'MiSans'; /* free to use */
+    src: url('./font/MiSans.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    font-family: 'MiSans', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #060606;
+    color: #e0e0e0;
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-image: 
+    linear-gradient(0deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+background-size: 5vh 5vh;
+
+animation: moveBackground 2s linear infinite;
+}
+
+@keyframes moveBackground {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 5vh 5vh;
+    }
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background:linear-gradient(black, transparent);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+header h1 {
+    color: #ff6700;
+    font-size: 28px;
+    transition: color 0.3s ease;
+}
+
+header nav a {
+    color: #e0e0e0;
+    border-radius: 20px;
+    margin-left: 20px;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 10px 15px;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+    position: relative;
+}
+
+header nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0%;
+    height: 0px;
+    background-color: #ff6700;
+    transition: width 0.3s ease;
+}
+
+header nav a:hover::after {
+    width: 100%;
+}
+
+header nav a:hover {
+    background-color: #ff6700;
+    color: white;
+    border-radius: 20px;
+    transform: scale(1.05);
+}
+
+section {
+    text-align: center;
+    padding: 100px 20px;
+    background-color: transparent;
+    margin: 40px auto;
+    border-radius: 15px;
+    max-width: 900px;
+    box-shadow: none;
+    transition: transform 0.3s ease;
+}
+
+
+section:hover {
+    transform: scale(1.02);
+}
+
+section h2 {
+    font-size: 36px;
+    color: #ff6700;
+    margin-bottom: 20px;
+    transition: color 0.3s ease;
+}
+
+section:hover h2 {
+    color: #ff6700;
+}
+
+section p {
+    font-size: 18px;
+    color: #b0b0b0;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+    transition: color 0.3s ease;
+}
+
+.download-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 40px;
+    margin-left: 5px;
+    background-color: #ff6700;
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    font-weight: bold;
+    font-size: 16px;
+    box-shadow: none;
+    margin-right: 5px;
+}
+
+.download-btn:hover {
+    background-color: #e55d00;
+    transform: scale(1.1);
+}
+
+.download-btn:active {
+    transform: scale(0.95);
+}
+
+.github-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 40px;
+    margin-right: 5px;
+    margin-left: 5px;
+    background-color: #353535;
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    font-weight: bold;
+    font-size: 16px;
+    box-shadow: none;
+}
+
+.discord-btn-contact
+{
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 40px;
+    margin-right: 5px;
+    margin-left: 5px;
+    background-color: #5865F2;
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    font-weight: bold;
+    font-size: 16px;
+    box-shadow: none;
+}
+
+.nuget-btn-contact
+{
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 40px;
+    margin-right: 5px;
+    margin-left: 5px;
+    background-color: #0956CC;
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    font-weight: bold;
+    font-size: 16px;
+    box-shadow: none;
+}
+
+.github-btn-contact
+{
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 40px;
+    margin-right: 5px;
+    margin-left: 5px;
+    background-color: #F66A0A;
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    font-weight: bold;
+    font-size: 16px;
+    box-shadow: none;
+}
+
+.github-btn:hover {
+    background-color: #686868;
+    transform: scale(1.1);
+}
+
+.github-btn:active {
+    transform: scale(0.95);
+}
+
+.features {
+    display: flex;
+    justify-content: center;
+    padding: 40px;
+    gap: 20px;
+    flex-wrap: wrap;
+    text-shadow: 0 0 5px #000000;
+}
+
+.feature {
+    flex: 1;
+    margin: 20px;
+    background-color: transparent;
+    text-align: center;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: none;
+    transition: all 0.3s ease, border-color 0s linear;
+    max-width: 250px;
+    border: 1px solid transparent;
+}
+
+.feature:hover {
+    transform: scale(1.05);
+    background-color: #291d135b;
+    border-radius: 10px;
+    animation: fadeToColor 0.5s forwards;
+}
+
+.about-section
+{
+
+    background-color: transparent;
+    text-align: center;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: none;
+    transition: all 0.3s ease, border-color 0s linear;
+    border: 1px solid transparent;
+}
+
+.about-section:hover
+{
+    transform: scale(0.95);
+    background-color: #291d135b;
+    border-radius: 10px;
+    animation: fadeToColor 0.5s forwards;
+}
+
+@keyframes fadeToColor {
+    0% {
+        border-color: white;
+    }
+
+    100% {
+        border-color: #ff6700;
+    }
+}
+
+.feature h3 {
+    color: #e0e0e0;
+    font-size: 20px;
+    margin-bottom: 10px;
+    transition: color 0.3s ease;
+}
+
+.feature:hover h3 {
+    color: #ff6700;
+}
+
+.feature p {
+    color: #b0b0b0;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.feature:hover p {
+    color: #e0e0e0;
+}
+
+footer {
+    text-align: center;
+    padding: 10px 0;
+    background-color: transparent;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    border-top: none;
+    background: linear-gradient(transparent, #000000d7, #000000);
+}
+
+footer p {
+    color: #888;
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+footer p:hover {
+    color: #ff6700;
+}
+
+footer .download-btn {
+    margin-top: 10px;
+    padding: 10px 30px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 10px rgba(255, 103, 0, 0.6);
+    }
+
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 20px rgba(255, 103, 0, 0.8);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 10px rgba(255, 103, 0, 0.6);
+    }
+}
+
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px;
+        background:linear-gradient(black, transparent)
+    }
+
+    header h1 {
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    header nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+    }
+
+    header nav a {
+        margin: 5px;
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+}
+
+.custom-link:link { 
+    color: rgb(156, 156, 156); 
+    transition: all 0.7s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.custom-link:visited { 
+    color: rgb(155, 155, 155); 
+}
+
+.custom-link:hover { 
+    color: white; /* Optional: A slight color change on hover */
+}
+
+.custom-link:active { 
+    color: white; 
+}
