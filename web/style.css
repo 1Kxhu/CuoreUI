@@ -5,11 +5,80 @@
     font-style: normal;
 }
 
-* {
+*
+{
     font-family: 'MiSans', sans-serif;
+}
+
+*::selection {
+    background-color: rgba(255, 255, 255, 0.125); /* Ensure transparency */
+  }
+
+body {
+    font-family: 'Poppins', sans-serif; /* Set Poppins as the default */
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+footer p
+{
+    margin: 0;
+    position: fixed;
+    transform: translateX(calc(50vw - 50%)) translateY(-1vh);
+    
+}
+
+/* When MiSans is loaded, change the font-family */
+.font-loaded {
+    font-family: 'MiSans', sans-serif;
+}
+
+.polish-flag::after {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 16px;
+    border-radius: 4px;
+    background-image: url('assets/polish-flag.svg');
+    background-size: cover;
+    margin-left: 8px;
+    vertical-align: middle;
+    transform: translateX(-38px);
+}   
+
+.pdm-mark::before
+{
+    content: '';
+    display: inline-block;
+    width: 1.4vh;
+    height: 1.4vh;
+    border-radius: 4px;
+    transform: translateY(-0.15vh);
+    background-image: url('assets/no-copyright.svg'); 
+    background-size: cover;
+    margin-left: 8px;
+    vertical-align: middle;
+    opacity: 50%;
+}
+
+.pdm-mark:hover
+{
+    cursor: pointer;
+}
+
+.legal
+{
+    font-size: 1.4vh;
+    color: rgba(255, 255, 255, 0.39);
+    margin-top: 4px;
+    text-align: center;
+    transition: all cubic-bezier(.6,1,.3,1) 0.3s;
+}
+
+.legal:hover
+{
+    color: rgb(255, 255, 255);
 }
 
 body {
@@ -122,6 +191,72 @@ section p {
     margin: 0 auto;
     line-height: 1.6;
     transition: color 0.3s ease;
+}
+
+.tagline-container {
+    display: inline-flex; /* Aligns tagline and button */
+    align-items: center;  /* Vertically centers the content */
+    position: relative; /* Make it relative for absolute positioning */
+}
+
+.tagline-display
+{
+    cursor: pointer; /* Change cursor to pointer */
+    opacity: 66%;
+    transition: all 0.3s ease-in-out;
+}
+
+.tagline-display:hover
+{
+    cursor: pointer; /* Change cursor to pointer */
+    opacity: 88%;
+    transition: all 0.3s ease-in-out;
+}
+
+.refresh-button {
+    cursor: pointer; /* Change cursor to pointer */
+    position: relative; /* For absolute positioning */
+    display: inline-block; /* Makes it clickable */
+    width: 16px; /* Set width */
+    height: 16px; /* Set height */
+    margin-left: 2px; /* Add some spacing */
+    vertical-align: middle; /* Align vertically */
+    background-image: url('assets/reload.svg'); /* Background image */
+    background-size: cover; /* Cover the entire area */
+    opacity: 33%;
+    transition: all 0.3s ease-in-out;
+}
+
+.refresh-button:hover {
+    opacity: 66%;
+    animation: rotate 0.75s cubic-bezier(.3,0,.2,1);
+}
+
+@keyframes rotate {
+    0% {
+        rotate: 0deg;
+    }
+    100% {
+        rotate: 360deg;
+    }
+}
+
+.pulsing-text
+{
+    animation: price-pulse 1.33s infinite cubic-bezier(0.5, 1, 0.5, 1);
+}
+
+@keyframes price-pulse
+{
+    0% {
+        text-shadow: 0 0 0 #000000;
+    }
+    50% {
+        text-shadow: 0 0 5vh #ff730086;
+    }
+    100% {
+        text-shadow: 0 0 0 #ffffff00;
+    }
 }
 
 .download-btn {
@@ -251,7 +386,7 @@ section p {
     transform: scale(1.05);
     background-color: #291d135b;
     border-radius: 10px;
-    animation: fadeToColor 0.5s forwards;
+    animation: fadeToColor 0.5s forwards ease-out, price-pulse 0.5s forwards cubic-bezier(0.5, 1, 0.5, 1);
 }
 
 .about-section
@@ -373,6 +508,21 @@ footer .download-btn {
         margin: 5px;
         font-size: 14px;
         padding: 8px 12px;
+    }
+
+    body {
+        background-color: #000000; /* might sound stupid but: oled */
+        color: #e0e0e0;
+        margin: 0;
+        padding: 0;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background-image: none;
+    background-size: 5vh 5vh;
+    
+    animation: moveBackground 2s linear infinite;
     }
 }
 
