@@ -1,19 +1,13 @@
-﻿using CuoreUI.Components;
-using CuoreUI.Properties;
+﻿using CuoreUI.Properties;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CuoreUI.Controls
 {
+    [ToolboxBitmap(typeof(Form))]
+
     public partial class cuiResizeGrip : UserControl
     {
         Point lastMousePoint = new Point(-1, -1);
@@ -31,6 +25,35 @@ namespace CuoreUI.Controls
             }
         }
 
+        private Color privateGripColor = Color.White;
+        public Color GripColor
+        {
+            get
+            {
+                return privateGripColor;
+            }
+            set
+            {
+                privateGripColor = value;
+
+                if (GripTexture == false)
+                {
+                    return;
+                }
+
+                if (TintedGrip != null)
+                {
+                    TintedGrip.Dispose();
+                }
+
+                TintedGrip = Drawing.Imaging.TintBitmap(Resources.grip, value);
+
+                Refresh();
+            }
+        }
+
+        Image TintedGrip = null;
+
         private bool privateGripTexture = true;
         public bool GripTexture
         {
@@ -41,17 +64,7 @@ namespace CuoreUI.Controls
             set
             {
                 privateGripTexture = value;
-
-                if (value == true)
-                {
-                    BackgroundImage = Resources.gripTexture;
-                }
-                else
-                {
-                    BackgroundImage = null;
-                }
-
-                Invalidate();
+                Refresh();
             }
         }
 
@@ -65,11 +78,18 @@ namespace CuoreUI.Controls
         public cuiResizeGrip()
         {
             InitializeComponent();
-            BackgroundImageLayout = ImageLayout.Center;
+
             Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             dragTimer.Tick += DragTimer_Tick;
-            Size = new Size(24,24);
+            Size = new Size(24, 24);
             Cursor = Cursors.SizeNWSE;
+
+            Timer refreshTimer = new Timer();
+            refreshTimer.Interval = 1000;
+            refreshTimer.Start();
+            refreshTimer.Tick += (e, s) => {
+                dragTimer.Interval = 1000 / CuoreUI.Drawing.GetHighestRefreshRate();
+            };
         }
 
         private void DragTimer_Tick(object sender, EventArgs e)
@@ -95,12 +115,12 @@ namespace CuoreUI.Controls
                     lastMousePoint = currentMousePoint;
                     TargetForm.Size = Size.Subtract(TargetForm.Size, (Size)mouseDelta);
 
-            
+
                 }
             }
             catch (NullReferenceException)
             {
-                
+
             }
         }
 
@@ -118,13 +138,23 @@ namespace CuoreUI.Controls
 
             lastMousePoint = new Point(-1, -1);
 
-            dragTimer.Interval = (int)(1000 / (double)CuoreUI.Drawing.GetHighestRefreshRate());
+            dragTimer.Interval = 1000 / CuoreUI.Drawing.GetHighestRefreshRate();
             dragTimer.Stop();
             dragTimer.Start();
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
+            if (Size != new Size(21, 21))
+            {
+                Size = new Size(21, 21);
+            }
+
+            if (GripTexture)
+            {
+                e.Graphics.DrawImage(TintedGrip, ClientRectangle);
+            }
+
             base.OnPaint(e);
             if (TargetForm != null)
             {

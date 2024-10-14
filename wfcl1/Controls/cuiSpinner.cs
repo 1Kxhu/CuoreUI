@@ -1,12 +1,13 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using static CuoreUI.Drawing;
 
 namespace CuoreUI.Controls
 {
+    [ToolboxBitmap(typeof(BackgroundWorker))]
     public partial class cuiSpinner : UserControl
     {
         Timer designerExclusiveRotationTimer = new Timer();

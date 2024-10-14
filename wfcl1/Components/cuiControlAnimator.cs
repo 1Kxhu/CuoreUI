@@ -7,6 +7,7 @@ using static CuoreUI.Drawing;
 
 namespace CuoreUI.Components
 {
+    [ToolboxBitmap(typeof(TrackBar))]
     public partial class cuiControlAnimator : Component
     {
         public cuiControlAnimator()

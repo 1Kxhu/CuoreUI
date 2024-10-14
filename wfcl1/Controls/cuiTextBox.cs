@@ -6,6 +6,7 @@ using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using static CuoreUI.Drawing;
 
+[ToolboxBitmap(typeof(TextBox))]
 [DefaultEvent("ContentChanged")]
 public class cuiTextBox : UserControl
 {
@@ -24,6 +25,7 @@ public class cuiTextBox : UserControl
     }
 
     private string privateContent = "Text here!";
+
     public string Content
     {
         get
@@ -63,7 +65,7 @@ public class cuiTextBox : UserControl
         };
         caretBlinkTimer.Start();
 
-        FrameDrawn += (e, s) => 
+        FrameDrawn += (e, s) =>
         {
             if (!Focused)
             {
@@ -162,7 +164,7 @@ public class cuiTextBox : UserControl
             Invalidate();
         }
     }
-    
+
     private Color privateFocusedBackground = Color.FromArgb(100, 34, 34, 34);
     [Description("Only used when DesignStyle is set to Full")]
     public Color FocusedBackground

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Windows.Forms;
 
 namespace CuoreUI
@@ -32,7 +34,8 @@ namespace CuoreUI
 
         public static int GetHighestRefreshRate()
         {
-            return Helper.GetHighestRefreshRate();
+            // 1000 max, 1 minimum, a simple "1000 / 1001" or "1000 / 0" may crash the whole app
+            return Math.Min(Math.Max(1, Helper.GetHighestRefreshRate()), 1000);
         }
 
         public class TimeDeltaInstance
@@ -54,9 +57,12 @@ namespace CuoreUI
             }
         }
 
+        static Timer refreshRefresher = new Timer();
+
         private static void SetTimerRefreshRate()
         {
             RefreshRateTimer.Interval = 1000 / GetHighestRefreshRate();
+
             if (!RefreshRateTimer.Enabled)
             {
                 RefreshRateTimer.Start();
@@ -65,26 +71,81 @@ namespace CuoreUI
                     FrameDrawn?.Invoke(null, EventArgs.Empty);
                 };
             }
+
+            if (!refreshRefresher.Enabled)
+            {
+                refreshRefresher.Interval = 1000;
+                refreshRefresher.Start();
+                refreshRefresher.Tick += (sender, args) =>
+                {
+                    RefreshRateTimer.Interval = 1000 / GetHighestRefreshRate();
+                };
+            }
         }
 
-        public static class ImageBlurs
+        public static class Imaging
         {
-            public static class GaussianBlur
+            public static Bitmap TintBitmap(Bitmap originalBitmap, Color tintColor)
             {
-                public unsafe static void Apply(ref Bitmap bitmap, float radius)
+                if (originalBitmap == null)
                 {
-                    Blurs.GaussianBlur.Apply(ref bitmap, radius);
+                    return null;
                 }
+
+                Bitmap tintedBitmap = new Bitmap(originalBitmap.Width, originalBitmap.Height);
+
+                using (Graphics graphics = Graphics.FromImage(tintedBitmap))
+                {
+                    graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                    graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                    graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                    float r = tintColor.R / 255f;
+                    float g = tintColor.G / 255f;
+                    float b = tintColor.B / 255f;
+                    float a = tintColor.A / 255f;
+
+                    ColorMatrix colorMatrix = new ColorMatrix(new float[][]
+                    {
+                    new float[]{ r, 0, 0, 0, 0 },
+                      new float[]{0, g, 0, 0, 0 },
+                      new float[]{0, 0, b, 0, 0 },
+                      new float[]{0, 0, 0, a, 0 },
+                      new float[]{0, 0, 0, 0, 1 }
+                    });
+
+                    ImageAttributes imageAttributes = new ImageAttributes();
+                    imageAttributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+
+                    graphics.DrawImage(originalBitmap, new Rectangle(0, 0, originalBitmap.Width, originalBitmap.Height),
+                                0, 0, originalBitmap.Width, originalBitmap.Height,
+                                GraphicsUnit.Pixel, imageAttributes);
+                }
+
+                return tintedBitmap;
             }
 
-            public static class QuadraticBlur
+            public static class ImageBlurs
             {
-                public unsafe static void Apply(ref Bitmap bitmap, float radius)
+                public static class GaussianBlur
                 {
-                    Blurs.QuadraticBlur.Apply(ref bitmap, radius);
+                    public unsafe static void Apply(ref Bitmap bitmap, float radius)
+                    {
+                        Blurs.GaussianBlur.Apply(ref bitmap, radius);
+                    }
+                }
+
+                public static class QuadraticBlur
+                {
+                    public unsafe static void Apply(ref Bitmap bitmap, float radius)
+                    {
+                        Blurs.QuadraticBlur.Apply(ref bitmap, radius);
+                    }
                 }
             }
         }
+
+
 
         public enum EasingTypes
         {

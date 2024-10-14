@@ -8,6 +8,7 @@ using static System.Windows.Forms.TabControl;
 
 namespace CuoreUI.Controls
 {
+    [ToolboxBitmap(typeof(TabControl))]
     public partial class cuiTabControlExperimental : UserControl
     {
         private readonly cuiTabControl tabControl = new cuiTabControl();

@@ -4,6 +4,7 @@ using System.Windows.Forms;
 
 namespace CuoreUI.Controls
 {
+    [ToolboxBitmap(typeof(SplitContainer))]
     public partial class cuiSeparator : UserControl
     {
         public cuiSeparator()

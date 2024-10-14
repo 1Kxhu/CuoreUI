@@ -8,6 +8,7 @@ using System.Windows.Forms;
 
 namespace CuoreUI.Controls
 {
+    [ToolboxBitmap(typeof(ComboBox))]
     public partial class cuiComboBox : UserControl
     {
         private string privateSelectedItem = string.Empty;
@@ -23,6 +24,8 @@ namespace CuoreUI.Controls
                 Invalidate();
             }
         }
+
+        DateTime lastClosed = DateTime.MinValue;
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string SelectedItem
@@ -56,10 +59,38 @@ namespace CuoreUI.Controls
             timer.Tick += Timer_Tick;
             timer.Start();
 
-            Timer dropdownmovetimer = new Timer();
-            dropdownmovetimer.Interval = 10;
-            dropdownmovetimer.Tick += dropdownmove;
-            dropdownmovetimer.Start();
+            Drawing.FrameDrawn += dropdownmove;
+
+            GlobalMouseHook.OnGlobalMouseClick += HandleGlobalMouseClick; // Subscribe to global mouse clicks
+        }
+
+        private void HandleGlobalMouseClick()
+        {
+            if (DesignMode || tempdropdown == null)
+            {
+                return;
+            }
+
+            // Check if the mouse click is outside this control
+            Point mousePosition = Control.MousePosition;
+            bool flag1 = this.Bounds.Contains(mousePosition) == false;
+            bool flag2 = tempdropdown?.Bounds.Contains(mousePosition) == false; 
+            if (flag1 && flag2)
+            {
+                CloseDropDown(null, EventArgs.Empty);
+                lastClosed = DateTime.Now;
+                Refresh();
+            }
+
+            if (GlobalMouseHook.isHooked)
+            {
+                GlobalMouseHook.Stop();
+            }
+            Refresh();
+            if (GlobalMouseHook.isHooked)
+            {
+                GlobalMouseHook.Stop();
+            }
         }
 
         private void dropdownmove(object sender, EventArgs e)
@@ -351,9 +382,12 @@ namespace CuoreUI.Controls
             DropDown.Show();
 
             DropDown.cuiFormRounder1.TargetForm.Invalidate();
+
+            GlobalMouseHook.Start();
         }
         private void CloseDropDown(object sender, EventArgs e)
         {
+
             if (tempdropdown != null)
             {
                 tempdropdown.Close();
@@ -365,8 +399,14 @@ namespace CuoreUI.Controls
                 isBrowsingOptions = false;
                 Refresh();
             }
-            else if (sender is null)
+            else if (sender is null) 
+            // null sender means either something REALLY wants to close it
+            // or the user had clicked off of the dropdown menu and/or control
             {
+                if ((lastClosed - DateTime.Now).Seconds < 1)
+                {
+                    return;
+                }
                 isBrowsingOptions = false;
                 Refresh();
             }
@@ -374,6 +414,7 @@ namespace CuoreUI.Controls
             {
                 throw new Exception($"Invalid sender\n{sender}");
             }
+            GlobalMouseHook.Stop();
         }
 
         ComboBoxDropDown tempdropdown;

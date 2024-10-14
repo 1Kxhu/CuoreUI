@@ -5,6 +5,7 @@ using System.Windows.Forms;
 
 namespace CuoreUI.Components
 {
+    [ToolboxBitmap(typeof(Panel))]
     public partial class cuiControlBlur : Component
     {
         private Bitmap cachedBitmap;
@@ -93,7 +94,7 @@ namespace CuoreUI.Components
                     privateTargetControl.DrawToBitmap(cachedBitmap, new Rectangle(0, 0, privateTargetControl.Width, privateTargetControl.Height));
 
                     //GaussianBlur.Apply(ref cachedBitmap, BlurAmount);
-                    Drawing.ImageBlurs.QuadraticBlur.Apply(ref cachedBitmap, BlurAmount);
+                    Drawing.Imaging.ImageBlurs.QuadraticBlur.Apply(ref cachedBitmap, BlurAmount);
 
                 }
             }

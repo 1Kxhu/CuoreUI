@@ -7,6 +7,7 @@ using System.Windows.Forms;
 
 namespace CuoreUI.Controls
 {
+    [ToolboxBitmap(typeof(Button))]
     [DefaultEvent("Click")]
     public partial class cuiButtonGroup : UserControl
     {

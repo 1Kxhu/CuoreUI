@@ -8,6 +8,7 @@ using static CuoreUI.Drawing;
 
 namespace CuoreUI.Controls
 {
+    [ToolboxBitmap(typeof(ProgressBar))]
     [DefaultEvent("Click")]
     public partial class cuiSwitch : UserControl
     {

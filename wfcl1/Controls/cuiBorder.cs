@@ -4,6 +4,7 @@ using System.Windows.Forms;
 
 namespace CuoreUI.Controls
 {
+    [ToolboxBitmap(typeof(Panel))]
     public partial class cuiBorder : Panel
     {
         public cuiBorder()

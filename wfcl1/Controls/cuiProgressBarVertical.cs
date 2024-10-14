@@ -5,6 +5,8 @@ using System.Windows.Forms;
 
 namespace CuoreUI.Controls
 {
+    [ToolboxBitmap(typeof(ProgressBar))]
+
     public partial class cuiProgressBarVertical : cuiProgressBarHorizontal
     {
         public cuiProgressBarVertical()

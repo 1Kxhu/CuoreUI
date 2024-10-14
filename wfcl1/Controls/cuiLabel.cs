@@ -5,6 +5,7 @@ using System.Windows.Forms;
 
 namespace CuoreUI.Controls
 {
+    [ToolboxBitmap(typeof(Label))]
     public partial class cuiLabel : UserControl
     {
         public cuiLabel()

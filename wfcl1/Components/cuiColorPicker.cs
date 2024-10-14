@@ -12,6 +12,7 @@ using System.Windows.Forms;
 
 namespace CuoreUI.Components
 {
+    [ToolboxBitmap(typeof(ColorDialog))]
     public partial class cuiColorPicker : Component
     {
         private ColorPickerForm PickerForm;

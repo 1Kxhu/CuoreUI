@@ -11,6 +11,7 @@ using System.Windows.Forms;
 
 namespace CuoreUI.Controls
 {
+    [ToolboxBitmap(typeof(ColorDialog))]
     public partial class ColorPickerWheel : cuiPictureBox
     {
         Point lastClickPosition = new Point(-8, -8);

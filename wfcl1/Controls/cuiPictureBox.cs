@@ -6,6 +6,7 @@ using System.Windows.Forms;
 
 namespace CuoreUI.Controls
 {
+    [ToolboxBitmap(typeof(PictureBox))]
     public partial class cuiPictureBox : UserControl
     {
         public cuiPictureBox()

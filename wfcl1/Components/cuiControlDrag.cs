@@ -5,6 +5,7 @@ using System.Windows.Forms;
 
 namespace CuoreUI
 {
+    [ToolboxBitmap(typeof(Button))]
     public partial class cuiControlDrag : Component
     {
         private Control targetControl;

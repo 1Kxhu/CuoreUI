@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Security.Permissions;
 using System.Windows.Forms;
 
 namespace CuoreUI.Controls
 {
+    [ToolboxBitmap(typeof(HScrollBar))]
     public partial class cuiScrollbarHorizontal : Control
     {
         private int thumbWidth;

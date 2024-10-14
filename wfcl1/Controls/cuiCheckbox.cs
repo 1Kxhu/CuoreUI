@@ -5,6 +5,7 @@ using System.Windows.Forms;
 
 namespace CuoreUI.Controls
 {
+    [ToolboxBitmap(typeof(CheckBox))]
     public partial class cuiCheckbox : cuiSwitch
     {
         public cuiCheckbox()

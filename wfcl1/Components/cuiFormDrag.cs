@@ -1,10 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace CuoreUI
 {
+    [ToolboxBitmap(typeof(Form))]
     public partial class cuiFormDrag : Component
     {
         private Form targetForm;

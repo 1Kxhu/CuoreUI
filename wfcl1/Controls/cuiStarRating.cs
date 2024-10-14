@@ -4,6 +4,7 @@ using System.Windows.Forms;
 
 namespace CuoreUI.Controls
 {
+    [ToolboxBitmap(typeof(ToolTip))]
     public partial class cuiStarRating : Control
     {
         public cuiStarRating()

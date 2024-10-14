@@ -5,9 +5,9 @@ using System.Windows.Forms;
 
 namespace CuoreUI.Controls
 {
+    [ToolboxBitmap(typeof(ListBox))]
     public partial class cuiListbox : ListBox
     {
-        Timer refreshTimer;
         public cuiListbox()
         {
             InitializeComponent();
@@ -20,11 +20,8 @@ namespace CuoreUI.Controls
             ItemHeight = 34;
             ForeColor = Color.FromArgb(84, 84, 84);
             SelectionMode = SelectionMode.One;
-            refreshTimer = new Timer();
-            refreshTimer.Interval = 25;
-            refreshTimer.Start();
-            refreshTimer.Tick += RefreshTimer_Tick;
-            Font = new Font("Microsoft YaHei UI", 9, FontStyle.Bold);
+            Drawing.FrameDrawn += RefreshTimer_Tick;
+            Font = new Font("Microsoft YaHei UI", 9, FontStyle.Regular);
         }
 
         private void RefreshTimer_Tick(object sender, EventArgs e)
