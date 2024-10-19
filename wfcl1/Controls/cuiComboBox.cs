@@ -474,7 +474,7 @@ namespace CuoreUI.Controls
         public Color ButtonHoverBackground
         {
             get; set;
-        } = Color.FromArgb(200, 255, 127, 80);
+        } = Color.FromArgb(200, 255, 106, 0);
 
         public Color ButtonPressedBackground
         {

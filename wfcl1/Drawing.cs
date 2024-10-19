@@ -9,7 +9,7 @@ namespace CuoreUI
 {
     public static class Drawing
     {
-        public static readonly Color PrimaryColor = Color.Coral;
+        public static readonly Color PrimaryColor = Color.FromArgb(255, 106, 0);
         public static Color TranslucentPrimaryColor
         {
             get

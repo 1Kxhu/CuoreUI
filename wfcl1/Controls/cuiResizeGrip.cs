@@ -52,7 +52,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        Image TintedGrip = null;
+        Image TintedGrip = Resources.grip; // previously null, caused an error when added at first
 
         private bool privateGripTexture = true;
         public bool GripTexture
@@ -150,12 +150,11 @@ namespace CuoreUI.Controls
                 Size = new Size(21, 21);
             }
 
-            if (GripTexture)
+            if (GripTexture || TintedGrip != null)
             {
                 e.Graphics.DrawImage(TintedGrip, ClientRectangle);
             }
 
-            base.OnPaint(e);
             if (TargetForm != null)
             {
                 Location = new Point(TargetForm.Size.Width - Width, TargetForm.Size.Height - Height);

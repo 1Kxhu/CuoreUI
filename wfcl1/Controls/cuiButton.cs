@@ -69,7 +69,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private Color privateHoverBackground = Color.FromArgb(200, 255, 127, 80);
+        private Color privateHoverBackground = Color.FromArgb(200, 255, 106, 0);
         public Color HoverBackground
         {
             get
@@ -265,7 +265,8 @@ namespace CuoreUI.Controls
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
             e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
             Rectangle modifiedCR = ClientRectangle;
-            modifiedCR.Inflate(-1, -1);
+            modifiedCR.Width -= 1;
+            modifiedCR.Height -= 1;
 
             GraphicsPath roundBackground = Helper.RoundRect(modifiedCR, Rounding);
 

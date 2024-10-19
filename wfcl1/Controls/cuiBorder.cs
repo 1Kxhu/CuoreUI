@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
@@ -12,6 +13,12 @@ namespace CuoreUI.Controls
             InitializeComponent();
             DoubleBuffered = true;
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+        }
+
+        protected override void OnResize(EventArgs eventargs)
+        {
+            base.OnResize(eventargs);
+            Refresh();
         }
 
         private Color privatePanelColor = CuoreUI.Drawing.PrimaryColor;
@@ -76,7 +83,8 @@ namespace CuoreUI.Controls
             base.OnPaint(e);
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
             Rectangle modifiedCR = ClientRectangle;
-            modifiedCR.Inflate(-1, -1);
+            modifiedCR.Width -= 1;
+            modifiedCR.Height -= 1;
 
             GraphicsPath roundBackground = Helper.RoundRect(modifiedCR, Rounding);
             using (SolidBrush brush = new SolidBrush(PanelColor))

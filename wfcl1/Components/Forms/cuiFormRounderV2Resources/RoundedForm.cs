@@ -30,6 +30,18 @@ namespace CuoreUI.Components.cuiFormRounderV2Resources
             }
         }
 
+        private Image privateBackgroundImage;
+        public Image BackgroundImageOfTargetForm
+        {
+            get => privateBackgroundImage;
+            set
+            {
+                privateBackgroundImage?.Dispose();
+                privateBackgroundImage = value;
+                DrawForm(null, EventArgs.Empty);
+            }
+        }
+
         public Color BackgroundColor
         {
             get => privateBackgroundColor;
@@ -122,7 +134,25 @@ namespace CuoreUI.Components.cuiFormRounderV2Resources
                 {
                     backGraphics.SmoothingMode = SmoothingMode.AntiAlias;
                     backGraphics.DrawPath(new Pen(BackgroundColor, 1.6f), fillinoutlinePath);
-                    backGraphics.FillPath(brush, roundedRectangle);
+
+                    if (BackgroundImageOfTargetForm == null)
+                    {
+                        backGraphics.FillPath(brush, roundedRectangle);
+                    }
+                    else
+                    {
+                        try
+                        {
+                            backgroundImageTextureBrush = new TextureBrush(BackgroundImageOfTargetForm);
+                            backgroundImageTextureBrush.WrapMode = WrapMode.Clamp;
+                        }
+                        catch
+                        {
+
+                        }
+                        backGraphics.FillPath(backgroundImageTextureBrush, roundedRectangle); //experimental
+                    }
+
                     backGraphics.DrawPath(pen, roundedRectangle);
                     backGraphics.SmoothingMode = SmoothingMode.None;
                 }
@@ -142,6 +172,8 @@ namespace CuoreUI.Components.cuiFormRounderV2Resources
                 ResumeLayout();
             }
         }
+
+        TextureBrush backgroundImageTextureBrush = null;
 
         protected override void OnPaint(PaintEventArgs e)
         {

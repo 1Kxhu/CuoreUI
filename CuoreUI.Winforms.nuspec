@@ -2,13 +2,13 @@
 <package>
   <metadata>
     <id>CuoreUI.Winforms</id>
-    <version>2024.9.28</version>
+    <version>2024.10.20</version>
     <authors>itzkxhu</authors>
     <owners>itzkxhu</owners>
-    <description>A Modern Winforms Library: The FREE Guna/Bunifu.</description>
+    <description>THE Free WinForms UI/UX Library.</description>
     <icon>icon.png</icon>
     <license type="expression">Unlicense</license>
-    <tags>winforms modern ui theme bunifu guna cuoreui</tags>
+    <tags>winforms modern ui telerik siticone cui theme bunifu guna cuoreui</tags>
     <repository type="git" url="https://github.com/1Kxhu/CuoreUI" />
   </metadata>
   <files>

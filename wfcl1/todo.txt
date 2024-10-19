@@ -1,2 +1,1 @@
-﻿better textbox that actually supports selecting regions of text
-make CuoreUI property (properties window) belong to section "CuoreUI"
+﻿device info retrieval (cpus, gpus, ram sticks, disks, os name, os architecture)

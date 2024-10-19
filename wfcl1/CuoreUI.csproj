@@ -50,9 +50,7 @@
     <Compile Update="Controls\cuiPictureBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="Controls\cuiScrollbar.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Update="Controls\cuiScrollbar.cs" />
     <Compile Update="Controls\cuiSeparator.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -113,6 +111,7 @@
     <PackageReference Include="Costura.Fody" Version="5.7.0" />
     <PackageReference Include="ExCSS" Version="4.2.3" />
     <PackageReference Include="Fody" Version="6.5.5" />
+    <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.5" />
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2535.41" />
     <PackageReference Include="NuGet.Build.Tasks.Pack" Version="6.10.1" />
     <PackageReference Include="Svg" Version="3.4.7" />

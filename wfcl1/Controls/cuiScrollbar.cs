@@ -6,7 +6,7 @@ using System.Windows.Forms;
 namespace CuoreUI.Controls
 {
     [ToolboxBitmap(typeof(VScrollBar))]
-    public partial class cuiScrollbar : Control
+    public partial class cuiScrollbar : Panel
     {
         private int thumbHeight;
         private ScrollableControl targetControl;
@@ -177,10 +177,20 @@ namespace CuoreUI.Controls
                 Invalidate();
             }
         }
+
+
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+            if (targetControl is cuiDataGridView gridview && gridview.Controls.Contains(this) == false && DesignMode == false)
+            {
+                gridview.Controls.Add(this);
+            }
+            else
+            {
+            }
 
             if (targetControl != null)
             {
@@ -236,6 +246,15 @@ namespace CuoreUI.Controls
             }
         }
 
+        protected override void OnMouseLeave(EventArgs e)
+        {
+            base.OnMouseLeave(e);
+            isThumbPressed = false;
+            Capture = false;
+            isThumbHovered = false;
+
+            Refresh();
+        }
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);

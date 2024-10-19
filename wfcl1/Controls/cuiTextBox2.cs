@@ -20,7 +20,7 @@ namespace CuoreUI.Controls
     public partial class cuiTextBox2 : UserControl
     {
         private Color privateBorderColor = Color.FromArgb(64, 64, 64);
-        private Color privateBorderFocusColor = Color.Coral;
+        private Color privateBorderFocusColor = Color.FromArgb(255, 106, 0);
         private int privateBorderSize = 1;
         private bool privateUnderlinedStyle = false;
         private bool privateIsFocused = false;

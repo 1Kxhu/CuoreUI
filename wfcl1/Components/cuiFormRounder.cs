@@ -35,11 +35,22 @@ namespace CuoreUI.Components
                 TargetForm.VisibleChanged += TargetForm_VisibleChanged;
                 TargetForm.BackColorChanged += TargetForm_BackColorChanged;
                 TargetForm.Activated += TargetForm_Activated;
+                TargetForm.ResizeEnd += (_, __) =>
+                {
+                    UpdateRoundedFormBitmap();
+                };
 
                 FakeForm.Activated += FakeForm_Activated;
                 FakeForm.FormClosing += TargetForm_FormClosing;
             }
         }
+
+        [Description("At cost of higher cpu/ram usage, fills out the 2px bevel around the form. False by default.")]
+        public bool ExperimentalBackground
+        {
+            get;
+            set;
+        } = false;
 
         bool targetFormActivating = false;
 
@@ -230,12 +241,107 @@ namespace CuoreUI.Components
         private const uint SWP_NOACTIVATE = 0x0010;
         private static readonly IntPtr HWND_TOP = new IntPtr(0);
 
+        private Bitmap originalBitmap;
+        private Bitmap stretchedBitmap;
+        private Graphics gOriginal;
+        private Graphics gStretched;
+
+
+        public void InitializeCaptureResources()
+        {
+            if (TargetForm == null || TargetForm.IsDisposed || targetFormActivating || roundedFormObj == null || TargetForm?.Bounds == null)
+            {
+                return;
+            }
+
+            Rectangle formRectangle = TargetForm.Bounds;
+
+            originalBitmap?.Dispose();
+            stretchedBitmap?.Dispose();
+
+            // Reuse the bitmap and graphics objects
+            originalBitmap = new Bitmap(formRectangle.Width, formRectangle.Height);
+            stretchedBitmap = new Bitmap(formRectangle.Width + 4, formRectangle.Height + 4);
+
+
+            gOriginal?.Dispose();
+            gStretched?.Dispose();
+
+            gOriginal = Graphics.FromImage(originalBitmap);
+            gStretched = Graphics.FromImage(stretchedBitmap);
+
+        }
+
+        public void CaptureForm()
+        {
+            if (TargetForm == null || TargetForm.IsDisposed || ExperimentalBackground)
+            {
+                return;
+            }
+
+            try
+            {
+
+
+                // Get the form's dimensions
+                Rectangle formRectangle = TargetForm.Bounds;
+
+                // Clear the original bitmap before drawing
+                gOriginal.Clear(Color.Transparent);
+
+                // Capture the form from the screen
+                gOriginal.CopyFromScreen(formRectangle.Location + new Size(1, 1), Point.Empty, formRectangle.Size - new Size(2, 2));
+
+                // Clear the stretched bitmap before drawing
+                gStretched.Clear(Color.Transparent);
+
+                // Draw the original image into the stretched bitmap, resizing it
+                gStretched.DrawImage(originalBitmap, new Rectangle(-1, -1, formRectangle.Width + 7, formRectangle.Height + 7));
+
+                originalBitmap.Dispose();
+                roundedFormObj.BackgroundImageOfTargetForm?.Dispose();
+                roundedFormObj.BackgroundImageOfTargetForm = stretchedBitmap;
+                stretchedBitmap?.Dispose();
+
+                GC.Collect();
+            }
+            catch
+            {
+            }
+        }
+
+        public void DisposeCaptureResources()
+        {
+            gOriginal?.Dispose();
+            gStretched?.Dispose();
+            originalBitmap?.Dispose();
+            stretchedBitmap?.Dispose();
+        }
+
+        internal void UpdateRoundedFormBitmap()
+        {
+            if (DesignMode || TargetForm == null || roundedFormObj == null || ExperimentalBackground)
+            {
+                return;
+            }
+
+            if ((TargetForm == null || TargetForm.IsDisposed) == false)
+            {
+                CaptureForm();
+            }
+        }
 
         [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
         private static extern IntPtr CreateRoundRectRgn(int nLeftRect, int nTopRect, int nRightRect, int nBottomRect, int nWidthEllipse, int nHeightEllipse);
 
         private void TargetForm_Load(object sender, EventArgs e)
         {
+            if (ExperimentalBackground)
+            {
+                InitializeCaptureResources();
+                UpdateRoundedFormBitmap();
+            }
+
             // initialize rounding
             FakeForm_Activated(sender, e);
 
@@ -252,10 +358,21 @@ namespace CuoreUI.Components
             TargetForm_LocationChanged(this, EventArgs.Empty);
             TargetForm_Resize(this, EventArgs.Empty);
 
+            if (ExperimentalBackground)
+            {
+                InitializeCaptureResources();
+            }
+
             // this may be a bad approach, but i will leave it like so, because it WORKS
             Timer miscTimer = new Timer { Interval = 1000 };
             miscTimer.Tick += (a1, a2) =>
             {
+                if (ExperimentalBackground)
+                {
+                    InitializeCaptureResources();
+                    UpdateRoundedFormBitmap();
+                }
+
                 if (!DesignMode && !shouldCloseDown && TargetForm != null)
                 {
                     // if windowstate has changed, update the region and other forms' windowstates
@@ -278,12 +395,24 @@ namespace CuoreUI.Components
             };
             miscTimer.Start();
 
+            if (ExperimentalBackground)
+            {
+                UpdateRoundedFormBitmap();
+            }
+
             // Drawing.FrameDrawn is called every 1000/hz milliseconds
             // where hz stands for the maximum refresh rate recorded from all display devices
             Drawing.FrameDrawn += (e2, s2) =>
             {
+
                 if (roundedFormObj != null && shouldCloseDown == false)
                 {
+                    if (stretchedBitmap == null && ExperimentalBackground)
+                    {
+                        InitializeCaptureResources();
+                        UpdateRoundedFormBitmap();
+                    }
+
                     try
                     {
                         // if windowstate has changed we want to update it for other forms too
@@ -327,6 +456,7 @@ namespace CuoreUI.Components
                 {
                     // either roundedFormObj is null or "stop" is true
                     // stop is true when the form had announced it wants to close (see TargetForm_FormClosing)
+                    DisposeCaptureResources();
                     Dispose();
                 }
             };
@@ -334,10 +464,14 @@ namespace CuoreUI.Components
 
         FormWindowState lastState;
 
+        bool resizing = false;
+
         private void TargetForm_Resize(object sender, EventArgs e)
         {
             if (roundedFormObj != null && TargetForm != null)
             {
+                resizing = true;
+
                 // If windowstate has changed, set said windowstate value to all the other forms
                 if (TargetForm.WindowState != lastState)
                 {
@@ -351,10 +485,23 @@ namespace CuoreUI.Components
                 // Updates rounding if needed, too
                 roundedFormObj.Size = Size.Add(TargetForm.Size, new Size(4, 4));
                 FakeForm.Size = TargetForm.Size;
+
+                if (ExperimentalBackground)
+                {
+                    InitializeCaptureResources();
+                }
+
                 roundedFormObj.InvalidateNextDrawCall = true;
+
+                if (ExperimentalBackground)
+                {
+                    UpdateRoundedFormBitmap();
+                }
+
                 TargetForm.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, TargetForm.Width, TargetForm.Height, (int)(Rounding * 2f), (int)(Rounding * 2f)));
 
                 targetFormActivating = false;
+                resizing = false;
             }
         }
     }

@@ -187,7 +187,8 @@ namespace CuoreUI.Controls
             Rectangle backgroundRect = cr;
             backgroundRect.Inflate(5, 5);
             backgroundRect.Offset(-1, -1);
-            cr.Inflate(-1, -1);
+            cr.Width -= 1;
+            cr.Height -= 1;
 
             g.FillRectangle(new SolidBrush(BackColor), backgroundRect);
 
