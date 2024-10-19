@@ -195,7 +195,7 @@ document.querySelector('.tagline-display').addEventListener('click', () => {
         
                 totalDownloads = data.data[0].totalDownloads;
 
-                const releaseDate = new Date(2024, 7, 4);
+                const releaseDate = new Date(2024, 6, 4); // javascript i hate you so fucking much why does your month index start at 0
                 const nowVersusThen = Date.now() - releaseDate;
 
                 const millisecondsPerDay = 1000 * 60 * 60 * 24;  // milliseconds to days
