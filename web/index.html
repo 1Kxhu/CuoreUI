@@ -203,7 +203,7 @@ document.querySelector('.tagline-display').addEventListener('click', () => {
 
                 console.log(`${daysSinceRelease} days since release.`);
 
-                perDayAverage = Math.floor(totalDownloads / daysSinceRelease);
+                perDayAverage = Math.ceiling(totalDownloads / daysSinceRelease);
         
                 console.log(`${perDayAverage} per day average.`);
                 console.log(`fetched downloads count! ${totalDownloads} total downloads!`);
