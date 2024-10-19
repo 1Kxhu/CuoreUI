@@ -201,6 +201,8 @@ document.querySelector('.tagline-display').addEventListener('click', () => {
                 const millisecondsPerDay = 1000 * 60 * 60 * 24;  // milliseconds to days
                 const daysSinceRelease = nowVersusThen / millisecondsPerDay;
 
+                console.log(`${daysSinceRelease} days since release.`);
+
                 perDayAverage = Math.floor(totalDownloads / daysSinceRelease);
         
                 console.log(`${perDayAverage} per day average.`);
