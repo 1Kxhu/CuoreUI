@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compare</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="./assets/cuoreui.svg">
+    <style>
+        .split-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            height: 0;
+            margin-top: 10vh;
+            width: 100vw; 
+            box-sizing: border-box;
+            padding: 20px;
+            gap: 20px;
+            border-radius: 8px;
+        }
+    
+        .panel {
+            flex: 1;
+            padding: 20px; 
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 8px;
+            box-sizing: border-box;
+            background-color: rgba(95, 48, 0, 0.1);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+    
+        .cui {
+            background-color: rgba(95, 48, 0, 0.1);
+            border-color: rgba(153, 99, 77, 0.2);
+            border-radius: 1rem;
+        }
+    
+        .guna {
+            background-color: rgba(58, 42, 88, 0.1);
+            border-color: rgba(145, 97, 201, 0.2);
+            border-radius: 1rem;
+        }
+    
+        .bun {
+            background-color: rgba(35, 17, 138, 0.1);
+            border-color: rgba(102, 95, 204, 0.3);
+            border-radius: 1rem;
+        }
+
+        .sit
+        {
+            background-color: rgba(20, 59, 10, 0.1);
+            border-color: rgba(108, 204, 95, 0.3);
+            border-radius: 1rem;
+        }
+
+        .tel
+        {
+            background-color: rgba(48, 59, 10, 0.1);
+            border-color: rgba(166, 204, 95, 0.3);
+            border-radius: 1rem;
+        }
+    
+        .empty-space {
+            flex: 0.5;
+            visibility: hidden;
+        }
+    
+        @media (aspect-ratio: 16/9) {
+            .split-container {
+                flex-direction: row;
+            }
+        }
+    
+        @media (aspect-ratio: 1/1) {
+            .split-container {
+                flex-direction: row;
+            }
+        }
+    
+        @media (aspect-ratio: 9/16) {
+            .split-container {
+                flex-direction: column;
+            }
+    
+            .empty-space {
+                flex: 0;
+                height: 20px;
+                width: 100%;
+            }
+    
+            .panel {
+                width: 90%;
+            }
+        }
+    
+        .price-container {
+            font-family: 'MiSans', sans-serif;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+            border-bottom: 1px  solid rgba(255, 255, 255, 0.062);
+            padding-left: 20px;
+            padding-right: 20px;
+            
+        }
+    
+        .price-container .currency {
+            font-size: 2.4vh;
+            vertical-align: top;
+        }
+    
+        .price-container .amount {
+            font-size: 6vh;
+        }
+    
+        .price-container .duration {
+            font-size: 2vh;
+            color: rgba(255, 255, 255, 0.8); 
+            vertical-align: bottom;
+            font-weight: lighter; 
+        }
+    
+        .sHeader {
+            font-family: 'MiSans', sans-serif;
+            font-size: 4vh;
+            font-weight: bolder;
+            margin-bottom: 10px;
+        }
+    
+        .cui {
+            color: #FF6A00;
+        }
+    
+        .guna {
+            color: #b18bf8;
+        }
+    
+        .bun {
+            color: #4D39E9;
+        }
+
+        .sit
+        {
+            color: #5DE700;
+        }
+
+        .tel
+        {
+            color: #b0d11c;
+        }
+    
+        p {
+            font-weight: lighter;
+            margin-bottom: 20px;
+        }
+    
+        @media (max-width: 768px) {
+            .split-container {
+                flex-direction: column;
+                margin-top: 30vh;
+            }
+    
+            .panel {
+                width: 100%;
+            }
+    
+            .empty-space {
+                flex: 0;
+                height: 10px;
+            }
+
+            .telfix
+    {
+        margin-bottom: 10vh;
+    }
+
+    .cuifix
+        {
+            margin-top: 25vh;
+        }
+
+        .split-container div
+        {
+            width: 100vw;
+        }
+
+        }
+
+        .gunabg
+        {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #ad8ee6;
+            color: black;
+            font-weight: bolder;
+        }
+
+        .bunifubg
+        {
+            background-color: #4D39E9;
+        }
+
+        .siticonebg
+        {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #5DE700;
+            color: black;
+            font-weight: bolder;
+        }
+
+        .telbg
+        {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #b0d11c;
+            color: black;
+            font-weight: bolder;
+        }
+    </style>
+    
+    
+</head>
+
+<body>
+    <header>
+        <img draggable="false" src="./assets/cuoreui mono.svg" alt="cui CuoreUI" style="width: 40px; height: 40px; vertical-align: middle; margin-right: 8px;">
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="https://www.nuget.org/packages/CuoreUI.Winforms">Download</a>
+            <a href="contact.html">Contact</a>
+            <a href="compare.html">Compare</a>
+        </nav>
+    </header>
+
+    <section>
+        <h2>Price Comparison</h2>
+        <p>These are the cheapest plans of popular UI Libraries.</p>
+        <p>Retrieved in Poland, in case of localised prices.</p>
+        <p class="legal">The prices shown here are from the 13th October 2024.</p>
+
+        <a href="https://gunaui.com/pricing/" class="github-btn nuget-btn-contact gunabg compbtn">
+            <img draggable="false" src="./assets/guna.svg" alt="Guna's Logo" style="filter:invert(); width: 20px; height: 20px; vertical-align: middle; margin-right: 7px; margin-top:2px;">
+            GunaUI
+        </a>
+
+        <a href="https://bunifuframework.com/pricing/" class="github-btn github-btn-contact bunifubg compbtn">
+            <img draggable="false" src="./assets/bunifu.svg" alt="Bunifu's Logo" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 7px;">
+            BunifuUI
+        </a>
+
+        <a href="https://www.siticoneframework.com/pricing" class="github-btn github-btn-contact siticonebg compbtn downbtn">
+            <img draggable="false" src="./assets/siticone.svg" alt="Siticone's Logo" style="filter:invert(); width: 20px; height: 20px; vertical-align: middle; margin-right: 7px;">
+            SiticoneUI
+        </a>
+
+        <a href="https://www.telerik.com/purchase/individual/winforms.aspx" class="github-btn github-btn-contact telbg compbtn downbtn">
+            <img draggable="false" src="./assets/telerik.svg" alt="Telerik's Logo" style="filter:invert(); width: 20px; height: 20px; vertical-align: middle; margin-right: 7px;">
+            TelerikUI
+        </a>
+    </section>
+
+    <div class="separator"></div>
+
+    <div class="split-container">
+        <div class="empty-space"></div>
+
+        <div class="left-side cuifix">
+            <h2  class="cui sHeader pulsing-text">CuoreUI</h2>
+            <p>Free, Open-Source.</p>
+            <div class="cui price-container">
+                <span class="currency">$</span>
+                <span class="amount pulsing-text">0.</span>
+                <span class="duration">/ forever</span>
+            </div>
+        </div>
+        <div class="right-side">
+            <h2 class="guna sHeader">GunaUI</h2>
+            <p>Cheapest (Individual)</p>
+            <div class="guna price-container">
+                <span class="currency">$</span>
+                <span class="amount">49.</span>
+                <span class="duration">/ yearly</span>
+            </div>
+        </div>
+        <div class="right-side-bun">
+            <h2 class="bun sHeader">BunifuUI</h2>
+            <p>Cheapest (Student)</p>
+            <div class="bun price-container">
+                <span class="currency">$</span>
+                <span class="amount">49.</span>
+                <span class="duration">/ yearly</span>
+            </div>
+        </div>
+
+        <div class="right-side-sit">
+            <h2 class="sit sHeader">SiticoneUI</h2>
+            <p>Cheapest (Single)</p>
+            <div class="sit price-container">
+                <span class="currency">$</span>
+                <span class="amount">37.</span>
+                <span class="duration">/ forever</span>
+            </div>
+        </div>
+
+        <div class="right-side-tel">
+            <h2 class="tel sHeader">TelerikUI</h2>
+            <p>Cheapest (Lite)</p>
+            <div class="tel price-container telfix">
+                <span class="currency">$</span>
+                <span class="amount">1k.</span>
+                <span class="duration">/ yearly</span>
+            </div>
+        </div>
+
+        <div class="empty-space"></div>
+    </div>
+
+    <footer>
+        <p class="pdm-mark" onclick="document.location.href = 'https://en.wikipedia.org/wiki/Unlicense'"> 2024 <a href="https://github.com/1Kxhu/CuoreUI" class="custom-link">CuoreUI</a>. No rights reserved. <a class="legal">Licensed under Unlicense.</a></p>
+    </footer>
+    <script src="fontLoader.js"></script>
+</body>
+
+</html>
