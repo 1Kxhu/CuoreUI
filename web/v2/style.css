@@ -435,7 +435,7 @@ background-size: cover;
 height: 1.5rem;
 aspect-ratio: 1;
 transform: translateX(-0.25rem) translateY(1px);
-background-image: url("/web/assets/github.svg");
+background-image: url("./assets/github.svg");
 background-size: cover;
 }
 
