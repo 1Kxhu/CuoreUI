@@ -264,7 +264,7 @@ user-select: none;
     position: absolute;
     content: "";
     background-size: cover;
-    background-image: url("/web/assets/cuoreui mono.svg");
+    background-image: url("./assets/cuoreui mono.svg");
     aspect-ratio: 1;
     height: 5vh;
     transform: translateY(-0.5vh) translateX(-28px);
@@ -296,7 +296,7 @@ footer {
     content: "";
     position: absolute;
     background-size: cover;
-    background-image: url("/web/assets/no-copyright.svg");
+    background-image: url("./assets/no-copyright.svg");
     width: 16px;
     height: 16px;
     margin-right: 8px;
@@ -373,7 +373,7 @@ nav a:hover {
     height:2vh;
     transform: translateY(2px) translateX(2px);
     background-size: cover;
-    background-image: url("/web/assets/reload.svg") !important;
+    background-image: url("./assets/reload.svg") !important;
 }
 
 .downloads-count
@@ -419,7 +419,7 @@ nav a:hover {
 height: 1.5rem;
 aspect-ratio: 1;
 transform: translateX(-0.25rem) translateY(1px);
-background-image: url("/web/assets/discord.svg");
+background-image: url("./assets/discord.svg");
 background-size: cover;
 }
 
@@ -445,7 +445,7 @@ background-size: cover;
 height: 1.5rem;
 aspect-ratio: 1;
 transform: translateX(-0.45rem) translateY(0px);
-background-image: url("/web/assets/nuget.svg");
+background-image: url("./assets/nuget.svg");
 background-size: cover;
 }
 
