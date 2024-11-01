@@ -12,13 +12,20 @@
 <body>
     <header>
         <div class="logo">CuoreUI</div>
-        <nav>
-            <a href="index.html">Homepage</a>
-            <a href="https://www.nuget.org/packages/CuoreUI.Winforms/">Download</a>
-            <a href="compare.html">Compare</a>
-            <a href="contact.html">Contact</a>
-        </nav>
+        <button class="burger-menu burger" aria-label="Toggle menu">
+            ☰
+        </button>
+        <div class="nav-links">
+            <nav class="nav-container">
+                <a href="index.html">Homepage</a>
+                <a class="download-nav" href="https://www.nuget.org/packages/CuoreUI.Winforms/">Download</a>
+                <a href="compare.html">Compare</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+        </div>
     </header>
+    
+    <script src="./burgerMenu.js" defer></script>
     
 <!-- Existing Hero Section -->
 <div class="hero">
@@ -32,28 +39,28 @@
             <h2 class="price-name">GunaUI</h2>
             <p>"Individual"</p>
             <h1 class="price">$49.<span class="price">/ yearly</span></h1>
-            <p class="pricing-link" onclick="window.open('https://gunaui.com/pricing/', '_blank')">Pricing Page</p>
+            <p class="pricing-link" onclick="window.open('https://gunaui.com/pricing/', '_blank')">Pricing</p>
         </div>
     
         <div class="price-container bunifu">
             <h2 class="price-name">BunifuUI</h2>
             <p>"Student"</p>
             <h1 class="price">$49.<span class="price">/ yearly</span></h1>
-            <p class="pricing-link" onclick="window.open('https://bunifuframework.com/pricing/', '_blank')">Pricing Page</p>
+            <p class="pricing-link" onclick="window.open('https://bunifuframework.com/pricing/', '_blank')">Pricing</p>
         </div>
     
         <div class="price-container siticone">
             <h2 class="price-name">SiticoneUI</h2>
             <p>"Single"</p>
             <h1 class="price">$37.<span class="price">/ forever</span></h1>
-            <p class="pricing-link" onclick="window.open('https://www.siticoneframework.com/pricing', '_blank')">Pricing Page</p>
+            <p class="pricing-link" onclick="window.open('https://www.siticoneframework.com/pricing', '_blank')">Pricing</p>
         </div>
     
         <div class="price-container telerik">
             <h2 class="price-name">TelerikUI</h2>
             <p>"Lite"</p>
             <h1 class="price">$1k.<span class="price">/ yearly</span></h1>
-            <p class="pricing-link" onclick="window.open('https://www.telerik.com/purchase.aspx?filter=desktop#individual-products', '_blank')">Pricing Page</p>
+            <p class="pricing-link" onclick="window.open('https://www.telerik.com/purchase.aspx?filter=desktop#individual-products', '_blank')">Pricing</p>
         </div>
     
     </div>

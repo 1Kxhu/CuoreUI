@@ -12,13 +12,20 @@
 <body>
     <header>
         <div class="logo">CuoreUI</div>
-        <nav>
-            <a href="index.html">Homepage</a>
-            <a href="https://www.nuget.org/packages/CuoreUI.Winforms/">Download</a>
-            <a href="compare.html">Compare</a>
-            <a href="contact.html">Contact</a>
-        </nav>
+        <button class="burger-menu burger" aria-label="Toggle menu">
+            ☰
+        </button>
+        <div class="nav-links">
+            <nav class="nav-container">
+                <a href="index.html">Homepage</a>
+                <a class="download-nav" href="https://www.nuget.org/packages/CuoreUI.Winforms/">Download</a>
+                <a href="compare.html">Compare</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+        </div>
     </header>
+    
+    <script src="./burgerMenu.js" defer></script>
     
     <!-- Existing Hero Section -->
     <div class="hero">
@@ -28,9 +35,18 @@
         <p class="downloads-count">We are working on getting the downloads count..</p>
         <div class="buttons">
             <button class="btn btn-github" onclick="document.location= 'https://github.com/1Kxhu/CuoreUI'">
-                .ㅤ GitHub Repository</button>
+                <img src="./assets/github.svg" alt="GitHub Icon" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
+                <span class="full-text">GitHub Repository</span>
+                <span class="short-text">Repository</span>
+            </button>
+            
             <button class="btn btn-nuget" onclick="document.location= 'https://www.nuget.org/packages/CuoreUI.Winforms'">
-                .ㅤ Browse NuGet Package</button>
+                <img src="./assets/nuget.svg" alt="NuGet Icon" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
+                <span class="full-text">NuGet Package</span>
+                <span class="short-text">Package</span>
+            </button>
+            
+            
         </div>
     </div>
 

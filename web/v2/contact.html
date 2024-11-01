@@ -12,13 +12,20 @@
 <body>
     <header>
         <div class="logo">CuoreUI</div>
-        <nav>
-            <a href="index.html">Homepage</a>
-            <a href="https://www.nuget.org/packages/CuoreUI.Winforms/">Download</a>
-            <a href="compare.html">Compare</a>
-            <a href="contact.html">Contact</a>
-        </nav>
+        <button class="burger-menu burger" aria-label="Toggle menu">
+            ☰
+        </button>
+        <div class="nav-links">
+            <nav class="nav-container">
+                <a href="index.html">Homepage</a>
+                <a class="download-nav" href="https://www.nuget.org/packages/CuoreUI.Winforms/">Download</a>
+                <a href="compare.html">Compare</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+        </div>
     </header>
+    
+    <script src="./burgerMenu.js" defer></script>
     
     <!-- Existing Hero Section -->
     <div class="hero">
