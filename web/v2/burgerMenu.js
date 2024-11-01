@@ -14,5 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('download clicked');
         downloadButtonInNav.textContent = 'Redirecting..';
 
+        setTimeout(() => {
+            downloadButtonInNav.textContent = 'Download';
+        }, 1000);
     });
 });
