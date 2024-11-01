@@ -20,6 +20,7 @@ namespace CuoreUI
 
         private static Timer RefreshRateTimer;
         public static event EventHandler FrameDrawn;
+        public static event EventHandler TenFramesDrawn;
 
         static Drawing()
         {
@@ -57,7 +58,16 @@ namespace CuoreUI
             }
         }
 
+        public static float LazyTimeDelta
+        {
+            get
+            {
+                return (float)1000/GetHighestRefreshRate();
+            }
+        }
+
         static Timer refreshRefresher = new Timer();
+        static byte frame = 0;
 
         private static void SetTimerRefreshRate()
         {
@@ -69,6 +79,12 @@ namespace CuoreUI
                 RefreshRateTimer.Tick += (sender, args) =>
                 {
                     FrameDrawn?.Invoke(null, EventArgs.Empty);
+                    frame++;
+                    if (frame >= 10)
+                    {
+                        frame = 0;
+                        TenFramesDrawn?.Invoke(null, EventArgs.Empty);
+                    }
                 };
             }
 
