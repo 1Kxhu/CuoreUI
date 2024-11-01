@@ -9,13 +9,28 @@ document.addEventListener('DOMContentLoaded', () => {
         burger.classList.toggle('burger-toggled');
     });
 
+    let wasDownloadClicked = false;
+
     const downloadButtonInNav = document.querySelector('.download-nav');
     downloadButtonInNav.addEventListener('click', () => {
         console.log('download clicked');
-        downloadButtonInNav.textContent = 'Redirecting..';
 
-        setTimeout(() => {
-            downloadButtonInNav.textContent = 'Download';
-        }, 1000);
+        wasDownloadClicked = true;
+
+        downloadButtonInNav.textContent = 'Redirecting..';
     });
+
+    function updateButton()
+    {
+        if (wasDownloadClicked == false)
+        {
+            downloadButtonInNav.textContent = 'Download';
+        }
+
+        wasDownloadClicked = false;
+    }
+
+    setInterval(() => {
+        updateButton();
+    }, 1000);
 });
