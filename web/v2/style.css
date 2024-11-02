@@ -569,3 +569,16 @@ nav a:hover {
     }
     
 }
+
+.polish-flag::after {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 16px;
+    border-radius: 4px;
+    background-image: url('assets/polish-flag.svg');
+    background-size: cover;
+    margin-left: 8px;
+    vertical-align: middle;
+    transform: translateX(-38px) translateY(4px);
+}   
