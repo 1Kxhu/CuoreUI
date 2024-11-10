@@ -39,6 +39,20 @@ public class cuiTextBox : UserControl
         }
     }
 
+    private bool privatePswdChar = false;
+    public bool UsePasswordChar
+    {
+        get
+        {
+            return privatePswdChar;
+        }
+        set
+        {
+            privatePswdChar = value;
+            Refresh();
+        }
+    }
+
     Timer caretBlinkTimer = new Timer();
 
     public cuiTextBox()
@@ -241,17 +255,34 @@ public class cuiTextBox : UserControl
         }
         else
         {
-            e.Graphics.DrawString(Content, Font, new SolidBrush(ForeColor), textLocation);
+            if (UsePasswordChar)
+            {
+                e.Graphics.DrawString(StringToPassword(Content), Font, new SolidBrush(ForeColor), textLocation);
+            }
+            else
+            {
+                e.Graphics.DrawString(Content, Font, new SolidBrush(ForeColor), textLocation);
+            }
         }
 
         if (showCaret)
         {
-            int newXLoc = textLocation.X + (int)Math.Ceiling(e.Graphics.MeasureString(Content, Font).Width);
+            int newXLoc = 0;
+            if (UsePasswordChar)
+            {
+                newXLoc = textLocation.X + (int)Math.Ceiling(e.Graphics.MeasureString(StringToPassword(Content), Font).Width);
+
+            }
+            else
+            {
+                newXLoc = textLocation.X + (int)Math.Ceiling(e.Graphics.MeasureString(Content, Font).Width);
+            }
             if (Content != string.Empty)
             {
                 newXLoc -= 2;
                 int countedWhiteSpaces = 1;
-                int whiteSpaceWidth = (int)Math.Floor(e.Graphics.MeasureString(" ", Font).Width);
+                int whiteSpaceWidth = 0;
+                whiteSpaceWidth = (int)Math.Floor(e.Graphics.MeasureString(" ", Font).Width);
                 foreach (char character in Content)
                 {
                     if (Content[Content.Length - countedWhiteSpaces] == ' ')
@@ -265,6 +296,16 @@ public class cuiTextBox : UserControl
             Point textCaretEndLocation = new Point(textCaretStartLocation.X, textCaretStartLocation.Y + Font.Height);
             e.Graphics.DrawLine(new Pen(ForeColor, 1f), textCaretStartLocation, textCaretEndLocation);
         }
+    }
+
+    private string StringToPassword(string content)
+    {
+        string passwordString = "";
+        foreach (char character in Content)
+        {
+            passwordString += "•";
+        }
+        return passwordString;
     }
 
     public bool ResetTextOnClick = false;

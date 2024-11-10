@@ -66,6 +66,14 @@ namespace CuoreUI
             }
         }
 
+        public static int LazyInt32TimeDelta
+        {
+            get
+            {
+                return 1000 / GetHighestRefreshRate();
+            }
+        }
+
         static Timer refreshRefresher = new Timer();
         static byte frame = 0;
 

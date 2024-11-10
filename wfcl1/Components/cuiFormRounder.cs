@@ -123,8 +123,6 @@ namespace CuoreUI.Components
             }
         }
 
-        bool updated = true;
-
         public void FakeForm_Activated(object sender, EventArgs e)
         {
             if (shouldCloseDown || wasFormClosingCalled || TargetForm == null || TargetForm.IsDisposed)
@@ -145,7 +143,6 @@ namespace CuoreUI.Components
                     // but we can just not care about this, since it's opacity is ALWAYS 100%
                 }
 
-                updated = false;
                 roundedFormObj.InvalidateNextDrawCall = true;
 
                 // https://github.com/1Kxhu/CuoreUI/issues/11 fix #3
@@ -157,7 +154,6 @@ namespace CuoreUI.Components
                         {
                             SetWindowPos(roundedFormObj.Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
                             SetWindowPos(TargetForm.Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
-                            updated = true;
 
                         }
 
@@ -213,7 +209,8 @@ namespace CuoreUI.Components
             // update Location with a 2,2 offset caused by RoundedForm in mind
             if (!DesignMode && roundedFormObj != null && TargetForm != null)
             {
-                roundedFormObj.Location = PointSubtract(TargetForm.Location, new Point(2, 2));
+                roundedFormObj.Location = PointSubtract(TargetForm.Location, new Point(1, 1));
+                UpdateRoundedFormRegion();
 
                 // https://github.com/1Kxhu/CuoreUI/issues/11 fix #2
                 if (TargetForm.WindowState == FormWindowState.Minimized)
@@ -258,6 +255,25 @@ namespace CuoreUI.Components
             if (DesignMode || TargetForm == null || roundedFormObj == null)
             {
                 return;
+            }
+        }
+
+        public void UpdateRoundedFormRegion()
+        {
+            if (TargetForm?.Opacity != 1)
+            {
+                // for opacity support
+                Region region = new Region(roundedFormObj.ClientRectangle);
+                Region offsetRegion = TargetForm.Region.Clone();
+
+                offsetRegion.Translate(1, 1);
+
+                region.Exclude(offsetRegion);
+                roundedFormObj.Region = region;
+            }
+            else
+            {
+                roundedFormObj.Region = new Region(roundedFormObj.ClientRectangle);
             }
         }
 
@@ -329,7 +345,8 @@ namespace CuoreUI.Components
                 {
                     // Related to how RoundedForm is drawn
                     // Updates rounding if needed, too
-                    roundedFormObj.Size = Size.Add(TargetForm.Size, new Size(4, 4));
+                    roundedFormObj.Size = Size.Add(TargetForm.Size, new Size(2, 2));
+                    UpdateRoundedFormRegion();
                     FakeForm.Size = TargetForm.Size;
 
                     roundedFormObj.InvalidateNextDrawCall = true;
@@ -345,6 +362,7 @@ namespace CuoreUI.Components
                 }
                 targetFormActivating = false;
             }
+
         }
     }
 }

@@ -402,6 +402,11 @@ namespace CuoreUI.Controls
                 textBox2.Visible = true;
                 privateIsPlaceholder = true;
             }
+            else
+            {
+                privateIsPlaceholder = false;
+                Refresh();
+            }
         }
         private void RemovePlaceholder()
         {
