@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CuoreUI.Components.Forms
@@ -44,7 +38,7 @@ namespace CuoreUI.Components.Forms
 
         private void TooltipForm_Resize(object sender, EventArgs e)
         {
-            cuiLabel1.Location = new Point(0, cuiLabel1.Font.Height/2);
+            cuiLabel1.Location = new Point(0, cuiLabel1.Font.Height / 2);
             cuiLabel1.Width = Width;
             cuiLabel1.Height = Height;
         }
