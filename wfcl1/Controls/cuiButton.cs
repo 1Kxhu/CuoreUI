@@ -4,6 +4,8 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
+using static Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System;
+using Image = System.Drawing.Image;
 
 namespace CuoreUI.Controls
 {
@@ -25,6 +27,20 @@ namespace CuoreUI.Controls
             DoubleBuffered = true;
             ForeColor = Color.White;
             Font = new Font("Microsoft Sans Serif", 9.75f);
+        }
+
+        private DialogResult privateDialogResult = DialogResult.None;
+        public DialogResult DialogResult
+        {
+            get
+            {
+                return privateDialogResult;
+            }
+            set
+            {
+                privateDialogResult = value;
+                Refresh();
+            }
         }
 
         private string privateContent = "Your text here!";
@@ -467,7 +483,10 @@ namespace CuoreUI.Controls
                     }
                 }
 
-                state = 2;
+                if (state != 1)
+                {
+                    state = 2;
+                }
                 Invalidate();
             }
             else
@@ -492,8 +511,23 @@ namespace CuoreUI.Controls
         protected override void OnMouseDown(MouseEventArgs e)
         {
             state = 3;
+
+            if (privateDialogResult != DialogResult.None)
+            {
+                Form parentForm = FindForm();
+                if (parentForm != null)
+                {
+                    parentForm.DialogResult = privateDialogResult;
+                }
+            }
+
             Invalidate();
         }
 
+        protected override void OnLostFocus(EventArgs e)
+        {
+            state = 1;
+            base.OnLostFocus(e);
+        }
     }
 }
