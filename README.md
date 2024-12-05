@@ -19,3 +19,4 @@ Older Releases: [GitHub](https://github.com/1Kxhu/CuoreUI/releases).
 a) Text me on discord (name: itzkxhu, id: 971053791480791121)
 
 b) Open a new discussion (https://github.com/1Kxhu/CuoreUI/discussions)
+I am LESS LIKELY to respond on weekends!
