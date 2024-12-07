@@ -16,7 +16,7 @@ Latest Releases: [NuGet](https://www.nuget.org/packages/CuoreUI.Winforms/).
 Older Releases: [GitHub](https://github.com/1Kxhu/CuoreUI/releases).
 
 # Want to leave feedback / Something's wrong?
-a) Text me on discord (name: itzkxhu, id: 971053791480791121)
+a) Text me on discord (name: .itzkxhu, id: 1312125815345119427)
 
 b) Open a new discussion (https://github.com/1Kxhu/CuoreUI/discussions)
 I am LESS LIKELY to respond on weekends!
