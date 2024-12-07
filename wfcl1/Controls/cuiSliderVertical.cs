@@ -207,7 +207,19 @@ namespace CuoreUI.Controls
             }
             else
             {
-                thumbRectangle.Y = thumbRectangle.Top - OutlineThickness + thumbRectangle.Height * 0.125f - (0.1f * Width) + 5f;
+                thumbRectangle.Y = thumbRectangle.Top - OutlineThickness + thumbRectangle.Height * 0.125f - (0.1f * Width) - 5;
+            }
+
+            if (DesignStyle == Styles.Full)
+            {
+                if (UpsideDown)
+                {
+                    thumbRectangle.Y += 4f;
+                }
+                else
+                {
+                    thumbRectangle.Y += 7;
+                }
             }
 
             GraphicsPath thumbPath = Helper.RoundRect(thumbRectangle, (int)(thumbRectangle.Width / 2));
