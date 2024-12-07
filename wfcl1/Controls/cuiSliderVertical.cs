@@ -19,6 +19,20 @@ namespace CuoreUI.Controls
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
         }
 
+        private bool privateUpsideDown = false;
+        public bool UpsideDown
+        {
+            get
+            {
+                return privateUpsideDown;
+            }
+            set
+            {
+                privateUpsideDown = value;
+                Refresh();
+            }
+        }
+
         private float privateValue = 100;
         private float privateMinValue = 0;
         private float privateMaxValue = 100;
@@ -170,9 +184,9 @@ namespace CuoreUI.Controls
 
             if (DesignStyle == Styles.Full)
             {
-                GraphicsPath rounbackground = Helper.RoundRect(modifiedCR, (int)((Width / 2) - OutlineThickness));
-                e.Graphics.FillPath(new SolidBrush(BackgroundColor), rounbackground);
-                e.Graphics.DrawPath(new Pen(OutlineColor, OutlineThickness), rounbackground);
+                GraphicsPath roundBackground = Helper.RoundRect(modifiedCR, (int)((Width / 2) - OutlineThickness));
+                e.Graphics.FillPath(new SolidBrush(BackgroundColor), roundBackground);
+                e.Graphics.DrawPath(new Pen(OutlineColor, OutlineThickness), roundBackground);
             }
             else if (DesignStyle == Styles.Partial)
             {
@@ -183,8 +197,17 @@ namespace CuoreUI.Controls
                 moddedCR.Inflate(0, -(int)(OutlineThickness * 2));
                 moddedCR.Inflate(0, -(int)(thumbRectangle.Height / 2));
 
-                GraphicsPath rounbackground = Helper.RoundRect(moddedCR, moddedCR.Width / 2);
-                e.Graphics.FillPath(new SolidBrush(OutlineColor), rounbackground);
+                GraphicsPath roundBackground = Helper.RoundRect(moddedCR, moddedCR.Width / 2);
+                e.Graphics.FillPath(new SolidBrush(OutlineColor), roundBackground);
+            }
+
+            if (UpsideDown)
+            {
+                thumbRectangle.Y = Height - thumbRectangle.Bottom - OutlineThickness - thumbRectangle.Height * 0.125f + (0.1f * Width) - 2.5f;
+            }
+            else
+            {
+                thumbRectangle.Y = thumbRectangle.Top - OutlineThickness + thumbRectangle.Height * 0.125f - (0.1f * Width) + 5f;
             }
 
             GraphicsPath thumbPath = Helper.RoundRect(thumbRectangle, (int)(thumbRectangle.Width / 2));
@@ -208,21 +231,38 @@ namespace CuoreUI.Controls
             base.OnMouseMove(e);
             if (e.Button == MouseButtons.Left)
             {
-                if (e.Y <= OutlineThickness)
+                if (UpsideDown)
                 {
-                    Value = MaxValue;
-                }
-                else if (e.Y >= Height - OutlineThickness)
-                {
-                    Value = MinValue;
+                    if (e.Y <= OutlineThickness)
+                    {
+                        Value = MinValue;
+                    }
+                    else if (e.Y >= Height - OutlineThickness)
+                    {
+                        Value = MaxValue;
+                    }
+                    else
+                    {
+                        Value = MinValue + ((float)(e.Y - OutlineThickness) / (Height - OutlineThickness) * (MaxValue - MinValue));
+                    }
                 }
                 else
                 {
-                    Value = MaxValue - ((float)(e.Y - OutlineThickness) / (Height - OutlineThickness) * (MaxValue - MinValue));
+                    if (e.Y <= OutlineThickness)
+                    {
+                        Value = MaxValue;
+                    }
+                    else if (e.Y >= Height - OutlineThickness)
+                    {
+                        Value = MinValue;
+                    }
+                    else
+                    {
+                        Value = MaxValue - ((float)(e.Y - OutlineThickness) / (Height - OutlineThickness) * (MaxValue - MinValue));
+                    }
                 }
             }
         }
-
         public enum Styles
         {
             Full,

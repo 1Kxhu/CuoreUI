@@ -21,9 +21,59 @@ namespace CuoreUI
             return Win32.GetRefreshRate();
         }
 
-        public static GraphicsPath RoundRect(int x, int y, int width, int height, int borderRadius)
+        public static GraphicsPath RoundHexagon(Rectangle bounds, float rounding)
         {
             GraphicsPath path = new GraphicsPath();
+
+            // so it doesnt crash (negative values also dont crash so thats cool)
+            rounding = Math.Min(rounding, Math.Min(bounds.Width, bounds.Height) / 4f);
+
+            PointF[] points = new PointF[6];
+            float width = bounds.Width;
+            float height = bounds.Height;
+
+            points[0] = new PointF(bounds.X + width / 2, bounds.Y); // t
+            points[1] = new PointF(bounds.X + width, bounds.Y + height / 4); // tr
+            points[2] = new PointF(bounds.X + width, bounds.Y + 3 * height / 4); // br
+            points[3] = new PointF(bounds.X + width / 2, bounds.Y + height); // b
+            points[4] = new PointF(bounds.X, bounds.Y + 3 * height / 4); // bl
+            points[5] = new PointF(bounds.X, bounds.Y + height / 4); // tl
+
+            for (int i = 0; i < points.Length; i++)
+            {
+                // i did Beziers becuase Arcs are PAINN
+
+                PointF current = points[i];
+                PointF previous = points[(i - 1 + points.Length) % points.Length];
+                PointF next = points[(i + 1) % points.Length];
+
+                PointF dirToPrev = Normalize(new PointF(previous.X - current.X, previous.Y - current.Y));
+                PointF dirToNext = Normalize(new PointF(next.X - current.X, next.Y - current.Y));
+
+                PointF arcStart = new PointF(current.X + dirToPrev.X * rounding, current.Y + dirToPrev.Y * rounding);
+                PointF arcEnd = new PointF(current.X + dirToNext.X * rounding, current.Y + dirToNext.Y * rounding);
+
+                PointF control1 = new PointF(current.X + dirToPrev.X * (rounding / 2), current.Y + dirToPrev.Y * (rounding / 2));
+                PointF control2 = new PointF(current.X + dirToNext.X * (rounding / 2), current.Y + dirToNext.Y * (rounding / 2));
+
+                if (i == 0)
+                    path.StartFigure();
+
+                path.AddLine(previous, arcStart);
+                path.AddBezier(arcStart, control1, control2, arcEnd);
+            }
+
+            path.CloseFigure();
+            return path;
+        }
+        public static PointF Normalize(PointF point)
+        {
+            float length = (float)Math.Sqrt(point.X * point.X + point.Y * point.Y);
+            return new PointF(point.X / length, point.Y / length);
+        }
+
+        public static GraphicsPath RoundRect(int x, int y, int width, int height, int borderRadius)
+        {
             Rectangle rectangle = new Rectangle(x, y, width, height);
 
             return RoundRect(rectangle, new Padding(borderRadius));

@@ -1,11 +1,17 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace CuoreUI.Controls.Shapes
 {
-    public partial class cuiEllipse : UserControl
+    public partial class cuiHexagon : UserControl
     {
+        public cuiHexagon()
+        {
+            InitializeComponent();
+        }
+
         private Color privateOutlineColor = Color.Empty;
         public Color OutlineColor
         {
@@ -48,15 +54,24 @@ namespace CuoreUI.Controls.Shapes
             }
         }
 
+        private int privateRounding = 5;
+        public int Rounding
+        {
+            get
+            {
+                return privateRounding;
+            }
+            set
+            {
+                privateRounding = value;
+                Refresh();
+            }
+        }
+
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
             Refresh();
-        }
-
-        public cuiEllipse()
-        {
-            InitializeComponent();
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -70,8 +85,10 @@ namespace CuoreUI.Controls.Shapes
 
             modifiedCR.Inflate(-OutlineThickness, -OutlineThickness);
 
-            e.Graphics.FillEllipse(new SolidBrush(PanelColor), modifiedCR);
-            e.Graphics.DrawEllipse(new Pen(OutlineColor, OutlineThickness), modifiedCR);
+            GraphicsPath hexagonPath = Helper.RoundHexagon(modifiedCR, Rounding);
+
+            e.Graphics.FillPath(new SolidBrush(PanelColor), hexagonPath);
+            e.Graphics.DrawPath(new Pen(OutlineColor, OutlineThickness), hexagonPath);
         }
     }
 }
