@@ -167,7 +167,7 @@
     font-size: calc(2vw + 4.5vh);
 }
 
-@media (max-width: 768px) {
+@media (max-aspect-ratio: 4/3) {
     .full-text {
         display: none;
     }
@@ -201,14 +201,14 @@
     }
 }
 
-@media (max-width: 600px) {
+@media (max-aspect-ratio: 4/3) {
     .features-container {
         flex-direction: column;
     }
 
     .feature-item {
         width: 80vw;
-        height: 20vw;
+        height: 10vw;
         aspect-ratio: 0;
         margin: 0 auto 20px;
     }
@@ -243,6 +243,39 @@
     
     .tagline{
         visibility: collapse !important;
+    }
+
+    .compare-container {
+        gap: 1vw !important;
+    }
+}
+
+@media (max-aspect-ratio: 5/6) {
+    .feature-item {
+        width: 80vw;
+        height: 20vw;
+        aspect-ratio: 0;
+        margin: 0 auto 20px;
+    }
+
+    .price-container {
+        transform: scale(1);
+        padding-bottom: 26vw;
+    }
+
+    .price-container:hover {
+        transform: scale(0.8);
+    }
+
+    .compare-container {
+        width: 100vw;
+        display: flex;
+        justify-content: center;
+        gap: 5vw !important;
+        flex-wrap: wrap;
+        text-align: center;
+        align-items: flex-start;
+        transform: scale(0.8);
     }
 }
 
@@ -511,7 +544,7 @@ nav a:hover {
 }
 
 /* Burger Menu styles for smaller screens */
-@media (max-width: 768px) {
+@media (max-aspect-ratio: 4/3) {
     .burger-menu {
         background-color: transparent;
         display: block;
