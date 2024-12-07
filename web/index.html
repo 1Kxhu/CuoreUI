@@ -28,23 +28,23 @@
     <script src="./burgerMenu.js" defer></script>
     
     <!-- Existing Hero Section -->
-    <div class="hero">
+    <div class="hero mainpage-hero">
         <h1 class="cuore-special-text">Cuore <span>for WinForms.</span></h1>
 
-        <p>CuoreUI is THE WinForms UI & UX Framework, and free too.</p>
+        <p>THE WinForms UI & UX Framework.</p>
         <p class="tagline">"Real art requires a heart."</p>
         <p class="downloads-count">We are working on getting the downloads count..</p>
         <div class="buttons">
             <button class="btn btn-github" onclick="document.location= 'https://github.com/1Kxhu/CuoreUI'">
                 <img src="./assets/github.svg" alt="GitHub Icon" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
                 <span class="full-text">GitHub Repository</span>
-                <span class="short-text">Repository</span>
+                <span class="short-text">GitHub</span>
             </button>
             
             <button class="btn btn-nuget" onclick="document.location= 'https://www.nuget.org/packages/CuoreUI.Winforms'">
                 <img src="./assets/nuget.svg" alt="NuGet Icon" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
                 <span class="full-text">NuGet Package</span>
-                <span class="short-text">Package</span>
+                <span class="short-text">NuGet</span>
             </button>
             
             
@@ -251,7 +251,7 @@ document.querySelector('.tagline').addEventListener('click', () => {
             let downloadsRightNow = await getNuGetPackageDownloads('CuoreUI.Winforms');
             // if a valid number is returned
             if (downloadsRightNow != undefined && downloadsRightNow > 0) {
-                document.querySelector('.downloads-count').innerText = "The library has " + downloadsRightNow + " total downloads on NuGet!" + ` (${perDayAverage} per day average)`;
+                document.querySelector('.downloads-count').innerText = downloadsRightNow + " downloads on NuGet!" + ` ${perDayAverage} per day.`;
                 clearInterval(getDownloadsTimer);
             } else {
                 checkingRightNow = false;
