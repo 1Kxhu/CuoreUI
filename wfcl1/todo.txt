@@ -1,1 +1,26 @@
-﻿
+﻿1. 
+Theme controller:
+ - cuiThemeManager
+ - cuiThemeDefiner
+
+ So far thinking of it like this:
+  - cuiThemeManager will hold all themes and will be the 'switch'
+	it will contain an array of cuiThemeDefiner(s)
+  - cuiThemeDefiner will use reflection to get all public 'Color' properties 
+	it will have a TargetControl property and all all of
+	the Color properties will be held in an int array
+  
+  Potential drawbacks are performance, but this is winforms so oh well
+
+2.
+cuiSlider rewrite:
+ you could probably notice the thumb location issues
+ i keep changing the slider thumb location code often so i will look into that
+
+3.
+cuiFormAnimator:
+ Win32 animatewindow type stuff if compatible, if not, do custom ones
+
+4.
+Improve on cuiFormRounder:
+ So that when a control is clipping at the edge of the form, the RoundedForm considers nearby pixels of the TargetForm

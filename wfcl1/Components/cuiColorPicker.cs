@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static CuoreUI.Components.Forms.ColorPickerForm;
 
 namespace CuoreUI.Components
 {
@@ -53,6 +54,7 @@ namespace CuoreUI.Components
         public async Task<DialogResult> ShowDialog()
         {
             PickerForm = new ColorPickerForm();
+            PickerForm.Theme = Theme;
             PickerForm.Show();
 
             bool canExitLoop = false;
@@ -69,6 +71,20 @@ namespace CuoreUI.Components
             }
 
             return PickerForm.DialogResult;
+        }
+
+
+        private Themes privateTheme = Themes.Dark;
+        public Themes Theme
+        {
+            get
+            {
+                return privateTheme;
+            }
+            set
+            {
+                privateTheme = value;
+            }
         }
     }
 }

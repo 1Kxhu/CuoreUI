@@ -181,7 +181,7 @@ namespace CuoreUI.Components.Forms
             }
             catch //not a color, ignore
             {
-                
+
             }
         }
 
@@ -195,6 +195,104 @@ namespace CuoreUI.Components.Forms
         {
             DialogResult = DialogResult.OK;
             Close();
+        }
+
+        public enum Themes
+        {
+            Dark,
+            Light
+        }
+
+        private Themes privateTheme = Themes.Dark;
+        public Themes Theme // i'll handle themes like this for now
+        {
+            get
+            {
+                return privateTheme;
+            }
+            set
+            {
+                privateTheme = value;
+                colorPickerWheel1.Theme = value;
+                switch (value)
+                {
+                    case Themes.Light:
+                        BackColor = SystemColors.Control;
+                        foreach (Control ct in Controls)
+                        {
+                            if (ct is cuiTextBox ctb)
+                            {
+                                ctb.ForeColor = Color.Black;
+                                ctb.Border = Color.FromArgb(221, 221, 221);
+                            }
+                            else if (ct is cuiLabel cl && cl != cuiLabel3)
+                            {
+                                cl.ForeColor = Color.Black;
+                            }
+                        }
+                        cuiButton3.NormalOutline = Color.FromArgb(20, 0, 0, 0);
+
+                        cuiButton2.NormalBackground = Color.FromArgb(20, 0, 0, 0);
+                        cuiButton2.ForeColor = Color.Black;
+                        cuiBorder1.PanelOutlineColor = Color.FromArgb(30, 0, 0, 0);
+
+                        cuiButton1.NormalBackground = Color.FromArgb(20, 0, 0, 0);
+                        cuiButton1.ImageTint = Color.Black;
+                        cuiButton1.HoveredImageTint = cuiButton1.ImageTint;
+                        cuiButton1.PressedImageTint = cuiButton1.ImageTint;
+
+                        cuiFormRounder1.OutlineColor = Color.FromArgb(30, 0, 0, 0);
+                        cuiLabel3.ForeColor = Color.FromArgb(84, 84, 84);
+                        break;
+
+                    case Themes.Dark:
+                        BackColor = Color.Black;
+                        foreach (Control ct in Controls)
+                        {
+                            if (ct is cuiTextBox ctb)
+                            {
+                                ctb.ForeColor = SystemColors.ButtonFace;
+                                ctb.Border = Color.FromArgb(34, 34, 34);
+                            }
+                            else if (ct is cuiLabel cl && cl != cuiLabel3)
+                            {
+                                cl.ForeColor = Color.White;
+                            }
+                        }
+                        cuiButton3.NormalOutline = Color.FromArgb(20, 255, 255, 255);
+
+                        cuiButton2.NormalBackground = Color.FromArgb(20, 255, 255, 255);
+                        cuiButton2.ForeColor = Color.White;
+                        cuiBorder1.PanelOutlineColor = Color.FromArgb(30, 255, 255, 255);
+
+                        cuiButton1.NormalBackground = Color.FromArgb(20, 255, 255, 255);
+                        cuiButton1.ImageTint = Color.White;
+                        cuiButton1.HoveredImageTint = cuiButton1.ImageTint;
+                        cuiButton1.PressedImageTint = cuiButton1.ImageTint;
+
+                        cuiFormRounder1.OutlineColor = Color.FromArgb(30, 255, 255, 255);
+                        cuiLabel3.ForeColor = Color.FromArgb(171, 171, 171);
+                        break;
+                }
+            }
+        }
+
+        private void cuiButton2_ForeColorChanged(object sender, EventArgs e)
+        {
+            cuiButton2.HoverForeColor = cuiButton2.ForeColor;
+            cuiButton2.PressedForeColor = cuiButton2.ForeColor;
+
+            cuiButton3.ForeColor = cuiButton2.ForeColor;
+
+            cuiButton3.HoverForeColor = cuiButton2.ForeColor;
+            cuiButton3.PressedForeColor = cuiButton2.ForeColor;
+
+            cuiButton2.ImageTint = cuiButton2.ForeColor;
+            cuiButton3.ImageTint = cuiButton2.ForeColor;
+            cuiButton2.HoveredImageTint = cuiButton2.ForeColor;
+            cuiButton3.HoveredImageTint = cuiButton2.ForeColor;
+            cuiButton2.PressedImageTint = cuiButton2.ForeColor;
+            cuiButton3.PressedImageTint = cuiButton2.ForeColor;
         }
     }
 }

@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
-using static Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System;
 using Image = System.Drawing.Image;
 
 namespace CuoreUI.Controls
@@ -275,6 +274,50 @@ namespace CuoreUI.Controls
             }
         }
 
+        Color privateCheckedForeColor = Color.White;
+        public Color CheckedForeColor
+        {
+            get
+            {
+                return privateCheckedForeColor;
+            }
+            set
+            {
+                privateCheckedForeColor = value;
+                Refresh();
+            }
+        }
+
+        Color privatePressedForeColor = Color.White;
+        public Color PressedForeColor
+        {
+            get
+            {
+                return privatePressedForeColor;
+            }
+            set
+            {
+                privatePressedForeColor = value;
+                Refresh();
+            }
+        }
+
+        public Color NormalForeColor => ForeColor;
+
+        Color privateHoverForeColor = Color.White;
+        public Color HoverForeColor
+        {
+            get
+            {
+                return privateHoverForeColor;
+            }
+            set
+            {
+                privateHoverForeColor = value;
+                Refresh();
+            }
+        }
+
         protected override void OnPaint(PaintEventArgs e)
         {
             stringFormat.Alignment = StringAlignment.Center;
@@ -289,6 +332,7 @@ namespace CuoreUI.Controls
             Color renderedBackgroundColor = Color.Empty;
             Color renderedOutlineColor = Color.Empty;
             Color renderedTint = ImageTint;
+            Color renderedForeColor = Color.Empty;
 
             if (CheckButton && Checked)
             {
@@ -303,18 +347,21 @@ namespace CuoreUI.Controls
                     case States.Normal:
                         renderedBackgroundColor = NormalBackground;
                         renderedOutlineColor = NormalOutline;
+                        renderedForeColor = NormalForeColor;
                         break;
 
                     case States.Hovered:
                         renderedBackgroundColor = HoverBackground;
                         renderedOutlineColor = HoverOutline;
                         renderedTint = HoveredImageTint;
+                        renderedForeColor = HoverForeColor;
                         break;
 
                     case States.Pressed:
                         renderedBackgroundColor = PressedBackground;
                         renderedOutlineColor = PressedOutline;
                         renderedTint = PressedImageTint;
+                        renderedForeColor = PressedForeColor;
                         break;
                 }
             }
@@ -349,7 +396,7 @@ namespace CuoreUI.Controls
             textRectangle.Offset(privateTextOffset);
             imageRectangle.Offset(privateImageOffset);
 
-            using (SolidBrush brush = new SolidBrush(ForeColor))
+            using (SolidBrush brush = new SolidBrush(renderedForeColor))
             {
                 e.Graphics.DrawString(privateContent, Font, brush, textRectangle, stringFormat);
             }

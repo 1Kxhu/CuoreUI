@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
@@ -113,13 +114,21 @@ namespace CuoreUI.Controls
 
         protected override void OnPaint(PaintEventArgs e)
         {
+            float percent;
+            try
+            {
+                percent = (float)(ProgressValue - MinimumValue) / (MaximumValue - MinimumValue) * 100;
+            }
+            catch
+            {
+                return;
+            }
+            
             int circleWidth = Width - BorderWidth - 1;
             int circleHeight = Height - BorderWidth - 1;
             int borderHalf = BorderWidth / 2;
 
             MinimumSize = new Size(BorderWidth * 2, BorderWidth * 2);
-
-            float percent = (float)(ProgressValue - MinimumValue) / (MaximumValue - MinimumValue) * 100;
 
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 

@@ -203,14 +203,14 @@ namespace CuoreUI.Controls
 
             if (UpsideDown)
             {
-                thumbRectangle.Y = Height - thumbRectangle.Bottom - OutlineThickness - thumbRectangle.Height * 0.125f + (0.1f * Width) - 2.5f;
+                thumbRectangle.Y = Height - thumbRectangle.Bottom - OutlineThickness - thumbRectangle.Height + (0.5f * Width) + 3;
             }
             else
             {
-                thumbRectangle.Y = thumbRectangle.Top - OutlineThickness + thumbRectangle.Height * 0.125f - (0.1f * Width) - 5;
+                thumbRectangle.Y = thumbRectangle.Top - OutlineThickness + thumbRectangle.Height - (0.5f * Width) - 3;
             }
 
-            if (DesignStyle == Styles.Full)
+            if (DesignStyle == Styles.Full) // honestly who even uses full style, i might remove it
             {
                 if (UpsideDown)
                 {
@@ -218,12 +218,41 @@ namespace CuoreUI.Controls
                 }
                 else
                 {
-                    thumbRectangle.Y += 7;
+                    thumbRectangle.Y -= Width/Height;
                 }
             }
 
-            GraphicsPath thumbPath = Helper.RoundRect(thumbRectangle, (int)(thumbRectangle.Width / 2));
-            e.Graphics.FillPath(new SolidBrush(ThumbColor), thumbPath);
+            if (ThumbOutlineThickness > 0)
+            {
+                RectangleF beforeThumb = thumbRectangle;
+                beforeThumb.Inflate(ThumbOutlineThickness, ThumbOutlineThickness);
+
+                using (GraphicsPath beforeThumbPath = Helper.RoundRect(beforeThumb, (int)(beforeThumb.Width / 2)))
+                using (SolidBrush backBrush = new SolidBrush(BackColor))
+                {
+                    e.Graphics.FillPath(backBrush, beforeThumbPath);
+                }
+            }
+
+            using (GraphicsPath thumbPath = Helper.RoundRect(thumbRectangle, (int)(thumbRectangle.Width / 2)))
+            using (SolidBrush thumbBrush = new SolidBrush(ThumbColor))
+            {
+                e.Graphics.FillPath(thumbBrush, thumbPath);
+            }
+        }
+
+        private int privateThumbOutlineThickness = 0;
+        public int ThumbOutlineThickness
+        {
+            get
+            {
+                return privateThumbOutlineThickness;
+            }
+            set
+            {
+                privateThumbOutlineThickness = value;
+                Refresh();
+            }
         }
 
         protected override void OnResize(EventArgs e)

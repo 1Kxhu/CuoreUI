@@ -27,6 +27,8 @@ namespace CuoreUI.Controls
                 if (value != null)
                 {
                     privateContent = value;
+                    cachedImage = null;
+                    cachedImageBrush = null;
                     TintImage();
                 }
                 else
@@ -146,15 +148,16 @@ namespace CuoreUI.Controls
             e.Graphics.InterpolationMode = InterpolationMode.HighQualityBilinear;
             e.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-            Rectangle clipRectangle = ClientRectangle;
-            clipRectangle.Inflate(-1, -1);
+            Rectangle fixedCR = ClientRectangle;
+            fixedCR.Inflate(-1, -1);
 
-            GraphicsPath clipGraphicsPath = Helper.RoundRect(clipRectangle, CornerRadius);
-
-            if (cachedImage != null)
+            using (GraphicsPath roundBg = Helper.RoundRect(fixedCR, CornerRadius))
             {
-                e.Graphics.SetClip(clipGraphicsPath);
-                e.Graphics.DrawImage(cachedImage, clipRectangle);
+                roundBg.FillMode = FillMode.Alternate;
+                roundBg.AddRectangle(fixedCR);
+
+                e.Graphics.DrawImage(cachedImage, fixedCR);
+                e.Graphics.FillPath(new SolidBrush(BackColor), roundBg);
             }
         }
 

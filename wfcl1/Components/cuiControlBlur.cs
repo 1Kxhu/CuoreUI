@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -23,11 +24,15 @@ namespace CuoreUI.Components
             }
             set
             {
-                if (TargetControl is Form)
+                if (TargetControl is Form || value is Form || value == null)
                 {
                     privateTargetControl = null;
                     cachedBitmap?.Dispose();
                     cachedBitmap = null;
+                    if ((Debugger.IsAttached || DesignMode) && value != null)
+                    {
+                        MessageBox.Show($"Cannot set TargetControl to type Form in this cuiControlBlur instance.\nBlurring the whole form would be too expensive for winforms, sorry.", "CuoreUI");
+                    }
                     return;
                 }
 

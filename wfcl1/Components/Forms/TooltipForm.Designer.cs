@@ -59,6 +59,7 @@
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(80, 20);
             this.Controls.Add(this.cuiLabel1);
+            this.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -69,6 +70,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "TooltipForm";
             this.TopMost = true;
+            this.ForeColorChanged += new System.EventHandler(this.TooltipForm_ForeColorChanged);
             this.Resize += new System.EventHandler(this.TooltipForm_Resize);
             this.ResumeLayout(false);
 

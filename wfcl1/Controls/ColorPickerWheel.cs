@@ -1,13 +1,8 @@
 ﻿using CuoreUI.Properties;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using static CuoreUI.Components.Forms.ColorPickerForm;
 
 namespace CuoreUI.Controls
 {
@@ -15,10 +10,17 @@ namespace CuoreUI.Controls
     public partial class ColorPickerWheel : cuiPictureBox
     {
         Point lastClickPosition = new Point(-8, -8);
+        public Themes Theme = Themes.Dark;
 
         public ColorPickerWheel()
         {
             Content = Resources.all_colours;
+        }
+
+        public ColorPickerWheel(Themes inputTheme)
+        {
+            Content = Resources.all_colours;
+            Theme = inputTheme;
         }
 
         public void UpdatePos()
@@ -28,6 +30,7 @@ namespace CuoreUI.Controls
         }
 
         Pen whitepen = new Pen(Color.White, 1);
+        Pen blackpen = new Pen(Color.Black, 1);
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -35,9 +38,9 @@ namespace CuoreUI.Controls
 
             int size = 8;
 
-            RectangleF circleRect = new RectangleF(lastClickPosition.X - size, lastClickPosition.Y - size, size*2, size*2);
+            RectangleF circleRect = new RectangleF(lastClickPosition.X - size, lastClickPosition.Y - size, size * 2, size * 2);
 
-            e.Graphics.DrawEllipse(whitepen, circleRect);
+            e.Graphics.DrawEllipse(Theme == Themes.Dark ? whitepen : blackpen, circleRect);
         }
     }
 }

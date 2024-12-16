@@ -236,6 +236,50 @@ namespace CuoreUI.Controls
             }
         }
 
+        Color privateCheckedForeColor = Color.White;
+        public Color CheckedForeColor
+        {
+            get
+            {
+                return privateCheckedForeColor;
+            }
+            set
+            {
+                privateCheckedForeColor = value;
+                Refresh();
+            }
+        }
+
+        Color privatePressedForeColor = Color.White;
+        public Color PressedForeColor
+        {
+            get
+            {
+                return privatePressedForeColor;
+            }
+            set
+            {
+                privatePressedForeColor = value;
+                Refresh();
+            }
+        }
+
+        public Color NormalForeColor => ForeColor;
+
+        Color privateHoverForeColor = Color.White;
+        public Color HoverForeColor
+        {
+            get
+            {
+                return privateHoverForeColor;
+            }
+            set
+            {
+                privateHoverForeColor = value;
+                Refresh();
+            }
+        }
+
         protected override void OnPaint(PaintEventArgs e)
         {
             stringFormat.Alignment = StringAlignment.Center;
@@ -255,21 +299,26 @@ namespace CuoreUI.Controls
             Color renderedBackgroundColor;
             Color renderedOutlineColor;
             Color tint = ImageTint;
+            Color renderedForeColor = Color.Empty;
+
             switch (state)
             {
                 case 2:
                     renderedBackgroundColor = HoverBackground;
                     renderedOutlineColor = HoverOutline;
+                    renderedForeColor = HoverForeColor;
                     break;
 
                 case 3:
                     renderedBackgroundColor = PressedBackground;
                     renderedOutlineColor = PressedOutline;
+                    renderedForeColor = PressedForeColor;
                     break;
 
                 case 1:
                     renderedBackgroundColor = NormalBackground;
                     renderedOutlineColor = NormalOutline;
+                    renderedForeColor = NormalForeColor;
                     break;
 
                 default:
@@ -282,6 +331,7 @@ namespace CuoreUI.Controls
                 tint = CheckedImageTint;
                 renderedBackgroundColor = CheckedBackground;
                 renderedOutlineColor = CheckedOutline;
+                renderedForeColor = CheckedForeColor;
             }
             else if (state == 2)
             {
@@ -322,7 +372,7 @@ namespace CuoreUI.Controls
             textRectangle.Offset(privateTextOffset);
             imageRectangle.Offset(privateImageOffset);
 
-            using (SolidBrush brush = new SolidBrush(ForeColor))
+            using (SolidBrush brush = new SolidBrush(renderedForeColor))
             {
                 e.Graphics.DrawString(privateContent, Font, brush, textRectangle, stringFormat);
             }
@@ -474,15 +524,11 @@ namespace CuoreUI.Controls
                 {
                     try
                     {
-
                         foreach (Control ctrl in Parent?.Controls)
                         {
-                            if (ctrl is cuiButtonGroup cbg)
+                            if (ctrl is cuiButtonGroup cbg && cbg.Group == Group)
                             {
-                                if (cbg.Group == this.Group && cbg != this)
-                                {
-                                    cbg.Checked = false;
-                                }
+                                cbg.Checked = cbg == this;
                             }
                         }
                     }
@@ -490,7 +536,6 @@ namespace CuoreUI.Controls
                     {
                         // if anything went wrong here it's probably a null reference exception
                     }
-                    Checked = true;
                 }
 
                 state = 2;

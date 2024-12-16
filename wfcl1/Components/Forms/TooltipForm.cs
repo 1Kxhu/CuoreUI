@@ -42,5 +42,10 @@ namespace CuoreUI.Components.Forms
             cuiLabel1.Width = Width;
             cuiLabel1.Height = Height;
         }
+
+        private void TooltipForm_ForeColorChanged(object sender, EventArgs e)
+        {
+            cuiLabel1.ForeColor = ForeColor;
+        }
     }
 }

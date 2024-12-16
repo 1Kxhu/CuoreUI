@@ -1,0 +1,151 @@
+﻿using System;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Windows.Forms;
+
+namespace CuoreUI.Controls
+{
+    public partial class cuiGradientBorder : UserControl
+    {
+        public cuiGradientBorder()
+        {
+            InitializeComponent();
+            DoubleBuffered = true;
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+        }
+
+        protected override void OnResize(EventArgs eventargs)
+        {
+            base.OnResize(eventargs);
+            Refresh();
+        }
+
+        Color privatePanelColor1 = CuoreUI.Drawing.PrimaryColor;
+        public Color PanelColor1
+        {
+            get
+            {
+                return privatePanelColor1;
+            }
+            set
+            {
+                privatePanelColor1 = value;
+                Invalidate();
+            }
+        }
+
+        Color privatePanelColor2 = Color.Transparent;
+        public Color PanelColor2
+        {
+            get
+            {
+                return privatePanelColor2;
+            }
+            set
+            {
+                privatePanelColor2 = value;
+                Invalidate();
+            }
+        }
+
+
+        Color privatePanelOutlineColor1 = CuoreUI.Drawing.PrimaryColor;
+        public Color PanelOutlineColor1
+        {
+            get
+            {
+                return privatePanelOutlineColor1;
+            }
+            set
+            {
+                privatePanelOutlineColor1 = value;
+                Invalidate();
+            }
+        }
+
+        Color privatePanelOutlineColor2 = CuoreUI.Drawing.PrimaryColor;
+        public Color PanelOutlineColor2
+        {
+            get
+            {
+                return privatePanelOutlineColor2;
+            }
+            set
+            {
+                privatePanelOutlineColor2 = value;
+                Invalidate();
+            }
+        }
+
+
+        float privateOutlineThickness = 1;
+        public float OutlineThickness
+        {
+            get
+            {
+                return privateOutlineThickness;
+            }
+            set
+            {
+                privateOutlineThickness = value;
+                Invalidate();
+            }
+        }
+
+
+        Padding privateRounding = new Padding(8, 8, 8, 8);
+        public Padding Rounding
+        {
+            get
+            {
+                return privateRounding;
+            }
+            set
+            {
+                privateRounding = value;
+                Invalidate();
+            }
+        }
+
+        float privateGradientAngle = 0;
+        public float GradientAngle
+        {
+            get
+            {
+                return privateGradientAngle;
+            }
+            set
+            {
+                privateGradientAngle = value % 360;
+                Invalidate();
+            }
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+            Rectangle modifiedCR = ClientRectangle;
+            modifiedCR.Width -= 1;
+            modifiedCR.Height -= 1;
+
+            GraphicsPath roundBackground = Helper.RoundRect(modifiedCR, Rounding);
+
+            using (LinearGradientBrush brush = new LinearGradientBrush(
+                modifiedCR, privatePanelColor1, privatePanelColor2, privateGradientAngle))
+            {
+                e.Graphics.FillPath(brush, roundBackground);
+            }
+
+            using (LinearGradientBrush borderBrush = new LinearGradientBrush(
+                modifiedCR, privatePanelOutlineColor1, privatePanelOutlineColor2, privateGradientAngle))
+            {
+                using (Pen pen = new Pen(borderBrush, privateOutlineThickness))
+                {
+                    e.Graphics.DrawPath(pen, roundBackground);
+                }
+            }
+        }
+    }
+}

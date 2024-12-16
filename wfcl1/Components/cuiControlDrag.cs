@@ -11,19 +11,6 @@ namespace CuoreUI
         private Control targetControl;
         private Point previousMousePosition;
 
-        private int privateDragFrequency = 4;
-        public int DragFrequency
-        {
-            get
-            {
-                return privateDragFrequency;
-            }
-            set
-            {
-                privateDragFrequency = value;
-            }
-        }
-
         public cuiControlDrag(IContainer container)
         {
             container.Add(this);
@@ -53,7 +40,7 @@ namespace CuoreUI
             }
         }
 
-        private async void MouseMove(object sender, MouseEventArgs e)
+        private void MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
@@ -68,8 +55,6 @@ namespace CuoreUI
                 }
 
                 previousMousePosition = currentMousePosition;
-
-                await Task.Delay(DragFrequency);
             }
         }
 

@@ -21,10 +21,14 @@ namespace CuoreUI.Controls
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
 
+            Size = new Size(48, 24);
+
             if (DesignMode)
             {
                 privateBackground = BackColor;
             }
+
+            ForeColor = Color.FromArgb(171, 171, 171);
         }
 
         private double elapsedTime = 0;
@@ -57,7 +61,6 @@ namespace CuoreUI.Controls
 
             xDistance = -(startX - targetX);
 
-            DateTime animationStartTime = DateTime.Now;
             double durationRatio = Duration / 1000.0;
 
             animationFinished = false;
@@ -136,8 +139,8 @@ namespace CuoreUI.Controls
         }
 
         private Color privateBackground = Color.Black;
-        [Description("The rounded background for the switch.")]
-        public Color Background
+        [Description("The rounded background for the CHECKED switch.")]
+        public Color CheckedBackground
         {
             get
             {
@@ -146,6 +149,21 @@ namespace CuoreUI.Controls
             set
             {
                 privateBackground = value;
+                Invalidate();
+            }
+        }
+
+        private Color privateUncheckedBackground = Color.Black;
+        [Description("The rounded background for the UNCHECKED switch.")]
+        public Color UncheckedBackground
+        {
+            get
+            {
+                return privateUncheckedBackground;
+            }
+            set
+            {
+                privateUncheckedBackground = value;
                 Invalidate();
             }
         }
@@ -197,7 +215,7 @@ namespace CuoreUI.Controls
 
         private Color privateOutlineColor = Color.FromArgb(34, 34, 34);
         [Description("The color of the outline.")]
-        public Color OutlineColor
+        public Color UncheckedOutlineColor
         {
             get
             {
@@ -225,7 +243,7 @@ namespace CuoreUI.Controls
             }
         }
 
-        private float privateOutlineThickness = 1.6f;
+        private float privateOutlineThickness = 1f;
         [Description("The thickness of the outline.")]
         public float OutlineThickness
         {
@@ -264,6 +282,20 @@ namespace CuoreUI.Controls
 
         public event EventHandler CheckedChanged;
 
+        private Size privateThumbShrinkSize = new Size(0, 0);
+        public Size ThumbSizeModifier
+        {
+            get
+            {
+                return privateThumbShrinkSize;
+            }
+            set
+            {
+                privateThumbShrinkSize = value;
+                Refresh();
+            }
+        }
+
         protected override void OnPaint(PaintEventArgs e)
         {
             if (animating == false)
@@ -297,7 +329,7 @@ namespace CuoreUI.Controls
 
             GraphicsPath roundBackground = Helper.RoundRect(modifiedCR, temporaryRounding);
 
-            using (SolidBrush brush = new SolidBrush(Background))
+            using (SolidBrush brush = new SolidBrush(Checked ? CheckedBackground : UncheckedBackground))
             {
                 e.Graphics.FillPath(brush, roundBackground);
             }
@@ -307,39 +339,26 @@ namespace CuoreUI.Controls
             thumbRect.Offset(0.5f, 0.5f);
             thumbRect.Inflate(-(int)(OutlineThickness), -(int)(OutlineThickness));
 
+            thumbRect.Inflate(ThumbSizeModifier);
+
             Rectangle temporaryThumbRect = thumbRectangleInt;
             temporaryThumbRect.Offset(1, 0);
 
             temporaryThumbRect.Height = temporaryThumbRect.Width;
 
-            using (Pen graphicsPen = new Pen(Background, Height / 10))
+            using (Pen graphicsPen = new Pen(CheckedBackground, Height / 10))
             {
                 graphicsPen.StartCap = LineCap.Round;
                 graphicsPen.EndCap = LineCap.Round;
 
-                if (Checked)
+                using (SolidBrush brush = new SolidBrush(Checked ? CheckedForeground : UncheckedForeground))
                 {
-                    using (SolidBrush brush = new SolidBrush(CheckedForeground))
-                    {
-                        e.Graphics.FillEllipse(brush, thumbRect);
-                    }
-
-                    using (Pen outlinePen = new Pen(CheckedOutlineColor, OutlineThickness))
-                    {
-                        e.Graphics.DrawPath(outlinePen, roundBackground);
-                    }
+                    e.Graphics.FillEllipse(brush, thumbRect);
                 }
-                else
-                {
-                    using (SolidBrush brush = new SolidBrush(UncheckedForeground))
-                    {
-                        e.Graphics.FillEllipse(brush, thumbRect);
-                    }
 
-                    using (Pen outlinePen = new Pen(OutlineColor, OutlineThickness))
-                    {
-                        e.Graphics.DrawPath(outlinePen, roundBackground);
-                    }
+                using (Pen outlinePen = new Pen(Checked ? CheckedOutlineColor : UncheckedOutlineColor, OutlineThickness))
+                {
+                    e.Graphics.DrawPath(outlinePen, roundBackground);
                 }
 
                 if (ShowSymbols)
@@ -357,7 +376,6 @@ namespace CuoreUI.Controls
                     }
                 }
             }
-
         }
 
         Rectangle thumbRectangleInt

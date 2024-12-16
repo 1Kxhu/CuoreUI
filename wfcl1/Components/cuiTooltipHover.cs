@@ -45,6 +45,31 @@ namespace CuoreUI.Components
             }
         }
 
+        public Color ForeColor
+        {
+            get
+            {
+                return tooltipForm.ForeColor;
+            }
+            set
+            {
+                tooltipForm.ForeColor = value;
+            }
+        }
+
+        public Color BackColor
+        {
+            get
+            {
+                return tooltipForm.BackColor;
+            }
+            set
+            {
+                tooltipForm.BackColor = value;
+                tooltipForm.cuiFormRounder.OutlineColor = value;
+            }
+        }
+
         private async void MouseHover(object sender, System.EventArgs e)
         {
             tooltipForm.Show();
