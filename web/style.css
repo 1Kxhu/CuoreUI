@@ -248,6 +248,12 @@
     .compare-container {
         gap: 1vw !important;
     }
+
+    .tagline
+    {
+        visibility: collapse;
+        height: 0;
+    }
 }
 
 @media (max-aspect-ratio: 5/6) {
@@ -277,6 +283,44 @@
         align-items: flex-start;
         transform: scale(0.8);
     }
+
+    .features
+    {
+        visibility: collapse;
+    }
+
+    body {
+        margin: 0; /* Remove default margin */
+        height: 100vh; /* Full viewport height */
+        position: relative;
+    }
+    
+    .mainpage-hero {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -100%);
+    }
+
+    .tagline
+    {
+        visibility: collapse;
+        height: 0;
+    }
+}
+
+@media (max-aspect-ratio: 9/16) {
+    .cuore-special-text
+    {
+        transform: scale(1.5) !important;
+        line-height: 5vh;
+        padding-bottom: 2.5vh;
+    }
+}
+
+.cuore-special-text
+{
+    transform: translateY(2.5vh);
 }
 
 .feature-item img {
