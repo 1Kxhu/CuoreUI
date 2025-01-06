@@ -1,4 +1,4 @@
-const message = "❤️ I hope you all had a blessed Christmas in 2024";
+const message = "CuoreUI is powered by people like You! 💛";
 
 let isChristmas = new Date().getMonth() === 11; // thanks javascript for offsetting months by -1!!! (AGAIN)
 
