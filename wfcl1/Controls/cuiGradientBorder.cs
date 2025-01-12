@@ -120,32 +120,33 @@ namespace CuoreUI.Controls
                 Invalidate();
             }
         }
-
         protected override void OnPaint(PaintEventArgs e)
         {
-            base.OnPaint(e);
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
             Rectangle modifiedCR = ClientRectangle;
-            modifiedCR.Width -= 1;
-            modifiedCR.Height -= 1;
+            modifiedCR.Inflate(-1, -1);
 
             GraphicsPath roundBackground = Helper.RoundRect(modifiedCR, Rounding);
 
+            using (Pen br = new Pen(BackColor))
             using (LinearGradientBrush brush = new LinearGradientBrush(
-                modifiedCR, privatePanelColor1, privatePanelColor2, privateGradientAngle))
+                modifiedCR, privatePanelColor1, privatePanelColor2, privateGradientAngle, true))
             {
                 e.Graphics.FillPath(brush, roundBackground);
+                e.Graphics.DrawPath(br, roundBackground); // offset fix
             }
 
             using (LinearGradientBrush borderBrush = new LinearGradientBrush(
-                modifiedCR, privatePanelOutlineColor1, privatePanelOutlineColor2, privateGradientAngle))
+                modifiedCR, privatePanelOutlineColor1, privatePanelOutlineColor2, privateGradientAngle, true))
             {
                 using (Pen pen = new Pen(borderBrush, privateOutlineThickness))
                 {
                     e.Graphics.DrawPath(pen, roundBackground);
                 }
             }
+
+            base.OnPaint(e);
         }
     }
 }

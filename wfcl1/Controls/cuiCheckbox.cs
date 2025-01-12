@@ -7,7 +7,7 @@ using System.Windows.Forms;
 namespace CuoreUI.Controls
 {
     [ToolboxBitmap(typeof(CheckBox))]
-    public partial class cuiCheckbox : cuiSwitch
+    public partial class cuiCheckbox : Control
     {
         public cuiCheckbox()
         {
@@ -22,6 +22,118 @@ namespace CuoreUI.Controls
             MinimumSize = new Size(16, 16);
 
             Content = this.Name;
+        }
+
+        public event EventHandler CheckedChanged;
+
+        private bool privateChecked = false;
+        [Description("Whether the switch is on or off.")]
+        public bool Checked
+        {
+            get
+            {
+                return privateChecked;
+            }
+            set
+            {
+                if (value != privateChecked)
+                {
+                    privateChecked = value;
+                    Invalidate();
+                    CheckedChanged?.Invoke(this, EventArgs.Empty);
+                }
+
+            }
+        }
+
+        private Color privateCheckedForeground = CuoreUI.Drawing.PrimaryColor;
+        [Description("The checked foreground.")]
+        public Color CheckedForeground
+        {
+            get
+            {
+                return privateCheckedForeground;
+            }
+            set
+            {
+                privateCheckedForeground = value;
+                Invalidate();
+            }
+        }
+
+        private Color privateUncheckedForeground = Color.FromArgb(34, 34, 34);
+        [Description("The unchecked foreground.")]
+        public Color UncheckedForeground
+        {
+            get
+            {
+                return privateUncheckedForeground;
+            }
+            set
+            {
+                privateUncheckedForeground = value;
+                Invalidate();
+            }
+        }
+
+        private bool privateOutlineStyle = true;
+        [Description("The style of the outline.")]
+        public bool OutlineStyle
+        {
+            get
+            {
+                return privateOutlineStyle;
+            }
+            set
+            {
+                privateOutlineStyle = value;
+                Invalidate();
+            }
+        }
+
+        private Color privateOutlineColor = Color.FromArgb(34, 34, 34);
+        [Description("The color of the outline.")]
+        public Color UncheckedOutlineColor
+        {
+            get
+            {
+                return privateOutlineColor;
+            }
+            set
+            {
+                privateOutlineColor = value;
+                Invalidate();
+            }
+        }
+
+        private Color privateCheckedOutlineColor = CuoreUI.Drawing.PrimaryColor;
+        [Description("The color of the checked outline.")]
+        public Color CheckedOutlineColor
+        {
+            get
+            {
+                return privateCheckedOutlineColor;
+            }
+            set
+            {
+                privateCheckedOutlineColor = value;
+                Invalidate();
+            }
+        }
+
+        private float privateOutlineThickness = 1f;
+        [Description("The thickness of the outline.")]
+        public float OutlineThickness
+        {
+            get
+            {
+                return privateOutlineThickness;
+            }
+            set
+            {
+                privateOutlineThickness = value;
+                Invalidate();
+            }
         }
 
         private string privateContent;
@@ -92,16 +204,24 @@ namespace CuoreUI.Controls
             }
         }
 
-        [Browsable(false)]
-        new internal Color CheckedBackground
+        private bool privateShowSymbols = true;
+        public bool ShowSymbols
         {
-            get; set;
+            get
+            {
+                return privateShowSymbols;
+            }
+            set
+            {
+                privateShowSymbols = value;
+                Invalidate();
+            }
         }
 
-        [Browsable(false)]
-        new internal Color UncheckedBackground
+        protected override void OnMouseClick(MouseEventArgs e)
         {
-            get; set;
+            Checked = !Checked;
+            base.OnMouseClick(e);
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -179,11 +299,15 @@ namespace CuoreUI.Controls
 
                 using (SolidBrush brush = new SolidBrush(ForeColor))
                 {
-                    textRect.Offset(textRect.Width + 4, -1);
+                    e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+
+                    textRect.Offset(textRect.Width + 4, 0.5f);
                     textRect.Width = Width;
                     e.Graphics.DrawString(Content, Font, brush, textRect);
                 }
             }
+
+            base.OnPaint(e);
         }
     }
 }

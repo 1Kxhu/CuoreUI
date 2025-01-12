@@ -12,7 +12,7 @@ namespace CuoreUI.Controls
         {
             InitializeComponent();
             DoubleBuffered = true;
-            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint, true);
         }
 
         protected override void OnResize(EventArgs eventargs)
@@ -80,7 +80,6 @@ namespace CuoreUI.Controls
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            base.OnPaint(e);
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
             Rectangle modifiedCR = ClientRectangle;
             modifiedCR.Width -= 1;
@@ -93,6 +92,8 @@ namespace CuoreUI.Controls
                 e.Graphics.FillPath(brush, roundBackground);
                 e.Graphics.DrawPath(pen, roundBackground);
             }
+
+            base.OnPaint(e);
         }
     }
 }

@@ -180,6 +180,8 @@ namespace CuoreUI.Controls
                     e.Graphics.Clear(BackColor);
                 }
             }
+
+            base.OnPaint(e);
         }
     }
 }

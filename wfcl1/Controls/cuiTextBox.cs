@@ -6,6 +6,7 @@ using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using static CuoreUI.Drawing;
 
+[Obsolete]
 [ToolboxBitmap(typeof(TextBox))]
 [DefaultEvent("ContentChanged")]
 public class cuiTextBox : UserControl
@@ -296,6 +297,8 @@ public class cuiTextBox : UserControl
             Point textCaretEndLocation = new Point(textCaretStartLocation.X, textCaretStartLocation.Y + Font.Height);
             e.Graphics.DrawLine(new Pen(ForeColor, 1f), textCaretStartLocation, textCaretEndLocation);
         }
+
+        base.OnPaint(e);
     }
 
     private string StringToPassword(string content)

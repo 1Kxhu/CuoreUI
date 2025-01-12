@@ -32,8 +32,6 @@ namespace CuoreUI.Controls
 
         protected override void OnPaint(PaintEventArgs e)
         {
-
-
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
             e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
             StringFormat stringFormat = new StringFormat();
@@ -55,6 +53,7 @@ namespace CuoreUI.Controls
             {
                 e.Graphics.DrawString(privateContent, Font, brush, ClientRectangle, stringFormat);
             }
+
             base.OnPaint(e);
         }
 

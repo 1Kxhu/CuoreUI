@@ -21,6 +21,7 @@
         }
 
         #region Windows Form Designer generated code
+        public bool initialized = false;
 
         /// <summary>
         /// Required method for Designer support - do not modify
@@ -28,6 +29,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.Opacity = 0;
+            Visible = false;
+            Size = new System.Drawing.Size(1,1);
+            Location = new System.Drawing.Point(0,0);
             this.SuspendLayout();
             // 
             // RoundedForm
@@ -42,7 +47,6 @@
             this.Text = "RoundedForm";
             this.PaddingChanged += new System.EventHandler(this.RoundedForm_PaddingChanged);
             this.ResumeLayout(false);
-
         }
 
         #endregion

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using static CuoreUI.Helper.Win32;
+using Color = System.Drawing.Color;
+using Pen = System.Drawing.Pen;
 
 namespace CuoreUI.Components.cuiFormRounderV2Resources
 {
@@ -66,6 +69,8 @@ namespace CuoreUI.Components.cuiFormRounderV2Resources
 
         public RoundedForm(Color init_backgroundColor, Color init_borderColor, ref int RoundValue, bool show = true)
         {
+            PerPixelAlphaBlend.SetBitmap(new Bitmap(1, 1), 0, Width, Height, Handle);
+
             Visible = show;
             InitializeComponent();
             SetStyles();
@@ -76,11 +81,21 @@ namespace CuoreUI.Components.cuiFormRounderV2Resources
 
         private void SetStyles()
         {
-            SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
+            // turns out UserPaint was causing a white rectangle on top left (in most cases)
+            SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
             DoubleBuffered = true;
-            this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
             this.UpdateStyles();
         }
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern IntPtr GetWindowLong(IntPtr hWnd, int nIndex);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern IntPtr SetWindowLong(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
+
+        const int GWL_EXSTYLE = -20;
+        const int WS_EX_LAYERED = 0x00080000;
+        const int WS_EX_TRANSPARENT = 0x00000020;
 
         protected override CreateParams CreateParams
         {
@@ -89,9 +104,16 @@ namespace CuoreUI.Components.cuiFormRounderV2Resources
                 CreateParams cp = base.CreateParams;
                 // turn on WS_EX_TOOLWINDOW style bit
                 cp.ExStyle |= 0x80;
+
+                // workaround to get rid of the win7 style window when app launches
+                cp.ExStyle |= WS_EX_LAYERED;
+                cp.ExStyle |= WS_EX_TRANSPARENT;
                 return cp;
             }
         }
+
+        private Bitmap targetFormBt = null;
+        public Form TargetForm = null;
         public void DrawForm(object sender, EventArgs e)
         {
             if (stop)
@@ -102,14 +124,19 @@ namespace CuoreUI.Components.cuiFormRounderV2Resources
             SuspendLayout();
             try
             {
+                if (!initialized)
+                {
+                    InitializeWindowFix();
+                }
+
                 if (backImage == null || backImage.Size != Size || InvalidateNextDrawCall)
                 {
                     InvalidateNextDrawCall = false;
+
                     backImage?.Dispose();
-                    backImage = new Bitmap(Width, Height);
                     backGraphics?.Dispose();
+                    backImage = new Bitmap(Width, Height);
                     backGraphics = Graphics.FromImage(backImage);
-                    backGraphics.SmoothingMode = SmoothingMode.None;
                 }
                 else
                 {
@@ -129,48 +156,57 @@ namespace CuoreUI.Components.cuiFormRounderV2Resources
                 GraphicsPath subtractPath = Helper.RoundRect(subtractRectangle, Rounding);
                 GraphicsPath fillinoutlinePath = Helper.RoundRect(fillinoutlineRectangle, Rounding);
 
-                using (SolidBrush brush = new SolidBrush(BackgroundColor))
-                using (Pen pen = new Pen(BorderColor))
+                using (Pen BorderPen = new Pen(BorderColor))
                 {
                     backGraphics.SmoothingMode = SmoothingMode.AntiAlias;
-                    backGraphics.DrawPath(new Pen(BackgroundColor, 1.6f), fillinoutlinePath);
 
-                    if (BackgroundImageOfTargetForm == null)
+                    if (Rounding > 0)
                     {
-                        backGraphics.FillPath(brush, roundedRectangle);
-                    }
-                    else
-                    {
-                        try
+                        using (Pen BackgroundPen = new Pen(BackgroundColor, 1))
+                        using (SolidBrush BackgroundBrush = new SolidBrush(BackgroundColor))
                         {
-                            backgroundImageTextureBrush = new TextureBrush(BackgroundImageOfTargetForm);
-                            backgroundImageTextureBrush.WrapMode = WrapMode.Clamp;
+                            backGraphics.FillPath(BackgroundBrush, fillinoutlinePath);
+                            backGraphics.DrawPath(BackgroundPen, fillinoutlinePath);
                         }
-                        catch
-                        {
 
+                        // means cuiFormRounder's 'EnhanceBorders' property is set to True
+                        if (backgroundImageTextureBrush != null)
+                        {
+                            using (Pen EnhanceBordersPen = new Pen(backgroundImageTextureBrush, 1))
+                            {
+                                backGraphics.DrawPath(EnhanceBordersPen, fillinoutlinePath);
+                            }
                         }
-                        backGraphics.FillPath(backgroundImageTextureBrush, roundedRectangle); //experimental
                     }
 
-                    backGraphics.DrawPath(pen, roundedRectangle);
+                    backGraphics.DrawPath(BorderPen, roundedRectangle);
                     backGraphics.SmoothingMode = SmoothingMode.None;
                 }
 
-                double normalisedOpacity = 1;
-
-                double.TryParse(Tag.ToString(), out normalisedOpacity);
-                normalisedOpacity *= 255;
-
-                byte opacity = Convert.ToByte(normalisedOpacity);
-
-                PerPixelAlphaBlend.SetBitmap(backImage, opacity, Left, Top, Handle);
-
+                // Tag should ALWAYS be a double.
+                // if not - it's either not initialized yet, or Tag was intentionally set to an unsupported value by the dev
+                byte opacity = (byte)((double)Tag * 255);
+                PerPixelAlphaBlend.SetBitmap(backImage, initialized ? opacity : (byte)0, Left, Top, Handle);
             }
             finally
             {
                 ResumeLayout();
             }
+        }
+        private void InitializeWindowFix()
+        {
+            Location = new Point(-Width + 1, -Height + 1);
+
+            // black border and win7 pre init tool window style fix
+            IntPtr currentStyle = GetWindowLong(Handle, GWL_EXSTYLE);
+
+            // remove WS_EX_LAYERED and WS_EX_TRANSPARENT from this rounded form
+            IntPtr newStyle = (IntPtr)((int)currentStyle & ~WS_EX_LAYERED & ~WS_EX_TRANSPARENT);
+            SetWindowLong(Handle, GWL_EXSTYLE, newStyle);
+
+            initialized = true;
+
+            Location = TargetForm.Location - new Size(1, 1);
         }
 
         TextureBrush backgroundImageTextureBrush = null;
@@ -184,7 +220,13 @@ namespace CuoreUI.Components.cuiFormRounderV2Resources
                 cp |= NativeMethods.WS_EX_LAYERED;
                 NativeMethods.SetWindowLong(Handle, NativeMethods.GWL_EXSTYLE, cp);
             }
+
             DrawForm(this, EventArgs.Empty);
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            Region = null;
         }
 
         private void RoundedForm_PaddingChanged(object sender, EventArgs e)
@@ -206,7 +248,35 @@ namespace CuoreUI.Components.cuiFormRounderV2Resources
             backImage?.Dispose();
             backGraphics?.Dispose();
 
+            PaddingChanged -= RoundedForm_PaddingChanged;
+
             Dispose();
         }
+
+        internal void UpdBitmap()
+        {
+            targetFormBt?.Dispose();
+            backgroundImageTextureBrush?.Image?.Dispose();
+            backgroundImageTextureBrush?.Dispose();
+            backgroundImageTextureBrush = null;
+        }
+
+        internal void UpdBitmap(Bitmap experimentalBitmap)
+        {
+            // Dispose of the existing bitmap if it's not the same instance
+            if (!ReferenceEquals(targetFormBt, experimentalBitmap))
+            {
+                targetFormBt?.Dispose();
+                targetFormBt = experimentalBitmap; // Assign new Bitmap
+            }
+
+            // Dispose of and recreate the TextureBrush
+            backgroundImageTextureBrush?.Dispose();
+            backgroundImageTextureBrush = new TextureBrush(targetFormBt)
+            {
+                WrapMode = WrapMode.Clamp
+            };
+        }
+
     }
 }

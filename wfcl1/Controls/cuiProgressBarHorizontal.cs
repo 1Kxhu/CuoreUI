@@ -144,8 +144,6 @@ namespace CuoreUI.Controls
                 {
                     tempGraphics.FillPath(brush, graphicsPath);
                 }
-
-                base.OnPaint(e);
             }
 
             if (Flipped)
@@ -157,6 +155,8 @@ namespace CuoreUI.Controls
             e.Graphics.DrawImage(tempBitmap, ClientRectangle);
 
             tempBitmap.Dispose();
+
+            base.OnPaint(e);
         }
 
         protected override void OnResize(EventArgs e)

@@ -387,6 +387,8 @@ namespace CuoreUI.Controls
                         graph.DrawRectangle(penBorder, 0, 0, Width - 0.5F, Height - 0.5F);
                 }
             }
+
+            base.OnPaint(e);
         }
 
         private void SetPlaceholder()

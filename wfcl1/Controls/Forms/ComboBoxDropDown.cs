@@ -46,9 +46,16 @@ namespace CuoreUI.Controls.Forms
 
                 cuiButton cuiButton = new cuiButton();
                 cuiButton.Name = item;
-                cuiButton.Width = Width + 10;
+                if (caller == null)
+                {
+                    cuiButton.Width = Width + cuiFormRounder1.Rounding*2;
+                }
+                else
+                {
+                    cuiButton.Width = 1 + Width + Rounding.All;
+                }
                 cuiButton.Content = item;
-                cuiButton.Location = new Point(0, i * cuiButton.Height);
+                cuiButton.Location = new Point(1, 1 + i * cuiButton.Height);
                 defaultHeight = cuiButton.Height;
                 defaultWidth = cuiButton.Width;
 
@@ -75,7 +82,10 @@ namespace CuoreUI.Controls.Forms
                 cuiButton.Click += (e, s) =>
                 {
                     // Ensure the caller's SelectedItem is updated correctly
-                    caller.SelectedItem = item;
+                    if (caller != null)
+                    {
+                        caller.SelectedItem = item;
+                    }
 
                     // Ensure the dropdown's SelectedItem is updated correctly
                     SelectedItem = item;
@@ -95,7 +105,14 @@ namespace CuoreUI.Controls.Forms
 
             SuspendLayout();
             Opacity = 0;
-            Size = new Size(Width, i * defaultHeight);
+            if (caller == null)
+            {
+                Size = new Size(Width, 3 + i * defaultHeight);
+            }
+            else
+            {
+                Size = new Size(Width, 1 + i * defaultHeight);
+            }
             Controls.Clear();
             cuiLabel label = new cuiLabel();
 
@@ -137,6 +154,10 @@ namespace CuoreUI.Controls.Forms
                     cb.NormalOutline = NormalOutline;
                     cb.HoverOutline = HoverOutline;
                     cb.PressedOutline = PressedOutline;
+
+                    cb.ForeColor = NormalForeColor;
+                    cb.HoverForeColor = HoverForeColor;
+                    cb.PressedForeColor = PressedForeColor;
                 }
             }
         }
@@ -160,17 +181,27 @@ namespace CuoreUI.Controls.Forms
             ShowInTaskbar = false;
         }
 
-        public ComboBoxDropDown(string[] userItems, int userWidth, Color bg, Color outline, cuiComboBox userCaller, int roundingArg)
+        public ComboBoxDropDown(string[] userItems, int userWidth, Color bg, Color outline, cuiComboBox userCaller, int roundingArg, bool visible = true)
         {
             InitializeComponent();
-            Width = userWidth - (cuiFormRounder1.Rounding * 2);
+
             Rounding = new Padding(roundingArg, roundingArg, roundingArg, roundingArg);
-            cuiFormRounder1.OutlineColor = outline;
             cuiFormRounder1.Rounding = Rounding.All;
+            Width = userWidth - (cuiFormRounder1.Rounding * 2);
+  
+            cuiFormRounder1.OutlineColor = outline;
             BackColor = Color.FromArgb(255, bg.R, bg.G, bg.B);
             caller = userCaller;
             Items = userItems;
             ShowInTaskbar = false;
+
+            if (caller == null || !visible)
+            {
+                Opacity = 0;
+                Width -= 4;
+            }
+
+            updateButtons();
         }
 
         public ComboBoxDropDown()
@@ -291,5 +322,50 @@ namespace CuoreUI.Controls.Forms
                 Invalidate();
             }
         }
+
+        private Color privateNormalForeColor = Color.White;
+        public Color NormalForeColor
+        {
+            get
+            {
+                return privateNormalForeColor;
+            }
+            set
+            {
+                privateNormalForeColor = value;
+                Invalidate();
+            }
+        }
+
+
+        private Color privateHoverForeColor = Color.White;
+        public Color HoverForeColor
+        {
+            get
+            {
+                return privateHoverForeColor;
+            }
+            set
+            {
+                privateHoverForeColor = value;
+                Invalidate();
+            }
+        }
+
+        private Color privatePressedForeColor = Color.White;
+        public Color PressedForeColor
+        {
+            get
+            {
+                return privatePressedForeColor;
+            }
+            set
+            {
+                privatePressedForeColor = value;
+                Invalidate();
+            }
+        }
+
+
     }
 }

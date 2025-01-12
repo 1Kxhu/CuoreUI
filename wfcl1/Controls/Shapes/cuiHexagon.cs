@@ -89,6 +89,8 @@ namespace CuoreUI.Controls.Shapes
 
             e.Graphics.FillPath(new SolidBrush(PanelColor), hexagonPath);
             e.Graphics.DrawPath(new Pen(OutlineColor, OutlineThickness), hexagonPath);
+
+            base.OnPaint(e);
         }
     }
 }

@@ -376,6 +376,8 @@ namespace CuoreUI.Controls
                     }
                 }
             }
+
+            base.OnPaint(e);
         }
 
         Rectangle thumbRectangleInt

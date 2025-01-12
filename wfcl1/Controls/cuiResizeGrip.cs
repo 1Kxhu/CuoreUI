@@ -1,6 +1,7 @@
 ﻿using CuoreUI.Properties;
 using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -35,24 +36,9 @@ namespace CuoreUI.Controls
             set
             {
                 privateGripColor = value;
-
-                if (GripTexture == false)
-                {
-                    return;
-                }
-
-                if (TintedGrip != null)
-                {
-                    TintedGrip.Dispose();
-                }
-
-                TintedGrip = Drawing.Imaging.TintBitmap(Resources.grip, value);
-
                 Refresh();
             }
         }
-
-        Image TintedGrip = Resources.grip; // previously null, caused an error when added at first
 
         private bool privateGripTexture = true;
         public bool GripTexture
@@ -87,7 +73,8 @@ namespace CuoreUI.Controls
             Timer refreshTimer = new Timer();
             refreshTimer.Interval = 1000;
             refreshTimer.Start();
-            refreshTimer.Tick += (e, s) => {
+            refreshTimer.Tick += (e, s) =>
+            {
                 dragTimer.Interval = 1000 / CuoreUI.Drawing.GetHighestRefreshRate();
             };
         }
@@ -143,16 +130,87 @@ namespace CuoreUI.Controls
             dragTimer.Start();
         }
 
-        protected override void OnPaint(PaintEventArgs e)
+        private Size privateTextureOffset = new Size(-2, -2);
+        public Size TextureOffset
         {
-            if (Size != new Size(21, 21))
+            get
             {
-                Size = new Size(21, 21);
+                return privateTextureOffset;
+            }
+            set
+            {
+                privateTextureOffset = value;
+                Refresh();
+            }
+        }
+
+        GraphicsPath SquareGripPath(int size)
+        {
+            int halfSize = size;
+            size *= 2;
+            GraphicsPath gp = new GraphicsPath();
+
+            void CreateAddRect(int x, int y)
+            {
+                gp.AddRectangle(new Rectangle(x + TextureOffset.Width, y + TextureOffset.Height, halfSize, halfSize));
             }
 
-            if (GripTexture || TintedGrip != null)
+            if (!SkipBottomRightSquare)
             {
-                e.Graphics.DrawImage(TintedGrip, ClientRectangle);
+                CreateAddRect(Width - size, Height - size); // b r
+            }
+
+            CreateAddRect(Width - size, Height - (size * 2)); // 2/3b r
+
+            CreateAddRect(Width - size, Height - (size * 3)); // 1/3b r
+
+            CreateAddRect(Width - (size * 2), Height - size); // b 2/3b
+
+            CreateAddRect(Width - (size * 3), Height - size); // b 1/3b
+
+            CreateAddRect(Width - (size * 2), Height - (size * 2)); // 2/3b 2/3b
+
+            return gp;
+        }
+
+        private int privateGripSize = 2;
+        public int GripSize
+        {
+            get
+            {
+                return privateGripSize;
+            }
+            set
+            {
+                privateGripSize = value;
+                Refresh();
+            }
+        }
+
+        private bool privateSkipBottomRightSquare = false;
+        public bool SkipBottomRightSquare
+        {
+            get
+            {
+                return privateSkipBottomRightSquare;
+            }
+            set
+            {
+                privateSkipBottomRightSquare = value;
+                Refresh();
+            }
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            if (GripTexture)
+            {
+                using (SolidBrush br = new SolidBrush(GripColor))
+                {
+                    GraphicsPath GP = SquareGripPath(GripSize);
+                    //Region = new Region(GP); // mask support at cost of more user mouse precision needed to drag the resizer
+                    e.Graphics.FillPath(br, GP);
+                }
             }
 
             if (TargetForm != null)

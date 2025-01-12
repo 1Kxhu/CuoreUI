@@ -251,8 +251,6 @@ namespace CuoreUI.Controls
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            base.OnPaint(e);
-
             if (privateRounding != Rounding)
             {
                 Rounding = Rounding;
@@ -284,6 +282,8 @@ namespace CuoreUI.Controls
                 scrollBar = null;
                 showVerticalScrollbar = false;
             }
+
+            base.OnPaint(e);
         }
 
         private Color privateHeaderColor = Color.FromArgb(64, 64, 64);

@@ -57,9 +57,10 @@ namespace CuoreUI
                 PointF control2 = new PointF(current.X + dirToNext.X * (rounding / 2), current.Y + dirToNext.Y * (rounding / 2));
 
                 if (i == 0)
+                {
                     path.StartFigure();
+                }
 
-                path.AddLine(previous, arcStart);
                 path.AddBezier(arcStart, control1, control2, arcEnd);
             }
 

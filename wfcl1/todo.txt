@@ -1,26 +1,20 @@
-﻿1. 
-Theme controller:
+﻿BUGS
+
+1. cuiControlAnimator on controls with BackColor == Color.Transparent
+2. the short period of time when a white rectangle on the top left appears when using both cuiFormRounder and cuiFormAnimator combined
+(RoundedForm.cs's bitmap isnt set and the form is forced to show itself anyway)
+
+FEATURES
+
+1. Theme controller:
  - cuiThemeManager
  - cuiThemeDefiner
 
- So far thinking of it like this:
-  - cuiThemeManager will hold all themes and will be the 'switch'
-	it will contain an array of cuiThemeDefiner(s)
-  - cuiThemeDefiner will use reflection to get all public 'Color' properties 
-	it will have a TargetControl property and all all of
-	the Color properties will be held in an int array
-  
-  Potential drawbacks are performance, but this is winforms so oh well
+2. big cleanup:
+ - remove duplicates
+ - remove unused content
+ - rephrase comments
+ - let cuiTextBox (legacy) die in sake of cuiTextBox2
 
-2.
-cuiSlider rewrite:
- you could probably notice the thumb location issues
- i keep changing the slider thumb location code often so i will look into that
-
-3.
-cuiFormAnimator:
- Win32 animatewindow type stuff if compatible, if not, do custom ones
-
-4.
-Improve on cuiFormRounder:
- So that when a control is clipping at the edge of the form, the RoundedForm considers nearby pixels of the TargetForm
+3. cursor fix (loaded automatically with cuore)
+- replace old windows cursor: HAND icon that winforms uses with what is supposed to be the user's actual HAND cursor

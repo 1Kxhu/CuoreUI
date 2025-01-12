@@ -293,8 +293,6 @@ namespace CuoreUI.Controls.Charts
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            base.OnPaint(e);
-
             Graphics g = e.Graphics;
 
             int chartWidth = this.Width - chartPadding * 2;
@@ -413,6 +411,8 @@ namespace CuoreUI.Controls.Charts
             linePen.Dispose();
 
             DrawLabels(g, chartPadding, chartWidth, chartHeight);
+
+            base.OnPaint(e);
         }
 
         private Color PopupBackground

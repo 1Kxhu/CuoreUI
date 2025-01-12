@@ -163,7 +163,6 @@ namespace CuoreUI.Controls.Charts
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            base.OnPaint(e);
             Graphics g = e.Graphics;
 
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
@@ -253,6 +252,8 @@ namespace CuoreUI.Controls.Charts
                 g.FillPath(new SolidBrush(PopupBackground), popupPath);
                 g.DrawString(popupText, Font, new SolidBrush(PopupText), popupRect);
             }
+
+            base.OnPaint(e);
         }
 
 

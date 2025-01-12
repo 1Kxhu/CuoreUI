@@ -161,14 +161,7 @@ namespace CuoreUI.Controls
             drawStringAndAdd(dayName, true);
             drawStringAndAdd(dateDetails);
 
-
-        }
-
-        protected override void OnClick(EventArgs e)
-        {
-            base.OnClick(e);
-
-
+            base.OnPaint(e);
         }
     }
 }

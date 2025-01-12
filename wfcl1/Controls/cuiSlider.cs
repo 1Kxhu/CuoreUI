@@ -23,6 +23,30 @@ namespace CuoreUI.Controls
         private float privateMinValue = 0;
         private float privateMaxValue = 100;
 
+        // [0 - 1]
+        public double GetProgress()
+        {
+            // if this is true what are you even doing
+            if (MaxValue == MinValue)
+                return 0;
+
+            return (double)(Value - MinValue) / (MaxValue - MinValue);
+        }
+
+        // [-1 - 1]
+        private double GetProgressHalfNormalized()
+        {
+            double progress = GetProgress();
+            progress = (-progress);
+
+            if (progress < 0)
+            {
+                progress = -progress;
+            }
+
+            return progress * 2;
+        }
+
         public float Value
         {
             get
@@ -33,18 +57,39 @@ namespace CuoreUI.Controls
             {
                 if (value >= privateMinValue && value <= privateMaxValue)
                 {
+                    bool isNewValue = value != privateValue;
+
                     privateValue = (int)value;
 
-                    float tempX = (value / (float)(MaxValue - MinValue) * Width) * 1;
-                    tempX = tempX - (Height / 2 + OutlineThickness * 2);
-                    tempX = Math.Max(0, tempX);
-                    tempX = Math.Min(tempX, Width - Height);
-                    thumbX = tempX;
-
+                    UpdateThumbRectangle();
                     Refresh();
-                    ValueChanged?.Invoke(this, EventArgs.Empty);
+
+                    if (isNewValue)
+                    {
+                        ValueChanged?.Invoke(this, EventArgs.Empty);
+                    }
                 }
             }
+        }
+
+        private void UpdateThumbRectangle()
+        {
+            float thumbHeight = (Height / 8f) * 5;
+            float halfThumbHeight = thumbHeight / 2;
+
+            double progInverted = GetProgressHalfNormalized();
+            ThumbRectangle = new RectangleF((float)((Width * GetProgress()) - ((ThumbRectangle.Width / 2) * progInverted) - (1 * progInverted)), (Height / 2) - halfThumbHeight - 1, thumbHeight, thumbHeight);
+        }
+
+        private void UpdateThumbRectangle(out float halfThumb)
+        {
+            float thumbHeight = (Height / 8f) * 5;
+            float halfThumbHeight = thumbHeight / 2;
+
+            double progInverted = GetProgressHalfNormalized();
+            ThumbRectangle = new RectangleF((float)((Width * GetProgress()) - ((ThumbRectangle.Width / 2) * progInverted) - (1 * progInverted)), (Height / 2) - halfThumbHeight - 1, thumbHeight, thumbHeight);
+
+            halfThumb = halfThumbHeight;
         }
 
         public event EventHandler ValueChanged;
@@ -81,44 +126,16 @@ namespace CuoreUI.Controls
             }
         }
 
-        private float privateOutlineThickness = 1.6f;
-        public float OutlineThickness
+        private Color privateTrackColor = Color.FromArgb(64, 128, 128, 128);
+        public Color TrackColor
         {
             get
             {
-                return privateOutlineThickness;
+                return privateTrackColor;
             }
             set
             {
-                privateOutlineThickness = value;
-                Refresh();
-            }
-        }
-
-        private float privatethumbX = 2;
-        float thumbX
-        {
-            get
-            {
-                return privatethumbX;
-            }
-            set
-            {
-                privatethumbX = value;
-                Refresh();
-            }
-        }
-
-        private Color privateOutlineColor = Color.FromArgb(34, 34, 34);
-        public Color OutlineColor
-        {
-            get
-            {
-                return privateOutlineColor;
-            }
-            set
-            {
-                privateOutlineColor = value;
+                privateTrackColor = value;
                 Refresh();
             }
         }
@@ -137,86 +154,37 @@ namespace CuoreUI.Controls
             }
         }
 
-        private Color privateBackgroundColor = Color.FromArgb(10, 10, 10);
-        public Color BackgroundColor
-        {
-            get
-            {
-                return privateBackgroundColor;
-            }
-            set
-            {
-                privateBackgroundColor = value;
-                Refresh();
-            }
-        }
-
+        RectangleF ThumbRectangle = Rectangle.Empty;
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            base.OnPaint(e);
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-            Rectangle modifiedCR = ClientRectangle;
-            modifiedCR.Inflate(-1, -1);
+            RectangleF trackRectangle = new RectangleF(0, 0, Width - 1, (Height / 8) + 0.5f);
+            trackRectangle.Y = (Height / 2) - (trackRectangle.Height / 2) - 0.5f;
 
-            float ratio = Height - (OutlineThickness * 2);
-            RectangleF thumbRectangle = new RectangleF(thumbX + OutlineThickness, OutlineThickness, ratio, ratio);
-            thumbRectangle.Inflate(-(Height / 10), -(Height / 10));
+            float halfThumbHeight;
+            UpdateThumbRectangle(out halfThumbHeight);
 
-            if (DesignStyle == Styles.Partial)
+            trackRectangle.Inflate(-halfThumbHeight, 0);
+            GraphicsPath trackPath = Helper.RoundRect(trackRectangle, (int)((trackRectangle.Height + 0.5f) / 2));
+
+            using (SolidBrush trackBrush = new SolidBrush(TrackColor))
             {
-                thumbRectangle.Inflate(-OutlineThickness, -OutlineThickness);
+                e.Graphics.FillPath(trackBrush, trackPath);
             }
 
-            if (DesignStyle == Styles.Full)
-            {
-                using (GraphicsPath rounbackground = Helper.RoundRect(modifiedCR, (int)((Height / 2) - OutlineThickness)))
-                using (SolidBrush backgroundBrush = new SolidBrush(BackgroundColor))
-                using (Pen outlinePen = new Pen(OutlineColor, OutlineThickness))
-                {
-                    e.Graphics.FillPath(backgroundBrush, rounbackground);
-                    e.Graphics.DrawPath(outlinePen, rounbackground);
-                }
-            }
-            else if (DesignStyle == Styles.Partial)
-            {
-                Rectangle moddedCR = modifiedCR;
-                moddedCR.Height = (int)(OutlineThickness * 2);
-                moddedCR.Y = (Height / 2) - (int)OutlineThickness;
-
-                moddedCR.Inflate(-(int)(OutlineThickness * 2), 0);
-                moddedCR.Inflate(-(int)(thumbRectangle.Width / 2), 0);
-
-                using (GraphicsPath rounbackground = Helper.RoundRect(moddedCR, moddedCR.Height / 2))
-                using (SolidBrush outlineBrush = new SolidBrush(OutlineColor))
-                {
-                    e.Graphics.FillPath(outlineBrush, rounbackground);
-                }
-            }
-
-            thumbRectangle.X += 3;
-
-            if (ThumbOutlineThickness > 0)
-            {
-                RectangleF beforeThumb = thumbRectangle;
-                beforeThumb.Inflate(ThumbOutlineThickness, ThumbOutlineThickness);
-
-                using (GraphicsPath beforeThumbPath = Helper.RoundRect(beforeThumb, (int)(beforeThumb.Height / 2)))
-                using (SolidBrush backBrush = new SolidBrush(BackColor))
-                {
-                    e.Graphics.FillPath(backBrush, beforeThumbPath);
-                }
-            }
-
-            using (GraphicsPath thumbPath = Helper.RoundRect(thumbRectangle, (int)(thumbRectangle.Height / 2)))
+            using (Pen thumbOutlinePen = new Pen(BackColor, ThumbOutlineThickness))
             using (SolidBrush thumbBrush = new SolidBrush(ThumbColor))
             {
-                e.Graphics.FillPath(thumbBrush, thumbPath);
+                e.Graphics.DrawRectangles(thumbOutlinePen, new RectangleF[] { ThumbRectangle });
+                e.Graphics.FillEllipse(thumbBrush, ThumbRectangle);
             }
+
+            base.OnPaint(e);
         }
 
-        private int privateThumbOutlineThickness = 0;
+        private int privateThumbOutlineThickness = 3;
         public int ThumbOutlineThickness
         {
             get
@@ -232,54 +200,36 @@ namespace CuoreUI.Controls
 
         protected override void OnResize(EventArgs e)
         {
-            Value = Value;
+            UpdateThumbRectangle();
             base.OnResize(e);
         }
 
-        protected override void OnClick(EventArgs e)
+        protected override void OnMouseDown(MouseEventArgs e)
         {
-            base.OnClick(e);
+            base.OnMouseDown(e);
             OnMouseMove(new MouseEventArgs(MouseButtons.Left, 1, PointToClient(Cursor.Position).X, PointToClient(Cursor.Position).Y, 0));
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
+
             if (e.Button == MouseButtons.Left)
             {
-                if (e.X >= Width - (OutlineThickness * 5) - (Height / 10))
-                {
-                    Value = MaxValue;
-                }
-                else if (e.X <= OutlineThickness)
-                {
-                    Value = MinValue;
-                }
-                else
-                {
-                    Value = ((float)(e.X - ((OutlineThickness - (Height / 10)))) / (Width - ((OutlineThickness - (Height / 10)))) * (MaxValue - MinValue));
-                }
+                float thumbWidth = ThumbRectangle.Width;
+                float progress = Clamp((float)(e.X - (thumbWidth / 2)) / (Width - thumbWidth), 0f, 1f);
 
+                Value = MinValue + progress * (MaxValue - MinValue);
             }
         }
-        public enum Styles
-        {
-            Full,
-            Partial
-        }
 
-        public Styles privateDesignStyle = Styles.Partial;
-        public Styles DesignStyle
+        public static float Clamp(float value, float min, float max)
         {
-            get
-            {
-                return privateDesignStyle;
-            }
-            set
-            {
-                privateDesignStyle = value;
-                Refresh();
-            }
+            if (value < min)
+                return min;
+            if (value > max)
+                return max;
+            return value;
         }
     }
 }

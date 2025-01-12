@@ -38,7 +38,6 @@
             this.Name = "cuiComboBox";
             this.Size = new System.Drawing.Size(169, 45);
             this.Click += new System.EventHandler(this.cuiComboBox_Click);
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.cuiComboBox_Paint);
             this.ResumeLayout(false);
 
         }

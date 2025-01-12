@@ -190,7 +190,10 @@ namespace CuoreUI.Controls
             cr.Width -= 1;
             cr.Height -= 1;
 
-            g.FillRectangle(new SolidBrush(BackColor), backgroundRect);
+            using (Brush bgBrush = new SolidBrush(BackColor))
+            {
+                g.FillRectangle(bgBrush, backgroundRect);
+            }
 
             GraphicsPath path2 = Helper.RoundRect(cr, Rounding);
 
@@ -250,6 +253,7 @@ namespace CuoreUI.Controls
                     }
                 }
             }
+
             base.OnPaint(e);
         }
 

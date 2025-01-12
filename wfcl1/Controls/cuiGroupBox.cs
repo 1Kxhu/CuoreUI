@@ -72,7 +72,6 @@ namespace CuoreUI.Controls
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            base.OnPaint(e);
             Graphics g = e.Graphics;
 
             g.SmoothingMode = SmoothingMode.AntiAlias;
@@ -97,6 +96,8 @@ namespace CuoreUI.Controls
 
             borderPen.Dispose();
             textBrush.Dispose();
+
+            base.OnPaint(e);
         }
     }
 }

@@ -297,6 +297,8 @@ namespace CuoreUI.Controls
                     e.Graphics.DrawPath(AddSymbolPen, plusSymbol);
                 }
             }
+
+            base.OnPaint(e);
         }
 
         Rectangle addTabRectangle = new Rectangle(0, 0, 0, 0);

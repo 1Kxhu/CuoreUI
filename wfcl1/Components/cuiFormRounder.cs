@@ -16,7 +16,6 @@ namespace CuoreUI.Components
         }
 
         public RoundedForm roundedFormObj;
-        public Form FakeForm { get; internal set; } = new FakeForm();
 
         private Form privateTargetForm;
         public Form TargetForm
@@ -24,9 +23,19 @@ namespace CuoreUI.Components
             get => privateTargetForm;
             set
             {
+                if (value == null && privateTargetForm != null && !privateTargetForm.Disposing)
+                {
+                    privateTargetForm.Region = null;
+                }
+
                 privateTargetForm = value;
-                if (privateTargetForm == null)
+
+                if (value == null)
+                {
+                    roundedFormObj.UpdBitmap();
+                    roundedFormObj.Hide();
                     return;
+                }
 
                 TargetForm.Load += TargetForm_Load;
                 TargetForm.Resize += TargetForm_Resize;
@@ -36,13 +45,25 @@ namespace CuoreUI.Components
                 TargetForm.VisibleChanged += TargetForm_VisibleChanged;
                 TargetForm.BackColorChanged += TargetForm_BackColorChanged;
                 TargetForm.Activated += TargetForm_Activated;
-                TargetForm.ResizeEnd += (_, __) =>
+                TargetForm.ResizeEnd += (e, s) =>
                 {
-                    UpdateRoundedFormBitmap();
+                    UpdateExperimentalBitmap();
                 };
 
-                FakeForm.Activated += FakeForm_Activated;
-                FakeForm.FormClosing += TargetForm_FormClosing;
+
+                if (roundedFormObj != null && !DesignMode) // if for some reason you want to toggle between a form and 'null'
+                {
+                    UpdateRoundedFormRegion();
+
+                    TargetForm_LocationChanged(this, EventArgs.Empty);
+                    TargetForm_Resize(this, EventArgs.Empty);
+
+                    if (EnhanceCorners)
+                    {
+                        UpdateExperimentalBitmap();
+                    }
+                    roundedFormObj.Show();
+                }
             }
         }
 
@@ -67,11 +88,6 @@ namespace CuoreUI.Components
             if (shouldCloseDown)
             {
                 return;
-            }
-
-            if (!DesignMode)
-            {
-                FakeForm.BackColor = TargetForm.BackColor;
             }
         }
 
@@ -115,11 +131,17 @@ namespace CuoreUI.Components
                 TargetForm.Controls.Clear();
 
                 // send close message to all forms
-                Helper.Win32.SendMessage(FakeForm.Handle, 0x0010, IntPtr.Zero, IntPtr.Zero);
-                Helper.Win32.SendMessage(TargetForm.Handle, 0x0010, IntPtr.Zero, IntPtr.Zero);
-                Helper.Win32.SendMessage(roundedFormObj.Handle, 0x0010, IntPtr.Zero, IntPtr.Zero);
 
-                (FakeForm as FakeForm).CloseFakeForm();
+                TryCloseForm(TargetForm);
+                TryCloseForm(roundedFormObj);
+            }
+        }
+
+        void TryCloseForm(Form f)
+        {
+            if (f != null && !f.IsDisposed && f.IsHandleCreated)
+            {
+                Helper.Win32.SendMessage(f.Handle, 0x0010, IntPtr.Zero, IntPtr.Zero);
             }
         }
 
@@ -154,9 +176,7 @@ namespace CuoreUI.Components
                         {
                             SetWindowPos(roundedFormObj.Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
                             SetWindowPos(TargetForm.Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
-
                         }
-
 
                         TargetForm.BringToFront();
                     }
@@ -172,7 +192,6 @@ namespace CuoreUI.Components
             {
                 return;
             }
-            FakeForm.Text = TargetForm.Text;
         }
 
         private static Point PointSubtract(Point p1, Point p2)
@@ -194,7 +213,12 @@ namespace CuoreUI.Components
                 if (roundedFormObj != null)
                 {
                     roundedFormObj.Rounding = value;
-                    roundedFormObj?.Invalidate();
+                    if (TargetForm != null)
+                    {
+                        UpdateTargetFormRegion();
+                        UpdateRoundedFormRegion();
+                        roundedFormObj?.Invalidate();
+                    }
                 }
             }
         }
@@ -222,8 +246,6 @@ namespace CuoreUI.Components
                     await Task.Delay(1000 / Drawing.GetHighestRefreshRate());
                     roundedFormObj.Show();
                 }
-
-                FakeForm.Location = TargetForm.Location;
             }
         }
 
@@ -250,12 +272,9 @@ namespace CuoreUI.Components
         private const uint SWP_NOACTIVATE = 0x0010;
         private static readonly IntPtr HWND_TOP = new IntPtr(0);
 
-        internal void UpdateRoundedFormBitmap()
+        void UpdateTargetFormRegion()
         {
-            if (DesignMode || TargetForm == null || roundedFormObj == null)
-            {
-                return;
-            }
+            TargetForm.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, TargetForm.Width, TargetForm.Height, (int)(Rounding * 2f), (int)(Rounding * 2f)));
         }
 
         public void UpdateRoundedFormRegion()
@@ -286,23 +305,26 @@ namespace CuoreUI.Components
             FakeForm_Activated(sender, e);
 
             TargetForm.FormBorderStyle = FormBorderStyle.None;
-            FakeForm.Opacity = 0;
+
 
             roundedFormObj = new RoundedForm(TargetForm.BackColor, OutlineColor, ref privateRounding);
+            roundedFormObj.TargetForm = TargetForm;
+            roundedFormObj.Tag = TargetForm.Opacity;
+
             TargetForm.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, TargetForm.Width, TargetForm.Height, (int)(Rounding * 2f), (int)(Rounding * 2f)));
 
             roundedFormObj.Show();
-            FakeForm.Show();
+
+            //FakeForm.Show();
 
             roundedFormObj.Activated += FakeForm_Activated;
             TargetForm_LocationChanged(this, EventArgs.Empty);
             TargetForm_Resize(this, EventArgs.Empty);
 
-            // Drawing.FrameDrawn is called every 1000/hz milliseconds
+            // Drawing.TenFramesDrawn is called every 10000/hz milliseconds
             // where hz stands for the maximum refresh rate recorded from all display devices
             Drawing.TenFramesDrawn += (_, __) =>
             {
-
                 if (roundedFormObj != null && shouldCloseDown == false)
                 {
                     try // https://github.com/1Kxhu/CuoreUI/issues/11 fix #1
@@ -316,6 +338,12 @@ namespace CuoreUI.Components
                         // ComboBoxDropDown raises an exception here
                         // but we can just not care about this, since it's opacity is ALWAYS 100%
                     }
+
+                    // TopMost smooth corners n border disappear fix
+                    if (TargetForm != null && TargetForm.IsDisposed == false && TargetForm.TopMost != roundedFormObj.TopMost)
+                    {
+                        roundedFormObj.TopMost = TargetForm.TopMost;
+                    }
                 }
                 else
                 {
@@ -324,20 +352,77 @@ namespace CuoreUI.Components
                     Dispose();
                 }
             };
+
+        }
+
+        private bool privateEnhanceCorners = false;
+        [Description("EXPERIMENTAL! Uses a bitmap approach to smoothen out the insides of the form, so that there isn't a 1px border the color of TargetForm.BackColor around the TargetForm")]
+        public bool EnhanceCorners
+        {
+            get
+            {
+                return privateEnhanceCorners;
+            }
+            set
+            {
+                privateEnhanceCorners = value;
+                UpdateExperimentalBitmap();
+            }
+        }
+
+        Bitmap experimentalBitmap
+        {
+            get; set;
+        }
+
+        // truly the smooth corner experience (tears of joy as of writing this)
+        private void UpdateExperimentalBitmap()
+        {
+            if (DesignMode || TargetForm == null || TargetForm.IsDisposed || shouldCloseDown)
+            {
+                return;
+            }
+
+            if (!EnhanceCorners || Rounding == 0)
+            {
+                experimentalBitmap?.Dispose();
+                roundedFormObj?.UpdBitmap();
+                return;
+            }
+
+            int targetWidth = Math.Max(TargetForm.Width + 1, 1);
+            int targetHeight = Math.Max(TargetForm.Height + 1, 1);
+
+            var newBitmap = new Bitmap(targetWidth, targetHeight);
+
+            using (Graphics g = Graphics.FromImage(newBitmap))
+            {
+                g.Clear(Color.Transparent);
+                TargetForm?.DrawToBitmap(newBitmap, new Rectangle(0, 0, TargetForm.Width, TargetForm.Height));
+            }
+
+            experimentalBitmap?.Dispose();
+            experimentalBitmap = newBitmap;
+            //experimentalBitmap.Save(@"C:\Desktop\cuoreh.png");
+            roundedFormObj?.UpdBitmap(newBitmap);
+
         }
 
         FormWindowState lastState;
 
         private void TargetForm_Resize(object sender, EventArgs e)
         {
-            if (roundedFormObj != null && TargetForm != null)
+            if (DesignMode || TargetForm == null || TargetForm.IsDisposed || shouldCloseDown)
+            {
+                return;
+            }
+
+            if (roundedFormObj != null)
             {
                 // If windowstate has changed, set said windowstate value to all the other forms
                 if (TargetForm.WindowState != lastState)
                 {
                     lastState = TargetForm.WindowState;
-
-                    FakeForm.WindowState = TargetForm.WindowState;
                     roundedFormObj.WindowState = TargetForm.WindowState;
                 }
 
@@ -347,7 +432,7 @@ namespace CuoreUI.Components
                     // Updates rounding if needed, too
                     roundedFormObj.Size = Size.Add(TargetForm.Size, new Size(2, 2));
                     UpdateRoundedFormRegion();
-                    FakeForm.Size = TargetForm.Size;
+                    UpdateExperimentalBitmap();
 
                     roundedFormObj.InvalidateNextDrawCall = true;
 
@@ -357,12 +442,11 @@ namespace CuoreUI.Components
                     }
                     else
                     {
-                        TargetForm.Region = new Region(TargetForm.ClientRectangle);
+                        TargetForm.Region = null;
                     }
                 }
                 targetFormActivating = false;
             }
-
         }
     }
 }

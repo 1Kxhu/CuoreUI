@@ -3,6 +3,10 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
+using Color = System.Drawing.Color;
+using Image = System.Drawing.Image;
+using Matrix = System.Drawing.Drawing2D.Matrix;
+using Pen = System.Drawing.Pen;
 
 namespace CuoreUI.Controls
 {
@@ -12,6 +16,8 @@ namespace CuoreUI.Controls
         public cuiPictureBox()
         {
             InitializeComponent();
+            // double buffer removes flickering when animating opacity and/or location with cuiControlAnimator
+            SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer, true);
         }
 
         Image cachedImage = null;
@@ -111,8 +117,8 @@ namespace CuoreUI.Controls
                             GraphicsUnit.Pixel, imageAttributes);
             }
 
-            cachedImageBrush = new TextureBrush(privateContent, WrapMode.Clamp);
-            cachedImage = TransformImage(tintedBitmap);
+            cachedImageBrush = new TextureBrush(tintedBitmap, WrapMode.Clamp);
+            cachedImage = tintedBitmap;
         }
 
         private TextureBrush cachedImageBrush = null;
@@ -134,8 +140,6 @@ namespace CuoreUI.Controls
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            base.OnPaint(e);
-
             if (cachedImage == null)
             {
                 DiposeIfPossible(ref privateContent);
@@ -151,29 +155,82 @@ namespace CuoreUI.Controls
             Rectangle fixedCR = ClientRectangle;
             fixedCR.Inflate(-1, -1);
 
+            using (Pen pen = new Pen(PanelOutlineColor, OutlineThickness))
             using (GraphicsPath roundBg = Helper.RoundRect(fixedCR, CornerRadius))
             {
-                roundBg.FillMode = FillMode.Alternate;
-                roundBg.AddRectangle(fixedCR);
+                GenerateTransformMatrix();
 
-                e.Graphics.DrawImage(cachedImage, fixedCR);
-                e.Graphics.FillPath(new SolidBrush(BackColor), roundBg);
+                e.Graphics.FillPath(cachedImageBrush, roundBg);
+                e.Graphics.DrawPath(pen, roundBg);
+            }
+
+            base.OnPaint(e);
+        }
+
+        private int privateRotation = 0;
+        public int Rotation
+        {
+            get
+            {
+                return privateRotation;
+            }
+            set
+            {
+                if (privateRotation != value)
+                {
+                    privateRotation = value % 360;
+                    Content = Content; // because refresh doesnt transform image but Content's setter does
+                }
             }
         }
 
-        public Image TransformImage(Image inputImage)
+        // empty to not affect already existing projects that use cuoreui and have a picturebox
+        private Color privatePanelOutlineColor = Color.Empty;
+        public Color PanelOutlineColor
         {
-            int width = ClientRectangle.Width;
-            int height = ClientRectangle.Height;
-
-            var newImage = new Bitmap(width, height);
-
-            using (Graphics g = Graphics.FromImage(newImage))
+            get
             {
-                g.DrawImage(inputImage, new Rectangle(0, 0, width, height));
+                return privatePanelOutlineColor;
+            }
+            set
+            {
+                privatePanelOutlineColor = value;
+                Invalidate();
+            }
+        }
+
+        private float privateOutlineThickness = 1;
+        public float OutlineThickness
+        {
+            get
+            {
+                return privateOutlineThickness;
+            }
+            set
+            {
+                privateOutlineThickness = value;
+                Invalidate();
+            }
+        }
+
+        private void GenerateTransformMatrix()
+        {
+            if (cachedImageBrush.Image == null)
+            {
+                return;
             }
 
-            return newImage;
+            Size imageSize = cachedImageBrush.Image.Size;
+
+            float scaleX = (float)Width / imageSize.Width;
+            float scaleY = (float)Height / imageSize.Height;
+
+            using (Matrix matrix = new Matrix())
+            {
+                matrix.RotateAt(Rotation, new PointF(Width / 2f, Height / 2f));
+                matrix.Scale(scaleX, scaleY);
+                cachedImageBrush.Transform = matrix;
+            }
         }
 
         private void cuiPictureBox_Resize(object sender, EventArgs e)

@@ -215,7 +215,7 @@ namespace CuoreUI.Controls
 
         public bool isBrowsingOptions = false;
 
-        private void cuiComboBox_Paint(object sender, PaintEventArgs e)
+        protected override void OnPaint(PaintEventArgs e)
         {
             if (SelectedIndex == -1 && privateSelectedItem != string.Empty)
             {
@@ -278,6 +278,7 @@ namespace CuoreUI.Controls
             //e.Graphics.DrawRectangle(new Pen(Color.Red), expandRect);
             //e.Graphics.DrawRectangle(new Pen(Color.Green), ClientRectangle);
 
+            base.OnPaint(e);
         }
 
         private Color privateExpandColor = Color.White;
@@ -336,7 +337,7 @@ namespace CuoreUI.Controls
                 tempdropdown.Close();
             }
 
-            ComboBoxDropDown DropDown = new ComboBoxDropDown(Items, Width, DropDownBackgroundColor, DropDownOutlineColor, this, Rounding);
+            ComboBoxDropDown DropDown = new ComboBoxDropDown(Items, Width, DropDownBackgroundColor, DropDownOutlineColor, (cuiComboBox)this, Rounding);
             DropDown.NormalBackground = ButtonNormalBackground;
             DropDown.HoverBackground = ButtonHoverBackground;
             DropDown.PressedBackground = ButtonPressedBackground;
@@ -464,7 +465,7 @@ namespace CuoreUI.Controls
         public int Rounding
         {
             get; set;
-        }
+        } = 8;
 
         public Color ButtonNormalBackground
         {

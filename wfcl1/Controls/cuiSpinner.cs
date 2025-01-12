@@ -8,7 +8,7 @@ using static CuoreUI.Drawing;
 namespace CuoreUI.Controls
 {
     [ToolboxBitmap(typeof(BackgroundWorker))]
-    public partial class cuiSpinner : UserControl
+    public partial class cuiSpinner : Control
     {
         Timer designerExclusiveRotationTimer = new Timer();
 
@@ -28,9 +28,20 @@ namespace CuoreUI.Controls
 
         public bool RotateEnabled = true;
 
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            base.OnHandleCreated(e);
+
+            if (DesignMode == false)
+            {
+                cuiSpinner_Load(this, EventArgs.Empty);
+            }
+        }
+
         public cuiSpinner()
         {
             InitializeComponent();
+
             DoubleBuffered = true;
             SetStyle(ControlStyles.UserPaint, true);
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
@@ -170,6 +181,8 @@ namespace CuoreUI.Controls
             {
                 e.Graphics.DrawPath(arcPen, arcPath);
             }
+
+            base.OnPaint(e);
         }
 
         private void cuiSpinner_Load(object sender, EventArgs e)

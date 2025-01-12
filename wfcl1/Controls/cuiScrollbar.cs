@@ -181,7 +181,6 @@ namespace CuoreUI.Controls
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            base.OnPaint(e);
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
             if (targetControl is cuiDataGridView gridview && gridview.Controls.Contains(this) == false && DesignMode == false)
