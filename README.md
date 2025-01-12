@@ -2,6 +2,7 @@
 NOT READY FOR PRODUCTION YET
 
 Licensed under the [Unlicense](https://github.com/1Kxhu/CuoreUI?tab=Unlicense-1-ov-file#)
+
 # What is CuoreUI?
 A C# .NET Winforms UI Library with modern-looking controls, components and forms.
 
@@ -20,3 +21,9 @@ a) Text me on discord (name: itzkxhu, id: 1312125815345119427)
 
 b) Open a new discussion (https://github.com/1Kxhu/CuoreUI/discussions)
 I am LESS LIKELY to respond on weekends!
+
+--
+
+### Have you been affected by a change in cuiSlider?
+Here's a guide:
+![image](https://github.com/user-attachments/assets/352dc6ea-8176-4ba7-bba1-dbf411f7089b)
