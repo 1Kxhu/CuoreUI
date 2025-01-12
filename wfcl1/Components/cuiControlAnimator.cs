@@ -123,7 +123,7 @@ namespace CuoreUI.Components
         public async Task PlayAnimation()
         {
 
-            if (animating || TargetControl == null || TargetControl is cuiPictureBox)
+            if (animating || TargetControl == null || TargetControl is cuiPictureBox || DesignMode)
                 return;
             animating = true;
 
