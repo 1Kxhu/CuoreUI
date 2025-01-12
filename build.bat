@@ -1,1 +1,1 @@
-.\nuget.exe  pack
+.\nuget.exe pack > output.log 2>&1
