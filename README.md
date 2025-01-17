@@ -8,8 +8,12 @@ A C# .NET Winforms UI Library with modern-looking controls, components and forms
 
 # Why should you use CuoreUI?
 Have you ever used an UI Library only to find out you need a license, it is unpolished, or it was abandoned?
-Well, this is none of that. I plan to update this Library as long as I can.
-I add unique stuff like a form rounder with smooth borders, real-time blurring of controls, smooth refresh rate independent animations
+
+**Then CuoreUI might be the solution.**
+
+I plan to update this Library as long as I can.
+
+The library features many controls with a sleek, xiaomi-like design, some even animated. Check out the cuiFormRounder component, you won't be disappointed! 
 
 # How to download and use CuoreUI?
 Latest Releases: [NuGet](https://www.nuget.org/packages/CuoreUI.Winforms/).
