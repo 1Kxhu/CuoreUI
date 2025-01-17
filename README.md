@@ -18,7 +18,7 @@ The library features many controls with a sleek, xiaomi-like design, some even a
 # How to download and use CuoreUI?
 Latest Releases: [NuGet](https://www.nuget.org/packages/CuoreUI.Winforms/).
 
-Older Releases: [GitHub](https://github.com/1Kxhu/CuoreUI/releases).
+Older Releases (+ DLL): [GitHub](https://github.com/1Kxhu/CuoreUI/releases).
 
 # Want to leave feedback / Something's wrong?
 a) Text me on discord (name: itzkxhu, id: 1312125815345119427)
