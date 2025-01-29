@@ -13,7 +13,7 @@ Have you ever used a UI Library only to find out you need a license, it is unpol
 
 **CuoreUI might be the solution.**
 
-I will update CuoreUI for as long as I can!
+CuoreUI will be alive for as long as possible! 
 
 ## 💾 Where to install? 
 `dotnet add package CuoreUI.Winforms`
