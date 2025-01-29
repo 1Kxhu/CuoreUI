@@ -3,8 +3,8 @@ Usable in production, but CuoreUI is still in development.
 
 Licensed under the [Unlicense](https://github.com/1Kxhu/CuoreUI?tab=Unlicense-1-ov-file#)
 
-# 🤷 What is CuoreUI?
-A C# .NET Winforms UI Library with modern-looking controls, components and forms.
+# A WinForms library.. 
+This is a C# .NET Winforms UI Library with modern-looking controls, components and forms.
 
 The library features many controls with a sleek design inspired by Xiaomi and modern Web UI design.
 
