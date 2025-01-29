@@ -9,7 +9,7 @@ A C# .NET Winforms UI Library with modern-looking controls, components and forms
 # Why should you use CuoreUI?
 Have you ever used an UI Library only to find out you need a license, it is unpolished, or it was abandoned?
 
-**Then CuoreUI might be the solution.**
+**CuoreUI might be the solution.**
 
 I plan to update this Library as long as I can.
 
