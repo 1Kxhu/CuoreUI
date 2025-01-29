@@ -16,10 +16,11 @@ Have you ever used a UI Library only to find out you need a license, it is unpol
 I will update CuoreUI for as long as I can!
 
 ## 💾 Where to install? 
+`dotnet add package CuoreUI.Winforms --version 2025.1.12.1`
+
 Latest Releases: [NuGet](https://www.nuget.org/packages/CuoreUI.Winforms/).
 
 Older Releases (+ DLL): [GitHub](https://github.com/1Kxhu/CuoreUI/releases).
-
 ## 📫 Contact?
 
 Don't hesitate to reach out, I respect everyone!
