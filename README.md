@@ -1,4 +1,4 @@
-![CuoreUI](https://github.com/1Kxhu/CuoreUI/assets/115172127/2118fd57-da6c-42a0-998a-b92f92774646)
+![CuoreUI](https://i.imgur.com/X2m89Nf.png)
 Usable in production, but CuoreUI is still in development. 
 
 Licensed under the [Unlicense](https://github.com/1Kxhu/CuoreUI?tab=Unlicense-1-ov-file#)
@@ -25,9 +25,9 @@ Older Releases (+ DLL): [GitHub](https://github.com/1Kxhu/CuoreUI/releases).
 
 Don't hesitate to reach out, I respect everyone!
 
-![Discord logo](https://github.com/user-attachments/assets/1eb8e84b-de53-406a-94fa-37f94dc82847) Let's talk on Discord: [@itzkxhu](https://discord.com/)
+![Discord logo](https://i.imgur.com/5nluHLg.png) Let's talk on Discord: [@itzkxhu](https://discord.com/)
 
-![YouTube logo](https://github.com/user-attachments/assets/dc8bc4f8-e613-4d04-922d-dce2def52e02) I have a YouTube channel: [@itzkxhu](https://www.youtube.com/@itzkxhu)
+![YouTube logo](https://i.imgur.com/vk5ilBU.png) I have a YouTube channel: [@itzkxhu](https://www.youtube.com/@itzkxhu)
 
 ![GitHub logo](https://i.imgur.com/fLvda9g.png) Create a Discussion: [GitHub Discussions](https://github.com/1Kxhu/CuoreUI/discussions)
 
