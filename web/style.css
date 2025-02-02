@@ -56,7 +56,7 @@
 
 .feature-item:hover {
     background-color: rgba(177, 120, 87, 0.1);
-    border-color: #ff6a00;
+    border-color: rgb(255, 106, 0);;
     box-shadow: 0 0 10vh rgba(177, 120, 87, 0.3);
     transform: scale(1.05);
 }
@@ -129,7 +129,7 @@
 }
 
 .cui {
-    color: #ff6600;
+    color: rgb(255, 106, 0);
 }
 
 .guna,
@@ -506,7 +506,7 @@ nav a {
 }
 
 nav a:hover {
-    background-color: #ff6a00;
+    background-color: rgb(255, 106, 0);;
 }
 
 .hero {
@@ -519,7 +519,7 @@ nav a:hover {
 .hero h1 {
     /* font-size: 72px; */
     margin-bottom: 10px;
-    color: #ff6a00;
+    color: rgb(255, 106, 0);
 }
 
 .hero h1 span {
@@ -589,6 +589,79 @@ nav a:hover {
 
 /* Burger Menu styles for smaller screens */
 @media (max-aspect-ratio: 4/3) {
+    .carousel {
+        position: relative;
+        width: 90%;
+        max-width: 600px;
+        margin: auto;
+        overflow: hidden;
+        transform: scale(1) translateY(-5vh) !important;
+    }
+
+    .carousel-inner {
+        display: flex;
+        transition: transform 0.4s ease-in-out;
+    }
+
+    .carousel-inner img {
+        width: 100%;
+        flex-shrink: 0;
+        border-radius: 8px;
+    }
+
+    .prev, .next {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.4);
+        color: white;
+        border: none;
+        padding: 0.75rem;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: background 0.3s ease-in-out, transform 0.2s;
+    }
+
+    .prev {
+        left: 5px;
+    }
+
+    .next {
+        right: 5px;
+    }
+
+    .prev:hover, .next:hover {
+        background: rgba(0, 0, 0, 0.6);
+        transform: translateY(-50%) scale(1.1);
+    }
+
+    .showcase-section
+    {
+        background-color: rgba(0, 0, 0, 0.33);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 10px;
+        text-align: left;
+    
+        padding: 1rem;
+    
+        width: 80vw !important;
+        height: calc(80vw*0.5625) !important;
+
+        margin: 2rem;
+    }
+    
+    .showcase-section img
+    {
+        margin-top: 0rem;
+        
+        width: 80vw !important;
+        height: auto;
+    
+        transform: scale(0.9) translateX(-1rem);
+    
+        position:static;
+    }
+
     .burger-menu {
         background-color: transparent;
         display: block;
@@ -676,4 +749,73 @@ nav a:hover {
     content-visibility: hidden;
     background-position: 100% 100%;
     background-size: 100% 150%;
+}
+
+.download-nav
+{
+    background-color: rgba(255, 106, 0, 0.33);
+    border: 1px solid rgba(255, 106, 0, 1);
+    color:#ffffff;
+}
+
+.price *
+{
+    font-weight: lighter;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(1rem);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+body {
+    animation: fadeIn 0.33s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.carousel {
+    overflow: hidden;
+    position: absolute;
+    transform: scale(0.5) translateX(10px) translateY(-10vh);
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    margin: auto;
+}
+
+.carousel-inner {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-inner img {
+    width: 100%;
+    flex-shrink: 0;
+}
+
+.prev, .next {
+    transform: scale(3) translateY(-25%) !important;
+    z-index: 99;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.prev {
+    left: 10px;
+}
+
+.next {
+    right: 10px;
 }

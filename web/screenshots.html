@@ -34,28 +34,35 @@
     </header>
     
     <script src="./burgerMenu.js" defer></script>
-    
-    <!-- Existing Hero Section -->
-    <div class="hero">
-        <h1>Contacting <span>me:</span></h1>
-        <p>You can write to me on discord!</p>
-        <p class="downloads-count">(Or GitHub discussions, but my response WILL be delayed.)</p>
-        <div class="buttons">
 
-            <button class="btn btn-discord" onclick="prompt('Discord Contact:', 'itzkxhu')">
-                <img src="./assets/discord.svg" alt="Discord Icon" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
-                <span class="full-text">@itzkxhu</span>
-                <span class="short-text">@itzkxhu</span>
-            </button>
-
-            <button class="btn btn-github" onclick="document.location= 'https://github.com/1Kxhu/CuoreUI/discussions'">
-                <img src="./assets/github.svg" alt="Discord Icon" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 8px;">
-                <span class="full-text">Discussions</span>
-                <span class="short-text">Discuss</span>
-            </button>
-                
-        </div>
+    <div class="hero" style="transform: translateY(20vh) !important; z-index: 9;">
+        <h1>Screenshots:</h1>
+        <p>What kind of designs are achievable.</p>
+        <p class="downloads-count">(Scroll down to view)</p>
     </div>
+
+    <div class="carousel">
+        <button class="prev" onclick="changeSlide(-1)">&#10094;</button>
+        <div class="carousel-inner">
+            <img src="https://1kxhu.github.io/CuoreUI/web/assets/screenshots/extract.webp" alt="extract">
+            <img src="https://1kxhu.github.io/CuoreUI/web/assets/screenshots/banking.webp" alt="banking">
+            <img src="https://1kxhu.github.io/CuoreUI/web/assets/screenshots/changemyiconshape.webp" alt="change my icon shape">
+            <img src="https://1kxhu.github.io/CuoreUI/web/assets/screenshots/code.webp" alt="code editor">
+        </div>
+        <button class="next" onclick="changeSlide(1)">&#10095;</button>
+    </div>
+    
+    <script>
+    let index = 0;
+    
+    function changeSlide(direction) {
+        const slides = document.querySelector(".carousel-inner");
+        const totalSlides = slides.children.length;
+        index = (index + direction + totalSlides) % totalSlides;
+        slides.style.transform = `translateX(-${index * 100}%)`;
+    }
+    </script>
+    
 
     <footer>
         <p class="footer-text-downloads" id="globalmessage"></p>

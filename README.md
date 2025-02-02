@@ -1,29 +1,35 @@
-![CuoreUI](https://github.com/1Kxhu/CuoreUI/assets/115172127/2118fd57-da6c-42a0-998a-b92f92774646)
-NOT READY FOR PRODUCTION YET
+![CuoreUI](https://i.imgur.com/X2m89Nf.png)
+Usable in production, but CuoreUI is still in development. 
 
 Licensed under the [Unlicense](https://github.com/1Kxhu/CuoreUI?tab=Unlicense-1-ov-file#)
 
-# What is CuoreUI?
-A C# .NET Winforms UI Library with modern-looking controls, components and forms.
+# A WinForms library.. 
+This is a C# .NET Winforms UI Library with modern-looking controls, components and forms.
 
-# Why should you use CuoreUI?
-Have you ever used an UI Library only to find out you need a license, it is unpolished, or it was abandoned?
-Well, this is none of that. I plan to update this Library as long as I can.
-I add unique stuff like a form rounder with smooth borders, real-time blurring of controls, smooth refresh rate independent animations
+The library features many controls with a sleek design inspired by Xiaomi and modern Web UI design.
 
-# How to download and use CuoreUI?
+## 🗿 Why use CuoreUI?
+Have you ever used a UI Library only to find out you need a license, it is unpolished, or it was abandoned?
+
+**CuoreUI might be the solution.**
+
+CuoreUI will be alive for as long as possible! 
+
+## 💾 Where to install? 
+`dotnet add package CuoreUI.Winforms`
+
 Latest Releases: [NuGet](https://www.nuget.org/packages/CuoreUI.Winforms/).
 
-Older Releases: [GitHub](https://github.com/1Kxhu/CuoreUI/releases).
+Older Releases (+ DLL): [GitHub](https://github.com/1Kxhu/CuoreUI/releases).
+## 📫 Contact?
 
-# Want to leave feedback / Something's wrong?
-a) Text me on discord (name: itzkxhu, id: 1312125815345119427)
+Don't hesitate to reach out, I respect everyone!
 
-b) Open a new discussion (https://github.com/1Kxhu/CuoreUI/discussions)
-I am LESS LIKELY to respond on weekends!
+![Discord logo](https://i.imgur.com/5nluHLg.png) Let's talk on Discord: [@itzkxhu](https://discord.com/)
 
---
+![YouTube logo](https://i.imgur.com/vk5ilBU.png) I have a YouTube channel: [@itzkxhu](https://www.youtube.com/@itzkxhu)
 
-### Have you been affected by a change in cuiSlider?
-Here's a guide:
-![image](https://github.com/user-attachments/assets/352dc6ea-8176-4ba7-bba1-dbf411f7089b)
+![GitHub logo](https://i.imgur.com/fLvda9g.png) Create a Discussion: [GitHub Discussions](https://github.com/1Kxhu/CuoreUI/discussions)
+
+
+
