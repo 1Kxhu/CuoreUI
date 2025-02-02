@@ -24,6 +24,12 @@ namespace CuoreUI
 
         static Drawing()
         {
+            HandCursorFix.EnableModernCursor();
+            Process.GetCurrentProcess().Exited += (e, s) => 
+            {
+                GlobalMouseHook.Stop();
+            };
+
             RefreshRateTimer = new Timer();
             SetTimerRefreshRate();
         }

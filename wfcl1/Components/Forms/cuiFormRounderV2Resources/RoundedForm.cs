@@ -121,6 +121,15 @@ namespace CuoreUI.Components.cuiFormRounderV2Resources
                 return;
             }
 
+            try
+            {
+                privateBackgroundColor = (Color)TargetForm?.BackColor;
+            }
+            catch
+            {
+
+            }
+
             SuspendLayout();
             try
             {
@@ -129,7 +138,7 @@ namespace CuoreUI.Components.cuiFormRounderV2Resources
                     InitializeWindowFix();
                 }
 
-                if (backImage == null || backImage.Size != Size || InvalidateNextDrawCall)
+                if (backImage == null || backImage.Size != Size || BackgroundColor != TargetForm?.BackColor || InvalidateNextDrawCall)
                 {
                     InvalidateNextDrawCall = false;
 

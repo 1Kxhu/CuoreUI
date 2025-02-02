@@ -48,10 +48,12 @@ namespace CuoreUI.Controls
                         messageFilter?.ReleaseHandle();
                     }
 
-                    if (value != Parent)
+                    if (Dock != DockStyle.None)
                     {
-                        targetControl = value;
+                        Dock = DockStyle.None;
                     }
+
+                    targetControl = value;
 
                     if (targetControl != null)
                     {
@@ -73,6 +75,11 @@ namespace CuoreUI.Controls
                 this.Location = new Point(targetControl.Left, targetControl.Bottom - this.Height);
                 this.BringToFront();
                 UpdateThumbPosition();
+
+                if (Parent is Form == false)
+                {
+                    FindForm()?.Controls.Add(this);
+                }
             }
         }
 

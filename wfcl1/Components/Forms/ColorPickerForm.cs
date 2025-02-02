@@ -1,16 +1,8 @@
 ﻿using CuoreUI.Controls;
-using CuoreUI.Properties;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using static CuoreUI.Helper.Win32;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace CuoreUI.Components.Forms
 {
@@ -73,7 +65,7 @@ namespace CuoreUI.Components.Forms
 
         private string ColorToHex(Color value)
         {
-            return "#" + value.A.ToString("x") + value.R.ToString("x") + value.G.ToString("x") + value.B.ToString("x");
+            return $"#{value.A:X2}{value.R:X2}{value.G:X2}{value.B:X2}";
         }
 
         private bool isInsideColorPicker()
@@ -129,12 +121,17 @@ namespace CuoreUI.Components.Forms
 
         private void ContentChanged(object sender, EventArgs e)
         {
-            if ((sender is cuiTextBox) == false || currentlyChangingColor)
+            if ((sender is cuiTextBox2) == false || currentlyChangingColor)
             {
                 return;
             }
 
-            cuiTextBox textbox = sender as cuiTextBox;
+            cuiTextBox2 textbox = sender as cuiTextBox2;
+
+            if (textbox.Content.Trim() == string.Empty)
+            {
+                return;
+            }
 
             int tempValue;
 
@@ -166,7 +163,7 @@ namespace CuoreUI.Components.Forms
 
         private void hexInput_ContentChanged(object sender, EventArgs e)
         {
-            if ((sender is cuiTextBox) == false)
+            if ((sender is cuiTextBox2) == false)
             {
                 return;
             }
@@ -220,10 +217,11 @@ namespace CuoreUI.Components.Forms
                         BackColor = SystemColors.Control;
                         foreach (Control ct in Controls)
                         {
-                            if (ct is cuiTextBox ctb)
+                            if (ct is cuiTextBox2 ctb)
                             {
                                 ctb.ForeColor = Color.Black;
-                                ctb.Border = Color.FromArgb(221, 221, 221);
+                                ctb.BackColor = SystemColors.Control;
+                                ctb.BorderColor = Color.FromArgb(221, 221, 221);
                             }
                             else if (ct is cuiLabel cl && cl != cuiLabel3)
                             {
@@ -249,10 +247,11 @@ namespace CuoreUI.Components.Forms
                         BackColor = Color.Black;
                         foreach (Control ct in Controls)
                         {
-                            if (ct is cuiTextBox ctb)
+                            if (ct is cuiTextBox2 ctb)
                             {
                                 ctb.ForeColor = SystemColors.ButtonFace;
-                                ctb.Border = Color.FromArgb(34, 34, 34);
+                                ctb.BackColor = Color.Black;
+                                ctb.BorderColor = Color.FromArgb(34, 34, 34);
                             }
                             else if (ct is cuiLabel cl && cl != cuiLabel3)
                             {
@@ -277,6 +276,11 @@ namespace CuoreUI.Components.Forms
             }
         }
 
+        internal void ToggleThemeSwitchButton(bool value)
+        {
+            cuiButton4.Visible = value;
+        }
+
         private void cuiButton2_ForeColorChanged(object sender, EventArgs e)
         {
             cuiButton2.HoverForeColor = cuiButton2.ForeColor;
@@ -293,6 +297,18 @@ namespace CuoreUI.Components.Forms
             cuiButton3.HoveredImageTint = cuiButton2.ForeColor;
             cuiButton2.PressedImageTint = cuiButton2.ForeColor;
             cuiButton3.PressedImageTint = cuiButton2.ForeColor;
+        }
+
+        private void cuiButton4_Click(object sender, EventArgs e)
+        {
+            if (Theme == Themes.Light)
+            {
+                Theme = Themes.Dark;
+            }
+            else
+            {
+                Theme = Themes.Light;
+            }
         }
     }
 }

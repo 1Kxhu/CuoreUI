@@ -252,23 +252,25 @@ namespace CuoreUI.Controls
                     crossmarkRectangle.Height = crossmarkRectangle.Width;
                     crossmarkRectangle.X = tabRectangle.X + ((tabRectangle.Width / 2) - (crossmarkRectangle.Width / 2));
                     crossmarkRectangle.Y = (tabRectangle.Height / 2) - (crossmarkRectangle.Height / 2);
-                    GraphicsPath crossmark = Helper.Crossmark(crossmarkRectangle);
-
-                    e.Graphics.FillPath(new SolidBrush(DeletionTabBackgroundColor), roundedRectanglePath);
-                    Pen DeletionCrossmarkPen = new Pen(DeletionColor, 2);
-                    DeletionCrossmarkPen.EndCap = LineCap.Round;
-                    DeletionCrossmarkPen.StartCap = LineCap.Round;
-                    e.Graphics.DrawPath(DeletionCrossmarkPen, crossmark);
+                    using (GraphicsPath crossmark = Helper.Crossmark(crossmarkRectangle))
+                    using (SolidBrush deletionBrush = new SolidBrush(DeletionTabBackgroundColor))
+                    using (Pen deletionCrossmarkPen = new Pen(DeletionColor, 2) { EndCap = LineCap.Round, StartCap = LineCap.Round })
+                    {
+                        e.Graphics.FillPath(deletionBrush, roundedRectanglePath);
+                        e.Graphics.DrawPath(deletionCrossmarkPen, crossmark);
+                    }
                 }
                 else
                 {
-                    e.Graphics.FillPath(new SolidBrush(tempTabColor), roundedRectanglePath);
-
-                    tabRectangle.Offset(0, tabRectangle.Height / 2);
-                    tabRectangle.Offset(0, -1 + -Font.Height / 2);
-                    StringFormat stringFormat = new StringFormat();
-                    stringFormat.Alignment = StringAlignment.Center;
-                    e.Graphics.DrawString(TabPages[i].Text, Font, new SolidBrush(tempTextColor), tabRectangle, stringFormat);
+                    using (SolidBrush tabBrush = new SolidBrush(tempTabColor))
+                    using (SolidBrush textBrush = new SolidBrush(tempTextColor))
+                    using (StringFormat stringFormat = new StringFormat { Alignment = StringAlignment.Center })
+                    {
+                        e.Graphics.FillPath(tabBrush, roundedRectanglePath);
+                        tabRectangle.Offset(0, tabRectangle.Height / 2);
+                        tabRectangle.Offset(0, -1 + -Font.Height / 2);
+                        e.Graphics.DrawString(TabPages[i].Text, Font, textBrush, tabRectangle, stringFormat);
+                    }
                 }
 
                 if (i == (TabPages.Count - 1) && i != TabSelectedToDeletion)
@@ -283,18 +285,20 @@ namespace CuoreUI.Controls
                     addTabRectangle.Offset(scaleDownHalf, scaleDownHalf);
                     addTabRectangle.Inflate(-scaleDown, -scaleDown);
 
-                    GraphicsPath plusBackground = Helper.RoundRect(addTabRectangle, Rounding / 2);
-                    e.Graphics.FillPath(new SolidBrush(tempAddButtonColor), plusBackground);
+                    using (GraphicsPath plusBackground = Helper.RoundRect(addTabRectangle, Rounding / 2))
+                    using (SolidBrush addButtonBrush = new SolidBrush(tempAddButtonColor))
+                    {
+                        e.Graphics.FillPath(addButtonBrush, plusBackground);
+                    }
 
                     addTabRectangle.Offset(0, 0);
                     addTabRectangle.Inflate(-4, -3);
 
-                    GraphicsPath plusSymbol = Helper.Plus(addTabRectangle);
-                    Pen AddSymbolPen = new Pen(tempTabColor, 2);
-                    AddSymbolPen.EndCap = LineCap.Round;
-                    AddSymbolPen.StartCap = LineCap.Round;
-                    AddSymbolPen.LineJoin = LineJoin.Round;
-                    e.Graphics.DrawPath(AddSymbolPen, plusSymbol);
+                    using (GraphicsPath plusSymbol = Helper.Plus(addTabRectangle))
+                    using (Pen addSymbolPen = new Pen(tempTabColor, 2) { EndCap = LineCap.Round, StartCap = LineCap.Round, LineJoin = LineJoin.Round })
+                    {
+                        e.Graphics.DrawPath(addSymbolPen, plusSymbol);
+                    }
                 }
             }
 
@@ -408,12 +412,12 @@ namespace CuoreUI.Controls
 
         public void CallTabAddedEvent(cuiTabPage tabPage)
         {
-            TabAdded.Invoke(tabPage, new EventArgs());
+            TabAdded?.Invoke(tabPage, new EventArgs());
         }
 
         public void CallTabAddedEvent(TabPage tabPage)
         {
-            TabAdded.Invoke(tabPage, new EventArgs());
+            TabAdded?.Invoke(tabPage, new EventArgs());
         }
 
         protected override void OnMouseClick(MouseEventArgs e)

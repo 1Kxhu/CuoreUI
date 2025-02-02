@@ -70,9 +70,6 @@
     <Compile Update="Controls\cuiTabControlExperimental.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="Controls\cuiTextBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Update="Controls\cuiSvgBox.cs">
       <SubType>Component</SubType>
     </Compile>

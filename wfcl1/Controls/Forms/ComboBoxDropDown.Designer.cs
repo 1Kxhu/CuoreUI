@@ -48,8 +48,6 @@
             this.Name = "ComboBoxDropDown";
             this.Text = "ComboBoxDropDown";
             this.TopMost = true;
-            this.Click += new System.EventHandler(this.ComboBoxDropDown_Click);
-            this.MouseLeave += new System.EventHandler(this.ComboBoxDropDown_MouseLeave);
             this.ResumeLayout(false);
 
         }

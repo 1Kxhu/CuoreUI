@@ -6,7 +6,7 @@
 
 FEATURES
 
-1. Theme controller:
+1. Theme controller: (will come as a different nuget package, not a part of cuoreui.winforms)
  - cuiThemeManager
  - cuiThemeDefiner
 
@@ -15,6 +15,3 @@ FEATURES
  - remove unused content
  - rephrase comments
  - let cuiTextBox (legacy) die in sake of cuiTextBox2
-
-3. cursor fix (loaded automatically with cuore)
-- replace old windows cursor: HAND icon that winforms uses with what is supposed to be the user's actual HAND cursor

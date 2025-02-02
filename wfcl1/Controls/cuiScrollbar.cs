@@ -48,10 +48,12 @@ namespace CuoreUI.Controls
                         messageFilter?.ReleaseHandle();
                     }
 
-                    if (value != Parent)
+                    if (Dock != DockStyle.None)
                     {
-                        targetControl = value;
+                        Dock = DockStyle.None;
                     }
+
+                    targetControl = value;
 
                     if (targetControl != null)
                     {
@@ -73,6 +75,11 @@ namespace CuoreUI.Controls
                 this.Location = new Point(targetControl.Right - this.Width, targetControl.Top);
                 this.BringToFront();
                 UpdateThumbPosition();
+
+                if (Parent is Form == false)
+                {
+                    FindForm()?.Controls.Add(this);
+                }
             }
         }
 
@@ -295,7 +302,7 @@ namespace CuoreUI.Controls
                 this.scrollbar = scrollbar;
             }
 
-            protected override void WndProc(ref Message m)
+            protected override void WndProc(ref System.Windows.Forms.Message m)
             {
                 const int WM_VSCROLL = 0x0115;
                 const int WM_MOUSEWHEEL = 0x020A;

@@ -6,6 +6,7 @@ using static CuoreUI.Components.Forms.ColorPickerForm;
 
 namespace CuoreUI.Controls
 {
+    [ToolboxItem(false)]
     [Description("Don't use, a part of color picker window.")]
     public partial class ColorPickerWheel : cuiPictureBox
     {

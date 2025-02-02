@@ -426,7 +426,7 @@ namespace CuoreUI.Controls
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
             actualText = textBox1.Text;
-            ContentChanged?.Invoke(sender, e);
+            ContentChanged?.Invoke(this, e);
         }
         private void textBox1_Click(object sender, EventArgs e)
         {

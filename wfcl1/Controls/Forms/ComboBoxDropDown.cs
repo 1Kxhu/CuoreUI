@@ -48,7 +48,7 @@ namespace CuoreUI.Controls.Forms
                 cuiButton.Name = item;
                 if (caller == null)
                 {
-                    cuiButton.Width = Width + cuiFormRounder1.Rounding*2;
+                    cuiButton.Width = Width + cuiFormRounder1.Rounding * 2;
                 }
                 else
                 {
@@ -188,7 +188,7 @@ namespace CuoreUI.Controls.Forms
             Rounding = new Padding(roundingArg, roundingArg, roundingArg, roundingArg);
             cuiFormRounder1.Rounding = Rounding.All;
             Width = userWidth - (cuiFormRounder1.Rounding * 2);
-  
+
             cuiFormRounder1.OutlineColor = outline;
             BackColor = Color.FromArgb(255, bg.R, bg.G, bg.B);
             caller = userCaller;
@@ -212,16 +212,6 @@ namespace CuoreUI.Controls.Forms
 
         public int SelectedIndex = 0;
         public string SelectedItem = string.Empty;
-
-        private void ComboBoxDropDown_MouseLeave(object sender, EventArgs e)
-        {
-
-        }
-
-        private void ComboBoxDropDown_Click(object sender, EventArgs e)
-        {
-
-        }
 
         // button properties
 
@@ -365,7 +355,5 @@ namespace CuoreUI.Controls.Forms
                 Invalidate();
             }
         }
-
-
     }
 }
