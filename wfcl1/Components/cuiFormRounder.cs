@@ -386,7 +386,7 @@ namespace CuoreUI.Components
         // truly the smooth corner experience (tears of joy as of writing this)
         private void UpdateExperimentalBitmap()
         {
-            if (DesignMode || TargetForm == null || TargetForm.IsDisposed || shouldCloseDown || roundedFormObj != null || roundedFormObj.IsDisposed == false)
+            if (DesignMode || TargetForm == null || TargetForm.IsDisposed || shouldCloseDown || roundedFormObj != null || roundedFormObj.IsDisposed)
             {
                 return;
             }
