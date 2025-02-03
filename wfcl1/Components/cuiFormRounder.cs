@@ -420,7 +420,7 @@ namespace CuoreUI.Components
 
         private void TargetForm_Resize(object sender, EventArgs e)
         {
-            if (DesignMode || TargetForm == null || TargetForm.IsDisposed || shouldCloseDown || roundedFormObj == null || roundedFormObj.IsDisposed == false)
+            if (DesignMode || TargetForm == null || TargetForm.IsDisposed || shouldCloseDown || roundedFormObj == null || roundedFormObj.IsDisposed)
             {
                 return;
             }
