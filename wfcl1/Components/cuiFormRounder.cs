@@ -51,7 +51,7 @@ namespace CuoreUI.Components
                 };
 
 
-                if (roundedFormObj != null && !DesignMode) // if for some reason you want to toggle between a form and 'null'
+                if (roundedFormObj != null && roundedFormObj.IsDisposed == false && !DesignMode) // if for some reason you want to toggle between a form and 'null'
                 {
                     UpdateRoundedFormRegion();
 
@@ -62,7 +62,7 @@ namespace CuoreUI.Components
                     {
                         UpdateExperimentalBitmap();
                     }
-                    roundedFormObj.Show();
+                    roundedFormObj?.Show();
                 }
             }
         }
@@ -98,7 +98,7 @@ namespace CuoreUI.Components
                 return;
             }
 
-            if (!DesignMode && roundedFormObj != null && !wasFormClosingCalled)
+            if (!DesignMode && roundedFormObj != null && !wasFormClosingCalled && roundedFormObj.IsDisposed == false)
             {
                 roundedFormObj.Visible = TargetForm.Visible;
                 roundedFormObj.Tag = TargetForm.Opacity;
@@ -152,34 +152,34 @@ namespace CuoreUI.Components
                 return;
             }
 
-            if (!DesignMode && TargetForm != null && roundedFormObj != null)
+            if (!DesignMode && TargetForm != null)
             {
                 try
                 {
                     // may crash if roundedFormObject is disposed or null
                     roundedFormObj.Tag = TargetForm.Opacity;
+
+                    roundedFormObj.InvalidateNextDrawCall = true;
+
+                    // https://github.com/1Kxhu/CuoreUI/issues/11 fix #3
+                    if (roundedFormObj.WindowState != FormWindowState.Minimized)
+                    {
+                        if (!wasFormClosingCalled && !shouldCloseDown)
+                        {
+                            if (TargetForm.WindowState != FormWindowState.Minimized)
+                            {
+                                SetWindowPos(roundedFormObj.Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
+                                SetWindowPos(TargetForm.Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
+                            }
+
+                            TargetForm.BringToFront();
+                        }
+                    }
                 }
                 catch
                 {
                     // ComboBoxDropDown raises an exception here
                     // but we can just not care about this, since it's opacity is ALWAYS 100%
-                }
-
-                roundedFormObj.InvalidateNextDrawCall = true;
-
-                // https://github.com/1Kxhu/CuoreUI/issues/11 fix #3
-                if (roundedFormObj.WindowState != FormWindowState.Minimized)
-                {
-                    if (!wasFormClosingCalled && !shouldCloseDown)
-                    {
-                        if (TargetForm.WindowState != FormWindowState.Minimized)
-                        {
-                            SetWindowPos(roundedFormObj.Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
-                            SetWindowPos(TargetForm.Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
-                        }
-
-                        TargetForm.BringToFront();
-                    }
                 }
             }
 
@@ -210,7 +210,7 @@ namespace CuoreUI.Components
                 {
                     return;
                 }
-                if (roundedFormObj != null)
+                if (roundedFormObj != null && roundedFormObj.IsDisposed == false)
                 {
                     roundedFormObj.Rounding = value;
                     if (TargetForm != null)
@@ -231,7 +231,7 @@ namespace CuoreUI.Components
             }
 
             // update Location with a 2,2 offset caused by RoundedForm in mind
-            if (!DesignMode && roundedFormObj != null && TargetForm != null)
+            if (!DesignMode && roundedFormObj != null && TargetForm != null && roundedFormObj != null && roundedFormObj.IsDisposed == false)
             {
                 roundedFormObj.Location = PointSubtract(TargetForm.Location, new Point(1, 1));
                 UpdateRoundedFormRegion();
@@ -239,12 +239,12 @@ namespace CuoreUI.Components
                 // https://github.com/1Kxhu/CuoreUI/issues/11 fix #2
                 if (TargetForm.WindowState == FormWindowState.Minimized)
                 {
-                    roundedFormObj.Hide();
+                    roundedFormObj?.Hide();
                 }
                 else
                 {
                     await Task.Delay(1000 / Drawing.GetHighestRefreshRate());
-                    roundedFormObj.Show();
+                    roundedFormObj?.Show();
                 }
             }
         }
@@ -260,7 +260,11 @@ namespace CuoreUI.Components
                 {
                     return;
                 }
-                roundedFormObj?.Invalidate();
+
+                if (roundedFormObj != null && roundedFormObj.IsDisposed == false)
+                {
+                    roundedFormObj?.Invalidate();
+                }
             }
         }
 
@@ -281,14 +285,17 @@ namespace CuoreUI.Components
         {
             if (TargetForm?.Opacity != 1)
             {
-                // for opacity support
-                Region region = new Region(roundedFormObj.ClientRectangle);
-                Region offsetRegion = TargetForm.Region.Clone();
+                if (roundedFormObj != null && roundedFormObj != null && roundedFormObj.IsDisposed == false)
+                {
+                    // for opacity support
+                    Region region = new Region(roundedFormObj.ClientRectangle);
+                    Region offsetRegion = TargetForm.Region.Clone();
 
-                offsetRegion.Translate(1, 1);
+                    offsetRegion.Translate(1, 1);
 
-                region.Exclude(offsetRegion);
-                roundedFormObj.Region = region;
+                    region.Exclude(offsetRegion);
+                    roundedFormObj.Region = region;
+                }
             }
             else
             {
@@ -309,11 +316,12 @@ namespace CuoreUI.Components
 
             roundedFormObj = new RoundedForm(TargetForm.BackColor, OutlineColor, ref privateRounding);
             roundedFormObj.TargetForm = TargetForm;
+            roundedFormObj.Size = TargetForm.Size + new Size(2, 2);
             roundedFormObj.Tag = TargetForm.Opacity;
 
             TargetForm.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, TargetForm.Width, TargetForm.Height, (int)(Rounding * 2f), (int)(Rounding * 2f)));
 
-            roundedFormObj.Show();
+            roundedFormObj?.Show();
 
             //FakeForm.Show();
 
@@ -325,7 +333,7 @@ namespace CuoreUI.Components
             // where hz stands for the maximum refresh rate recorded from all display devices
             Drawing.TenFramesDrawn += (_, __) =>
             {
-                if (roundedFormObj != null && shouldCloseDown == false)
+                if (roundedFormObj != null && shouldCloseDown == false && roundedFormObj.IsDisposed == false)
                 {
                     try // https://github.com/1Kxhu/CuoreUI/issues/11 fix #1
                     {
@@ -378,7 +386,7 @@ namespace CuoreUI.Components
         // truly the smooth corner experience (tears of joy as of writing this)
         private void UpdateExperimentalBitmap()
         {
-            if (DesignMode || TargetForm == null || TargetForm.IsDisposed || shouldCloseDown)
+            if (DesignMode || TargetForm == null || TargetForm.IsDisposed || shouldCloseDown || roundedFormObj != null || roundedFormObj.IsDisposed == false)
             {
                 return;
             }
@@ -412,41 +420,39 @@ namespace CuoreUI.Components
 
         private void TargetForm_Resize(object sender, EventArgs e)
         {
-            if (DesignMode || TargetForm == null || TargetForm.IsDisposed || shouldCloseDown)
+            if (DesignMode || TargetForm == null || TargetForm.IsDisposed || shouldCloseDown || roundedFormObj == null || roundedFormObj.IsDisposed == false)
             {
                 return;
             }
 
-            if (roundedFormObj != null)
+            // If windowstate has changed, set said windowstate value to all the other forms
+            if (TargetForm.WindowState != lastState)
             {
-                // If windowstate has changed, set said windowstate value to all the other forms
-                if (TargetForm.WindowState != lastState)
-                {
-                    lastState = TargetForm.WindowState;
-                    roundedFormObj.WindowState = TargetForm.WindowState;
-                }
-
-                if (TargetForm.WindowState != FormWindowState.Minimized)
-                {
-                    // Related to how RoundedForm is drawn
-                    // Updates rounding if needed, too
-                    roundedFormObj.Size = Size.Add(TargetForm.Size, new Size(2, 2));
-                    UpdateRoundedFormRegion();
-                    UpdateExperimentalBitmap();
-
-                    roundedFormObj.InvalidateNextDrawCall = true;
-
-                    if (TargetForm.WindowState == FormWindowState.Normal)
-                    {
-                        TargetForm.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, TargetForm.Width, TargetForm.Height, (int)(Rounding * 2f), (int)(Rounding * 2f)));
-                    }
-                    else
-                    {
-                        TargetForm.Region = null;
-                    }
-                }
-                targetFormActivating = false;
+                lastState = TargetForm.WindowState;
+                roundedFormObj.WindowState = TargetForm.WindowState;
             }
+
+            if (TargetForm.WindowState != FormWindowState.Minimized)
+            {
+                // Related to how RoundedForm is drawn
+                // Updates rounding if needed, too
+                roundedFormObj.Size = Size.Add(TargetForm.Size, new Size(2, 2));
+                UpdateRoundedFormRegion();
+                UpdateExperimentalBitmap();
+
+                roundedFormObj.InvalidateNextDrawCall = true;
+
+                if (TargetForm.WindowState == FormWindowState.Normal)
+                {
+                    TargetForm.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, TargetForm.Width, TargetForm.Height, (int)(Rounding * 2f), (int)(Rounding * 2f)));
+                }
+                else
+                {
+                    TargetForm.Region = null;
+                }
+            }
+            targetFormActivating = false;
+
         }
     }
 }

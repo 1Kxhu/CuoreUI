@@ -187,7 +187,7 @@ namespace CuoreUI.Controls.Forms
 
             Rounding = new Padding(roundingArg, roundingArg, roundingArg, roundingArg);
             cuiFormRounder1.Rounding = Rounding.All;
-            Width = userWidth - (cuiFormRounder1.Rounding * 2);
+            Width = userWidth - 3;
 
             cuiFormRounder1.OutlineColor = outline;
             BackColor = Color.FromArgb(255, bg.R, bg.G, bg.B);
