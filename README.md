@@ -31,5 +31,17 @@ Don't hesitate to reach out, I respect everyone!
 
 ![GitHub logo](https://i.imgur.com/fLvda9g.png) Create a Discussion: [GitHub Discussions](https://github.com/1Kxhu/CuoreUI/discussions)
 
+## 🖋️ Versioning
+**We use the following format:**
+`yyyy.mm.dd.hotfix`
 
+**yyyy** stands for the year. (like 2012)
+
+**mm** stands for the month. (it can be both single digit and 2 digits) 
+
+**dd** stands for the day (it can be both single digit and 2 digits) 
+
+**hotfix** stands for the amount of bugfix updates gived that day. 
+
+> An example version would be 2022.9.2. It means the update came out on the 2nd day of the 9th month in the year 2022 - that's September 2nd, 2022.
 
