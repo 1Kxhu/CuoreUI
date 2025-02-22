@@ -3,6 +3,8 @@ Usable in production, but CuoreUI is still in development.
 
 Licensed under the [Unlicense](https://github.com/1Kxhu/CuoreUI?tab=Unlicense-1-ov-file#)
 
+TODOs: https://github.com/1Kxhu/CuoreUI/discussions/16
+
 # A WinForms library.. 
 This is a C# .NET Winforms UI Library with modern-looking controls, components and forms.
 
