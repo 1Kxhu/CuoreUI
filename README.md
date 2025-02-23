@@ -28,9 +28,9 @@ Older Releases (+ DLL): [GitHub](https://github.com/1Kxhu/CuoreUI/releases).
 
 Don't hesitate to reach out, I respect everyone!
 
-![Discord logo](https://i.imgur.com/5nluHLg.png) Let's talk on Discord: [@itzkxhu](https://discord.com/)
+![Discord logo](https://i.imgur.com/BvvyqHK.png) Let's talk on Discord: [@itzkxhu](https://discord.com/)
 
-![YouTube logo](https://i.imgur.com/vk5ilBU.png) I have a YouTube channel: [@itzkxhu](https://www.youtube.com/@itzkxhu)
+![YouTube logo](https://i.imgur.com/OOAQDD5.png) I have a YouTube channel: [@itzkxhu](https://www.youtube.com/@itzkxhu)
 
 ![GitHub logo](https://i.imgur.com/fLvda9g.png) Create a Discussion: [GitHub Discussions](https://github.com/1Kxhu/CuoreUI/discussions)
 
