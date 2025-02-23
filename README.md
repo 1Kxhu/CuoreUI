@@ -1,4 +1,4 @@
-![CuoreUI Logo](https://github.com/user-attachments/assets/4acb73e1-7196-4cc1-a03b-f310de05681a)
+![CuoreUI Logo](https://i.imgur.com/sh8j9cJ.png)
 ![Static Unlicense License Badge](https://img.shields.io/badge/License-Unlicense-ff6a00)
 
 CuoreUI is currently in development.
