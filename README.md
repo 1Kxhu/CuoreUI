@@ -1,4 +1,5 @@
-![CuoreUI](https://i.imgur.com/X2m89Nf.png)
+![CuoreUI Logo](https://github.com/user-attachments/assets/4acb73e1-7196-4cc1-a03b-f310de05681a)
+
 Usable in production, but CuoreUI is still in development. 
 
 Licensed under the [Unlicense](https://github.com/1Kxhu/CuoreUI?tab=Unlicense-1-ov-file#)
