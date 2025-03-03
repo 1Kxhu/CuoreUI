@@ -186,7 +186,7 @@ namespace CuoreUI.Controls
         private int state = 1;
         private SolidBrush privateBrush = new SolidBrush(Color.Black);
         private Pen privatePen = new Pen(Color.Black);
-        StringFormat stringFormat = new StringFormat();
+        StringFormat stringFormat = new StringFormat() { Alignment = StringAlignment.Center };
 
         private Image privateImage = null;
         public Image Image
@@ -320,7 +320,6 @@ namespace CuoreUI.Controls
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            stringFormat.Alignment = StringAlignment.Center;
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
             e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
             Rectangle modifiedCR = ClientRectangle;

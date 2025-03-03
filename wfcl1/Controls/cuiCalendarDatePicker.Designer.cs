@@ -1,6 +1,6 @@
 ﻿namespace CuoreUI.Controls
 {
-    partial class cuiDateTimePicker
+    partial class cuiCalendarDatePicker
     {
         /// <summary> 
         /// Required designer variable.
@@ -30,13 +30,12 @@
         {
             this.SuspendLayout();
             // 
-            // cuiDateTimePicker
+            // cuiCalendarDatePicker
             // 
-
-            this.MaximumSize = new System.Drawing.Size(1000, 21);
-            this.MinimumSize = new System.Drawing.Size(0, 21);
-            this.Name = "cuiDateTimePicker";
-            this.Size = new System.Drawing.Size(200, 21);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Name = "cuiCalendarDatePicker";
+            this.Size = new System.Drawing.Size(153, 45);
             this.ResumeLayout(false);
 
         }

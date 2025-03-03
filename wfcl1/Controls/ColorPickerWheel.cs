@@ -7,7 +7,7 @@ using static CuoreUI.Components.Forms.ColorPickerForm;
 namespace CuoreUI.Controls
 {
     [ToolboxItem(false)]
-    [Description("Don't use, a part of color picker window.")]
+    [Description("Don't use, an internal part of color picker window.")]
     public partial class ColorPickerWheel : cuiPictureBox
     {
         Point lastClickPosition = new Point(-8, -8);

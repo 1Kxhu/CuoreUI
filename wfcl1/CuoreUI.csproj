@@ -96,9 +96,6 @@
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="todo.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Costura.Fody" Version="5.7.0" />
     <PackageReference Include="Fody" Version="6.5.5" />
     <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.5" />

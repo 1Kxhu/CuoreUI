@@ -33,7 +33,8 @@
             // 
             // cuiFormRounder1
             // 
-            this.cuiFormRounder1.OutlineColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.cuiFormRounder1.EnhanceCorners = false;
+            this.cuiFormRounder1.OutlineColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
             this.cuiFormRounder1.Rounding = 8;
             this.cuiFormRounder1.TargetForm = this;
             // 

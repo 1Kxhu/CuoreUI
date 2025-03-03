@@ -117,23 +117,23 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="all_colours" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\all colours.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="rightMonthButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vwAADr8BOAVTJAAAAKBJREFUSEvt1DEKAjEQheEVFRGv4EUsrcTSUvBkFnaWtp7CuwiCaPfJ4hQyWJmN
+        IPjDNJlHXiaTTNP8+QnQz2udgSE2mOVcJ2DqyRnznC8GbRzD5IIlellXBCY4hMkVq9a4UzDGPkxuWGOQ
+        dUVghC3uEYusKSYqOUUlu5wvIhpexyA2r3NFLyev0+R3zzRrPqb6R/vGqKg77Fqqjus/1XkA4zv5a0TL
+        SHsAAAAASUVORK5CYII=
+</value>
   </data>
-  <data name="calendar" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\calendar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="crossmark" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\crossmark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="half_moon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\half-moon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="sun_light" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\sun-light.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="yes" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\yes.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="leftMonthButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vwAADr8BOAVTJAAAAKBJREFUSEvt1DEKwkAQBdCIiohX8CKWVmJpKXgyCztLW0/hXQRBtHsSnIAsVpus
+        IOTBNslndshupqp6fwn1GqbPOxHFF9hhnL5vJYovcfU2TzPZMMAatyh+TjPZovMN7lH8hFmay4IRtnhE
+        8SOmaS4bVnjG2mOSZlrBITq/dNp54xcbFP9EZQ+5VvSaNr79aPXGnSo6KhpFh92nYuO617kXIPD/ZUcm
+        Jz0AAAAASUVORK5CYII=
+</value>
   </data>
 </root>
