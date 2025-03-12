@@ -20,7 +20,7 @@ CuoreUI will be alive for as long as possible!
 
 Latest Releases: [NuGet](https://www.nuget.org/packages/CuoreUI.Winforms/).
 
-Older Releases (+ DLL): [GitHub](https://github.com/1Kxhu/CuoreUI/releases).
+Older Releases (+ DLL): [GitHub](https://github.com/7owh/CuoreUI/releases).
 ## 📫 Contact?
 
 Don't hesitate to reach out, I respect everyone!
@@ -29,7 +29,7 @@ Don't hesitate to reach out, I respect everyone!
 
 ![YouTube logo](https://i.imgur.com/OOAQDD5.png) I have a YouTube channel: [@sevenowh](https://m.youtube.com/@sevenowh)
 
-![GitHub logo](https://i.imgur.com/fLvda9g.png) Create a Discussion: [GitHub Discussions](https://github.com/1Kxhu/CuoreUI/discussions)
+![GitHub logo](https://i.imgur.com/fLvda9g.png) Create a Discussion: [GitHub Discussions](https://github.com/7owh/CuoreUI/discussions)
 
 ## 🖋️ Versioning
 **We use the following format:**
