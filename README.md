@@ -23,7 +23,7 @@ Latest Releases: [NuGet](https://www.nuget.org/packages/CuoreUI.Winforms/).
 Older Releases (+ DLL): [GitHub](https://github.com/7owh/CuoreUI/releases).
 ## 📫 Contact?
 
-Don't hesitate to reach out, I respect everyone!
+Don't hesitate to reach out, I respect everyone. 
 
 ![Discord logo](https://i.imgur.com/BvvyqHK.png) Let's talk on Discord: [@sevenow](https://discord.com/)
 
