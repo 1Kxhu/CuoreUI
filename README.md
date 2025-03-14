@@ -4,16 +4,18 @@
 CuoreUI is currently in development.
 
 # A WinForms library.. 
-This is a C# .NET Winforms UI Library with modern-looking controls, components and forms.
+This is a C# .NET Winforms UI Library with <ins>modern-looking</ins> controls, components and forms.
 
 The library features many controls with a sleek design inspired by Xiaomi and modern Web UI design.
+
+The library does everything <ins>decently</ins>, for more special-case controls check out other libraries (or use WPF). 
 
 ## 🗿 Why use CuoreUI?
 Have you ever used a UI Library only to find out you need a license, it is unpolished, or it was abandoned?
 
 **CuoreUI might be the solution.**
 
-CuoreUI will be alive for as long as possible! 
+CuoreUI will be alive for as long as at least one person uses it! 
 
 ## 💾 Where to install? 
 `dotnet add package CuoreUI.Winforms`
